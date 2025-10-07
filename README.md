@@ -2,9 +2,9 @@
 
 > Schrap hierboven eventueel wat niet past
 
-- Student: VOORNAAM NAAM
-- Studentennummer: xxxxxxxxx
-- E-mailadres: <voornaam.naam@student.hogent.be>
+- Student: Lisa Vercruysse
+- Studentennummer: 202294679
+- E-mailadres: <lisa.vercruysse@student.hogent.be>
 
 ## Vereisten
 

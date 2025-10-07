@@ -9,10 +9,10 @@
 
 ## 📋 Studentgegevens
 
-- **Student:** Voornaam Naam
-- **Studentennummer:** xxxxxxxx
-- **E-mailadres:** <voornaam.naam@student.hogent.be>
-- **GitHub repository:** <LINK_NAAR_GITHUB_REPO>
+- **Student:** Lisa Vercruysse
+- **Studentennummer:** 202294679
+- **E-mailadres:** <lisa.vercruysse@student.hogent.be>
+- **GitHub repository:** <https://github.com/HOGENT-frontendweb/frontendweb-2526-vercruysselisa>
 - **Online versies:**
   - **Back-end:** <LINK_NAAR_ONLINE_BACKEND>
   - **Front-end:** <LINK_NAAR_ONLINE_FRONTEND>
@@ -99,54 +99,3 @@
 
 [Suggesties voor verbetering...]
 
-### Reflectie groepswerk
-
-> **Instructies:**
->
-> - Vul dit eerlijk in, we controleren ook de GitHub contributions en pull requests.
-> - Verwijder deze sectie als je alleen hebt gewerkt.
-
-**Hoe verliep het groepswerk?**
-
-> **Instructie:** Vink voor elk groepslid één van de drie opties aan door een 'x' tussen de vierkante haken te plaatsen: `[x]`
-
-- **[Naam student 1]:**
-
-  - [ ] Ik heb minder bijgedragen dan mijn groepsgenoot
-  - [ ] Ik heb evenveel bijgedragen als mijn groepsgenoot
-  - [ ] Ik heb meer bijgedragen dan mijn groepsgenoot
-
-- **[Naam student 2]:**
-  - [ ] Ik heb minder bijgedragen dan mijn groepsgenoot
-  - [ ] Ik heb evenveel bijgedragen als mijn groepsgenoot
-  - [ ] Ik heb meer bijgedragen dan mijn groepsgenoot
-
-**Welke functionaliteiten heeft elk groepslid toegevoegd voor Web Services?**
-
-> **Instructie:** Geef per persoon een duidelijk overzicht van wat die heeft geïmplementeerd voor het project voor het olod Web Services.
-
-- **[Naam student 1]:**
-
-  - [Bijvoorbeeld: Gebruikersregistratie en login systeem]
-  - [Bijvoorbeeld: Dashboard met overzicht functionaliteit]
-  - [Bijvoorbeeld: Integratietesten voor product endpoints]
-
-- **[Naam student 2]:**
-  - [Bijvoorbeeld: Productcatalogus met zoek- en filterfunctionaliteit]
-  - [Bijvoorbeeld: Winkelwagen en checkout proces]
-  - [Bijvoorbeeld: Integratietesten voor winkelwagen endpoints]
-
-**Welke functionaliteiten heeft elk groepslid toegevoegd voor Front-end Web Development?**
-
-> **Instructie:** Geef per persoon een duidelijk overzicht van wat die heeft geïmplementeerd voor het project voor het olod Front-end Web Development.
-
-- **[Naam student 1]:**
-
-  - [Bijvoorbeeld: Gebruikersregistratie en login systeem]
-  - [Bijvoorbeeld: Dashboard met overzicht functionaliteit]
-  - [Bijvoorbeeld: Integratietesten voor product endpoints]
-
-- **[Naam student 2]:**
-  - [Bijvoorbeeld: Productcatalogus met zoek- en filterfunctionaliteit]
-  - [Bijvoorbeeld: Winkelwagen en checkout proces]
-  - [Bijvoorbeeld: Integratietesten voor winkelwagen endpoints]
