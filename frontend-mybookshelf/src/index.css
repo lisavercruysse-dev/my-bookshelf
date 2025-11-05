@@ -2,7 +2,7 @@
 
 @layer base {
     html {
-        @apply bg-sky-50 font-serif;
+        @apply bg-emerald-50 font-serif;
     }
 
     h4 {

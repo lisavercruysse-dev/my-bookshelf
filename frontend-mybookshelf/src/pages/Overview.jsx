@@ -13,14 +13,21 @@ export default function Overview(){
   return (
     <>
       <div>
-        <div className="bg-emerald-900 p-3 text-emerald-50 font-serif">
+        <div className="bg-emerald-900 p-3 text-emerald-50">
           topbar
         </div>
-        <h1 className="text-5xl text-emerald-900 font-bold font font-serif p-4">My Bookshelf</h1> 
-        <button className="bg-emerald-900 p-3 text-emerald-50 font-serif rounded-lg">Reviews</button>
-        <button className="bg-emerald-900 p-3 text-emerald-50 font-serif rounded-lg">Discover</button>
-        <button className="bg-emerald-900 p-3 text-emerald-50 font-serif rounded-lg">My Books</button>
-        <div>
+        <div className='flex flex-col items-center'>
+          <h1 className="text-7xl text-emerald-900 font-bold font p-14 text-center">My Bookshelf</h1>
+          <div className='hidden sm:flex flex-row items-center justify-center'>
+            <button className="bg-emerald-900 pb-3 pt-3 mb-12
+            text-emerald-50 rounded-lg m-2 hover:bg-emerald-950 w-50">My Reviews</button>
+            <button className="bg-emerald-900 pb-3 pt-3 mb-12
+             text-emerald-50 rounded-lg m-2 hover:bg-emerald-950 w-50">Discover</button>
+            <button className="bg-emerald-900 pb-3 pt-3 mb-12
+             text-emerald-50 rounded-lg m-2 hover:bg-emerald-950 w-50">My Books</button>
+          </div>
+        </div>
+        <div className='flex flex-wrap justify-center gap-10 max-w-400 mx-auto'>
           <AsyncData loading={isLoading} error={error}>
             {books.map((book) => {
               const b = book.volumeInfo;
