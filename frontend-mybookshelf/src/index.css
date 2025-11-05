@@ -2,6 +2,11 @@
 
 @layer base {
     html {
-        @apply bg-sky-50
+        @apply bg-sky-50 font-serif;
     }
+
+    h4 {
+    @apply text-xl font-bold;
 }
+}
+
