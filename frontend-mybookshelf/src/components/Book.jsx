@@ -31,7 +31,7 @@ export default function Book (props) {
       </p>
       <div className='items-center flex flex-col '>
         <button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 m-3 bg-emerald-900 
-         hover:bg-emerald-950" 
+         hover:bg-emerald-950 hover:cursor-pointer" 
         onClick={toggleInfo}>{isMoreInfo ? 'less' : 'more'}</button>
       </div>
     </div>

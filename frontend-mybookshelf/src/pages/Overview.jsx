@@ -1,30 +1,37 @@
 import useSWR from 'swr';
-import { getBookTest } from '../api';
+import { getBooks } from '../api';
 import AsyncData from '../components/AsyncData';
 import Book from '../components/Book';
+import { Link } from 'react-router';
+import TopBar from '../components/TopBar';
 
 export default function Overview(){
   const {
     data: books = [],
     error,
     isLoading,
-  } = useSWR('?q=flowers+inauthor:keyes', getBookTest);
+  } = useSWR('?q=flowers+inauthor:keyes', getBooks);
 
   return (
     <>
       <div>
-        <div className="bg-emerald-900 p-3 text-emerald-50">
-          topbar
-        </div>
+        <TopBar/>
         <div className='flex flex-col items-center'>
           <h1 className="text-7xl text-emerald-900 font-bold font p-14 text-center">My Bookshelf</h1>
-          <div className='hidden sm:flex flex-row items-center justify-center'>
-            <button className="bg-emerald-900 pb-3 pt-3 mb-12
-            text-emerald-50 rounded-lg m-2 hover:bg-emerald-950 w-50">My Reviews</button>
-            <button className="bg-emerald-900 pb-3 pt-3 mb-12
-             text-emerald-50 rounded-lg m-2 hover:bg-emerald-950 w-50">Discover</button>
-            <button className="bg-emerald-900 pb-3 pt-3 mb-12
-             text-emerald-50 rounded-lg m-2 hover:bg-emerald-950 w-50">My Books</button>
+          <div className='hidden sm:flex flex-row items-center justify-center gap-6'>
+            <Link to='myReviews' className='mb-12'>
+              <button className="bg-emerald-900 pb-3 pt-3 hover:cursor-pointer
+            text-emerald-50 rounded-lg hover:bg-emerald-950 w-50">My Reviews</button>
+            </Link>  
+            <Link to='/Discover' className='mb-12'>
+              <button className="bg-emerald-900 pb-3 pt-3 hover:cursor-pointer
+             text-emerald-50 rounded-lg hover:bg-emerald-950 w-50">
+                Discover</button>
+            </Link> 
+            <Link to='/myBooks' className='mb-12'>
+              <button className="bg-emerald-900 pb-3 pt-3 hover:cursor-pointer
+             text-emerald-50 rounded-lg hover:bg-emerald-950 w-50">My Books</button>
+            </Link>  
           </div>
         </div>
         <div className='flex flex-wrap justify-center gap-10 max-w-400 mx-auto'>
