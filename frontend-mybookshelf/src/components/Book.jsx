@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import altBook from '../assets/altBook.jpg';
+import { Link } from 'react-router';
 
 export default function Book (props) {
 
   const {title, amountPages, author, img} = props;
-  const [isMoreInfo, setIsMoreInfo] = useState(false);
   const [imgUrl, setImgUrl] = useState(img || altBook);
-  
-  const toggleInfo = () => {
-    setIsMoreInfo(!isMoreInfo);
-  };
 
   return (
     <div className="flex flex-col p-5 m-2 items-center min-w-90 text-emerald-50 max-w-90
@@ -26,13 +22,16 @@ export default function Book (props) {
         onError={() => setImgUrl(altBook)}
         className="w-48 rounded-lg border border-emerald-50"
       />
-      <p className=''>
-        {amountPages}
+      <p className='mt-2 italic'>
+        Pages: {amountPages}
       </p>
-      <div className='items-center flex flex-col '>
-        <button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 m-3 bg-emerald-900 
-         hover:bg-emerald-950 hover:cursor-pointer" 
-        onClick={toggleInfo}>{isMoreInfo ? 'less' : 'more'}</button>
+      <div className='items-center flex gap-3 mt-4 mb-2'>
+        <Link to='bookInfo'><button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 bg-emerald-900 
+         hover:bg-emerald-950 hover:cursor-pointer w-20" 
+        >More</button></Link>
+        <button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 bg-emerald-900 
+         hover:bg-emerald-950 hover:cursor-pointer w-20" 
+        >save</button>
       </div>
     </div>
   );
