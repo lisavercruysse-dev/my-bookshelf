@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import altBook from '../assets/altBook.jpg';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export default function Book (props) {
 
-  const {title, amountPages, author, img} = props;
+  const {isbn, title, amountPages, author, img} = props;
   const [imgUrl, setImgUrl] = useState(img || altBook);
 
   return (
@@ -26,7 +26,7 @@ export default function Book (props) {
         Pages: {amountPages}
       </p>
       <div className='items-center flex gap-3 mt-4 mb-2'>
-        <Link to='bookInfo'><button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 bg-emerald-900 
+        <Link to={`/bookInfo/${isbn}`}><button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 bg-emerald-900 
          hover:bg-emerald-950 hover:cursor-pointer w-20" 
         >More</button></Link>
         <button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 bg-emerald-900 

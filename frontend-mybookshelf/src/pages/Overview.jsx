@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { getBooks } from '../api';
 import AsyncData from '../components/AsyncData';
 import Book from '../components/Book';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 
 export default function Overview(){
@@ -41,8 +41,7 @@ export default function Overview(){
 
               const isbn =
                 b.industryIdentifiers?.find((id) => id.type === 'ISBN_13')?.identifier ||
-      b.industryIdentifiers?.find((id) => id.type === 'ISBN_10')?.identifier ||
-      book.id;
+                b.industryIdentifiers?.find((id) => id.type === 'ISBN_10')?.identifier; 
 
               const title = b.title || 'No title';
               const genre = b.categories || [];

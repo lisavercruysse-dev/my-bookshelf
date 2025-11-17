@@ -30,6 +30,43 @@ Ik verwacht dat volgende software reeds geïnstalleerd is:
 
 ## Back-end
 
+## ERD
+
+![ERD](assets/image.png)
+
+## API CALLS
+
+### Books
+
+GET /api/users/:id/books		-> All saved books for user with
+this id.
+
+GET /api/books			        -> Get all saved books
+
+GET /api/books/topRated		    -> Get top rated books
+
+GET /api/books/:id			-> Get specific book
+
+
+POST /api/books			        -> Save new book to database
+
+### Users
+
+GET /api/users/:id			    -> Get all info about user (+ their book list)
+
+POST /api/users			        -> Create new user
+
+### Reviews
+GET /api/users/:id/reviews		-> Get all the reviews for a user
+
+GET /api/books/:isbn/reviews	-> Get reviews for specific book
+
+POST /api/reviews			    -> Add new review
+
+PUT /api/reviews/:id			-> Edit review
+
+DELETE /api/reviews/:id         -> Delete review
+
 ## Opstarten
 
 > Schrijf hier hoe we de applicatie starten (.env bestanden aanmaken, commando's om uit te voeren...)
