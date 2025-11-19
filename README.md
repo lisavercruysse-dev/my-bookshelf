@@ -32,7 +32,7 @@ Ik verwacht dat volgende software reeds geïnstalleerd is:
 
 ## ERD
 
-![ERD](assets/image.png)
+![ERD](assets/ERDupdate.png)
 
 ## API CALLS
 

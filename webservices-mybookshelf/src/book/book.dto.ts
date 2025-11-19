@@ -5,6 +5,8 @@ export class CreateBookRequestDto {
   amountPages: number;
   author: string;
   description: string;
+  avgRating: number;
+  ratingCount: number;
 }
 
 export class BookResponseDto extends CreateBookRequestDto {}

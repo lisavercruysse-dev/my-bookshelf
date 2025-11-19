@@ -14,6 +14,23 @@ export class BookService {
     };
   }
 
+  getPopular(): BookListResponseDto {
+    const C =
+      BOOKS.reduce((acc, b) => acc + (b.avgRating ?? 0), 0) / BOOKS.length;
+    const m = 60; // minimum votes threshold
+
+    const scored = [...BOOKS].map((b) => {
+      const v = b.ratingCount ?? 0;
+      const R = b.avgRating ?? 0;
+      const weightedScore = (v / (v + m)) * R + (m / (v + m)) * C;
+      return { ...b, weightedScore };
+    });
+
+    const sorted = scored.sort((a, b) => b.weightedScore - a.weightedScore);
+
+    return { items: sorted };
+  }
+
   getByIsbn(isbn: string): BookResponseDto {
     const book = BOOKS.find((b: Book) => b.isbn === isbn);
 
@@ -30,6 +47,8 @@ export class BookService {
     amountPages,
     author,
     description,
+    avgRating,
+    ratingCount,
   }: CreateBookRequestDto): BookResponseDto {
     const newBook = {
       isbn,
@@ -38,6 +57,8 @@ export class BookService {
       amountPages,
       author,
       description,
+      avgRating,
+      ratingCount,
     };
     BOOKS.push(newBook);
     return newBook;

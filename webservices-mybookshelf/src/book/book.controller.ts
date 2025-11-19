@@ -23,6 +23,11 @@ export class BookController {
     return this.bookService.getAll();
   }
 
+  @Get('topRated')
+  getPopularBooks(): BookListResponseDto {
+    return this.bookService.getPopular();
+  }
+
   @Get(':isbn')
   getBookByIsbn(@Param('isbn') isbn: string): BookResponseDto {
     return this.bookService.getByIsbn(isbn);
