@@ -43,8 +43,6 @@ this id.
 
 GET /api/books			        -> Get all saved books
 
-GET /api/books/topRated		    -> Get top rated books
-
 GET /api/books/:isbn			-> Get specific book
 
 POST /api/books			        -> Save new book to database
