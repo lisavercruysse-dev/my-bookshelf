@@ -5,9 +5,111 @@ export interface Book {
   amountPages: number;
   author: string;
   description: string;
-  avgRating: number;
-  ratingCount: number;
 }
+
+export interface Review {
+  id: number;
+  isbn: string;
+  userId: number;
+  body: string;
+  stars: number;
+  date: Date;
+  title: string;
+}
+
+export const REVIEWS: Review[] = [
+  {
+    id: 1,
+    isbn: '9780435123437',
+    userId: 2,
+    body: 'An emotional and thought-provoking story. I loved every chapter.',
+    stars: 5,
+    date: new Date('2024-04-12'),
+    title: 'Beautiful and heartbreaking',
+  },
+  {
+    id: 2,
+    isbn: '9780435123437',
+    userId: 4,
+    body: 'Great concept but a bit slow in the middle.',
+    stars: 4,
+    date: new Date('2024-03-28'),
+    title: 'Slow but powerful',
+  },
+  {
+    id: 3,
+    isbn: '9781781103142',
+    userId: 1,
+    body: 'A magical classic. Reread it every year.',
+    stars: 5,
+    date: new Date('2024-05-01'),
+    title: 'Timeless',
+  },
+  {
+    id: 4,
+    isbn: '9781781103142',
+    userId: 7,
+    body: 'Still fun, but the pacing feels uneven now.',
+    stars: 4,
+    date: new Date('2024-04-02'),
+    title: 'Good but not perfect',
+  },
+  {
+    id: 5,
+    isbn: '0123438455178',
+    userId: 3,
+    body: 'Simple but surprisingly engaging. A short and fun read.',
+    stars: 4,
+    date: new Date('2024-01-18'),
+    title: 'Unexpectedly nice',
+  },
+  {
+    id: 6,
+    isbn: '0123438455178',
+    userId: 6,
+    body: "Didn't connect with it at all.",
+    stars: 2,
+    date: new Date('2024-02-25'),
+    title: 'Not for me',
+  },
+  {
+    id: 7,
+    isbn: '0721438935188',
+    userId: 8,
+    body: 'Honestly not great, felt rushed.',
+    stars: 2,
+    date: new Date('2024-03-05'),
+    title: 'Disappointing',
+  },
+  {
+    id: 8,
+    isbn: '0721438935188',
+    userId: 5,
+    body: 'A well-written story with strong themes.',
+    stars: 4,
+    date: new Date('2024-03-22'),
+    title: 'Solid book',
+  },
+  {
+    id: 9,
+    isbn: '0721438935188',
+    userId: 9,
+    body: 'Amazing worldbuilding and characters.',
+    stars: 5,
+    date: new Date('2024-02-14'),
+    title: 'Loved it!',
+  },
+  {
+    id: 10,
+    isbn: '9780435123437',
+    userId: 10,
+    body: 'Interesting ideas but found the writing uneven.',
+    stars: 3,
+    date: new Date('2024-01-30'),
+    title: 'Mixed feelings',
+  },
+];
+
 export const BOOKS: Book[] = [
   {
     isbn: '0123438455178',
@@ -16,8 +118,6 @@ export const BOOKS: Book[] = [
     amountPages: 4,
     author: 'Test Person',
     description: 'This is a test book',
-    avgRating: 5,
-    ratingCount: 300,
   },
   {
     isbn: '9780435123437',
@@ -26,8 +126,6 @@ export const BOOKS: Book[] = [
     amountPages: 218,
     author: 'Daniel Keyes',
     description: 'Traditional Chinese edition of Flowers for Algernon...',
-    avgRating: 4.1,
-    ratingCount: 2300,
   },
   {
     isbn: '9781781103142',
@@ -36,8 +134,6 @@ export const BOOKS: Book[] = [
     amountPages: 336,
     author: 'J.K. Rowling',
     description: 'Da Harry er 11 år, får han at vide...',
-    avgRating: 4.8,
-    ratingCount: 5400,
   },
   {
     isbn: '0721438935188',
@@ -46,8 +142,6 @@ export const BOOKS: Book[] = [
     amountPages: 20,
     author: 'Suzanne Collins',
     description: 'This is a test book',
-    avgRating: 3,
-    ratingCount: 6000,
   },
   {
     isbn: '9780143127550',
@@ -56,8 +150,6 @@ export const BOOKS: Book[] = [
     amountPages: 150,
     author: 'John Doe',
     description: 'A sample description for testing purposes',
-    avgRating: 4.5,
-    ratingCount: 1200,
   },
   {
     isbn: '9780553293357',
@@ -66,8 +158,6 @@ export const BOOKS: Book[] = [
     amountPages: 320,
     author: 'Jane Smith',
     description: 'Another sample book',
-    avgRating: 4.2,
-    ratingCount: 800,
   },
   {
     isbn: '9780262033848',
@@ -76,8 +166,6 @@ export const BOOKS: Book[] = [
     amountPages: 500,
     author: 'Alice Johnson',
     description: 'Learning algorithms made easy',
-    avgRating: 4.9,
-    ratingCount: 450,
   },
   {
     isbn: '9781491950296',
@@ -86,8 +174,6 @@ export const BOOKS: Book[] = [
     amountPages: 230,
     author: 'Bob Brown',
     description: 'Testing your frontend applications',
-    avgRating: 3.8,
-    ratingCount: 900,
   },
   {
     isbn: '9780131103627',
@@ -96,8 +182,6 @@ export const BOOKS: Book[] = [
     amountPages: 280,
     author: 'Dennis Ritchie',
     description: 'Classic C programming guide',
-    avgRating: 4.7,
-    ratingCount: 3800,
   },
   {
     isbn: '9780134685991',
@@ -106,8 +190,6 @@ export const BOOKS: Book[] = [
     amountPages: 416,
     author: 'Joshua Bloch',
     description: 'Best practices for Java programming',
-    avgRating: 4.6,
-    ratingCount: 2500,
   },
   {
     isbn: '9780000000001',
@@ -117,7 +199,5 @@ export const BOOKS: Book[] = [
     author: 'Solo Reviewer',
     description:
       'A book that only one person reviewed, but gave it a perfect rating.',
-    avgRating: 5,
-    ratingCount: 1,
   },
 ];

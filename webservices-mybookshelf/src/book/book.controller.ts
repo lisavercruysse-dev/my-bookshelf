@@ -1,11 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import {
   BookListResponseDto,
@@ -19,23 +21,33 @@ export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @Get()
-  getAllBooks(): BookListResponseDto {
+  async getAllBooks(): Promise<BookListResponseDto> {
     return this.bookService.getAll();
   }
 
-  @Get('topRated')
-  getPopularBooks(): BookListResponseDto {
-    return this.bookService.getPopular();
-  }
-
   @Get(':isbn')
-  getBookByIsbn(@Param('isbn') isbn: string): BookResponseDto {
+  async getBookByIsbn(@Param('isbn') isbn: string): Promise<BookResponseDto> {
     return this.bookService.getByIsbn(isbn);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createBook(@Body() createBookDto: CreateBookRequestDto): BookResponseDto {
+  async createBook(
+    @Body() createBookDto: CreateBookRequestDto,
+  ): Promise<BookResponseDto> {
     return this.bookService.create(createBookDto);
+  }
+
+  @Delete(':isbn')
+  async deleteBook(@Param('isbn') isbn: string): Promise<void> {
+    await this.bookService.delete(isbn);
+  }
+
+  @Put(':isbn')
+  async updateBook(
+    @Param('isbn') isbn: string,
+    @Body() updateBookDto: CreateBookRequestDto,
+  ): Promise<BookResponseDto> {
+    return this.bookService.update(isbn, updateBookDto);
   }
 }

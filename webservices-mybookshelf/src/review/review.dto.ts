@@ -1,0 +1,15 @@
+export class CreateReviewRequestDto {
+  id: number;
+  isbn: string;
+  userId: number;
+  body: string;
+  stars: number;
+  date: Date;
+  title: string;
+}
+
+export class ReviewResponseDto extends CreateReviewRequestDto {}
+
+export class ReviewListResponseDto {
+  items: ReviewResponseDto[];
+}

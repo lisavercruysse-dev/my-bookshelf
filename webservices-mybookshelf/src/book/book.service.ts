@@ -1,66 +1,63 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BOOKS, Book } from 'src/data/mock_data';
 import {
   CreateBookRequestDto,
   BookListResponseDto,
   BookResponseDto,
+  UpdateBookRequestDto,
 } from './book.dto';
+import {
+  type DatabaseProvider,
+  InjectDrizzle,
+} from 'src/drizzle/drizzle.provider';
+import { eq } from 'drizzle-orm';
+import { books } from 'src/drizzle/schema';
 
 @Injectable()
 export class BookService {
-  getAll(): BookListResponseDto {
-    return {
-      items: BOOKS,
-    };
+  constructor(
+    @InjectDrizzle()
+    private readonly db: DatabaseProvider,
+  ) {}
+
+  async getAll(): Promise<BookListResponseDto> {
+    const items = await this.db.query.books.findMany();
+    return { items };
   }
 
-  getPopular(): BookListResponseDto {
-    const C =
-      BOOKS.reduce((acc, b) => acc + (b.avgRating ?? 0), 0) / BOOKS.length;
-    const m = 60; // minimum votes threshold
-
-    const scored = [...BOOKS].map((b) => {
-      const v = b.ratingCount ?? 0;
-      const R = b.avgRating ?? 0;
-      const weightedScore = (v / (v + m)) * R + (m / (v + m)) * C;
-      return { ...b, weightedScore };
+  async getByIsbn(isbn: string): Promise<BookResponseDto> {
+    const book = await this.db.query.books.findFirst({
+      where: eq(books.isbn, isbn),
     });
 
-    const sorted = scored.sort((a, b) => b.weightedScore - a.weightedScore);
-
-    return { items: sorted };
-  }
-
-  getByIsbn(isbn: string): BookResponseDto {
-    const book = BOOKS.find((b: Book) => b.isbn === isbn);
-
     if (!book) {
-      throw new NotFoundException('Book not found');
+      throw new NotFoundException('No book with this ISBN exists');
     }
+
     return book;
   }
 
-  create({
-    isbn,
-    title,
-    genre,
-    amountPages,
-    author,
-    description,
-    avgRating,
-    ratingCount,
-  }: CreateBookRequestDto): BookResponseDto {
-    const newBook = {
-      isbn,
-      title,
-      genre,
-      amountPages,
-      author,
-      description,
-      avgRating,
-      ratingCount,
-    };
-    BOOKS.push(newBook);
-    return newBook;
+  async create(book: CreateBookRequestDto): Promise<BookResponseDto> {
+    await this.db.insert(books).values(book);
+    return this.getByIsbn(book.isbn);
+  }
+
+  async update(
+    isbn: string,
+    updateBook: UpdateBookRequestDto,
+  ): Promise<BookResponseDto> {
+    await this.db.update(books).set(updateBook).where(eq(books.isbn, isbn));
+    return this.getByIsbn(isbn);
+  }
+
+  async delete(isbn: string): Promise<void> {
+    const index = await this.db.query.books.findFirst({
+      where: eq(books.isbn, isbn),
+    });
+
+    if (!index) {
+      throw new NotFoundException('No book with this ISBN exists');
+    }
+
+    await this.db.delete(books).where(eq(books.isbn, isbn));
   }
 }
