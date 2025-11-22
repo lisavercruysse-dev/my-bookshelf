@@ -71,6 +71,16 @@ DELETE /api/reviews/:id         -> Delete review
 ## Opstarten
 
 > Schrijf hier hoe we de applicatie starten (.env bestanden aanmaken, commando's om uit te voeren...)
+> Maak .env bestand met volgende info: 
+- NODE_ENV=development
+- PORT=3000
+- DATABASE_URL=mysql://<user>:<password>@localhost:3306/mybookshelf
+
+_Zorg ervoor dat je in de map "webservices-mybookshelf" zit -> cd webservices-mybookshelf_
+
+Voer volgende commando's uit:
+- db:migrate
+- db:seed
 
 ## Testen
 
