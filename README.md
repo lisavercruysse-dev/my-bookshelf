@@ -58,7 +58,9 @@ POST /api/users			        -> Create new user
 ### Reviews
 GET /api/users/:id/reviews		-> Get all the reviews for a user
 
-GET /api/books/:isbn/reviews	-> Get reviews for specific book
+GET /api/reviews/:id    -> Get review with this id
+
+GET /api/reviews/:isbn	-> Get reviews for specific book
 
 POST /api/reviews			    -> Add new review
 

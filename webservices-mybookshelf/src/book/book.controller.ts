@@ -15,10 +15,14 @@ import {
   CreateBookRequestDto,
 } from './book.dto';
 import { BookService } from './book.service';
+import { ReviewService } from 'src/review/review.service';
 
 @Controller('books')
 export class BookController {
-  constructor(private readonly bookService: BookService) {}
+  constructor(
+    private readonly bookService: BookService,
+    private readonly reviewService: ReviewService,
+  ) {}
 
   @Get()
   async getAllBooks(): Promise<BookListResponseDto> {
@@ -28,6 +32,11 @@ export class BookController {
   @Get(':isbn')
   async getBookByIsbn(@Param('isbn') isbn: string): Promise<BookResponseDto> {
     return this.bookService.getByIsbn(isbn);
+  }
+
+  @Get(':isbn/reviews')
+  async getBookReviews(@Param('isbn') isbn: string) {
+    return this.reviewService.getReviewsByIsbn(isbn);
   }
 
   @Post()

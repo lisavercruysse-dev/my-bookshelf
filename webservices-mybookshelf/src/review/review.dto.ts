@@ -10,6 +10,12 @@ export class CreateReviewRequestDto {
 
 export class ReviewResponseDto extends CreateReviewRequestDto {}
 
+export class UpdateReviewRequestDto {
+  body: string;
+  stars: number;
+  title: string;
+}
+
 export class ReviewListResponseDto {
   items: ReviewResponseDto[];
 }

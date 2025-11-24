@@ -7,9 +7,12 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { ReviewModule } from './review/review.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
+import { UserController } from './user/user.controller';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
+    UserModule,
     BookModule,
     ReviewModule,
     ConfigModule.forRoot({
@@ -18,7 +21,7 @@ import { DrizzleModule } from './drizzle/drizzle.module';
     }),
     DrizzleModule,
   ],
-  controllers: [AppController, HealthController],
+  controllers: [AppController, HealthController, UserController],
   providers: [AppService],
 })
 export class AppModule {}

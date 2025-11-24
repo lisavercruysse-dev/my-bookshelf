@@ -50,14 +50,10 @@ export class BookService {
   }
 
   async delete(isbn: string): Promise<void> {
-    const index = await this.db.query.books.findFirst({
-      where: eq(books.isbn, isbn),
-    });
+    const [result] = await this.db.delete(books).where(eq(books.isbn, isbn));
 
-    if (!index) {
+    if (result.affectedRows === 0) {
       throw new NotFoundException('No book with this ISBN exists');
     }
-
-    await this.db.delete(books).where(eq(books.isbn, isbn));
   }
 }

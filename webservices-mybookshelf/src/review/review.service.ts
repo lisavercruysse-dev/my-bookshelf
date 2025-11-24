@@ -1,22 +1,84 @@
-import { Injectable } from '@nestjs/common';
-import { REVIEWS } from 'src/data/mock_data';
-import { ReviewListResponseDto } from './review.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  CreateReviewRequestDto,
+  ReviewListResponseDto,
+  ReviewResponseDto,
+  UpdateReviewRequestDto,
+} from './review.dto';
+import {
+  type DatabaseProvider,
+  InjectDrizzle,
+} from 'src/drizzle/drizzle.provider';
+import { eq } from 'drizzle-orm';
+import { reviews } from 'src/drizzle/schema';
 
 @Injectable()
 export class ReviewService {
-  getAllReviews(): ReviewListResponseDto {
-    return {
-      items: REVIEWS,
-    };
+  constructor(
+    @InjectDrizzle()
+    private readonly db: DatabaseProvider,
+  ) {}
+
+  async getAllReviews(): Promise<ReviewListResponseDto> {
+    const items = await this.db.query.reviews.findMany();
+    return { items };
   }
 
-  getReviewsByIsbn(isbn: string): ReviewListResponseDto {
-    const filteredReviews = REVIEWS.filter((r) => r.isbn === isbn);
-    if (filteredReviews.length === 0) {
-      throw new Error('No reviews found for this ISBN');
+  async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
+    const items = await this.db.query.reviews.findMany({
+      where: eq(reviews.isbn, isbn),
+    });
+    if (items.length === 0) {
+      throw new NotFoundException('No reviews for this ISBN exist');
     }
-    return {
-      items: filteredReviews,
-    };
+    return { items };
+  }
+
+  async getReviewById(id: number): Promise<ReviewResponseDto> {
+    const item = await this.db.query.reviews.findFirst({
+      where: eq(reviews.id, id),
+    });
+    if (!item) {
+      throw new NotFoundException('No review with this ID exists');
+    }
+    return item;
+  }
+
+  async getReviewsByUserId(id: number): Promise<ReviewListResponseDto> {
+    const items = await this.db.query.reviews.findMany({
+      where: eq(reviews.userId, id),
+    });
+    if (items.length === 0) {
+      throw new NotFoundException('No reviews for this user exist');
+    }
+    return { items };
+  }
+
+  async create(review: CreateReviewRequestDto): Promise<ReviewResponseDto> {
+    const [newReview] = await this.db
+      .insert(reviews)
+      .values(review)
+      .$returningId();
+
+    return this.getReviewById(newReview.id);
+  }
+
+  async update(
+    id: number,
+    review: UpdateReviewRequestDto,
+  ): Promise<ReviewResponseDto> {
+    await this.db.update(reviews).set(review).where(eq(reviews.id, id));
+    if (!review) {
+      throw new NotFoundException('No review with this ID exists');
+    }
+    return this.getReviewById(id);
+  }
+
+  async delete(id: number): Promise<void> {
+    const [result] = await this.db.delete(reviews).where(eq(reviews.id, id));
+
+    if (result.affectedRows === 0) {
+      throw new NotFoundException('No review with this ID exists');
+    }
   }
 }
