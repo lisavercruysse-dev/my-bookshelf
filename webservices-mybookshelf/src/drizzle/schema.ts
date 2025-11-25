@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import {
   int,
   mysqlTable,
@@ -18,6 +19,7 @@ export const books = mysqlTable(
     description: varchar('description', { length: 1000 }).notNull(),
     amountPages: int('amountPages', { unsigned: true }).notNull(),
     author: varchar('author', { length: 255 }).notNull(),
+    favoriteCount: int('favoriteCount', { unsigned: true }).notNull(),
   },
   (table) => [uniqueIndex('idx_isbn').on(table.isbn)],
 );
@@ -26,8 +28,12 @@ export const reviews = mysqlTable(
   'reviews',
   {
     id: int('id', { unsigned: true }).primaryKey().autoincrement(),
-    isbn: varchar('isbn', { length: 13 }).notNull(),
-    userId: int('userId', { unsigned: true }).notNull(),
+    isbn: varchar('isbn', { length: 13 })
+      .notNull()
+      .references(() => books.isbn, { onDelete: 'cascade' }),
+    userId: int('userId', { unsigned: true })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
     body: varchar('body', { length: 1000 }).notNull(),
     stars: smallint('stars', { unsigned: true }).notNull(),
     date: date('date').notNull(),
@@ -45,13 +51,49 @@ export const users = mysqlTable('users', {
 export const userBooks = mysqlTable(
   'user_books',
   {
-    isbn: varchar('isbn', { length: 13 }).notNull(),
-    userId: int('userId', { unsigned: true }).notNull(),
+    isbn: varchar('isbn', { length: 13 })
+      .notNull()
+      .references(() => books.isbn, { onDelete: 'cascade' }),
+    userId: int('userId', { unsigned: true })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
     pagesRead: int('pagesRead', { unsigned: true }).notNull(),
     status: varchar('status', { length: 50 }).notNull(),
     favorite: boolean('favorite').notNull().default(false),
     dateStarted: date('dateStarted'),
-    dateFinished: date('dateFinished'),
+    dateEnded: date('dateEnded'),
   },
   (table) => [primaryKey({ columns: [table.isbn, table.userId] })],
 );
+
+export const bookRelations = relations(books, ({ many }) => ({
+  reviews: many(reviews),
+  userBooks: many(userBooks),
+}));
+
+export const userRelations = relations(users, ({ many }) => ({
+  reviews: many(reviews),
+  userBooks: many(userBooks),
+}));
+
+export const reviewRelations = relations(reviews, ({ one }) => ({
+  book: one(books, {
+    fields: [reviews.isbn],
+    references: [books.isbn],
+  }),
+  user: one(users, {
+    fields: [reviews.userId],
+    references: [users.id],
+  }),
+}));
+
+export const userBookRelations = relations(userBooks, ({ one }) => ({
+  book: one(books, {
+    fields: [userBooks.isbn],
+    references: [books.isbn],
+  }),
+  user: one(users, {
+    fields: [userBooks.userId],
+    references: [users.id],
+  }),
+}));

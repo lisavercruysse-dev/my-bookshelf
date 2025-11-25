@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   Post,
   Put,
@@ -12,6 +10,7 @@ import {
 import {
   BookListResponseDto,
   BookResponseDto,
+  BookWithReviewResponseDto,
   CreateBookRequestDto,
 } from './book.dto';
 import { BookService } from './book.service';
@@ -24,23 +23,19 @@ export class BookController {
     private readonly reviewService: ReviewService,
   ) {}
 
-  @Get()
-  async getAllBooks(): Promise<BookListResponseDto> {
-    return this.bookService.getAll();
+  @Get('popular')
+  async getPopular(): Promise<BookListResponseDto> {
+    return this.bookService.getPopular();
   }
 
   @Get(':isbn')
-  async getBookByIsbn(@Param('isbn') isbn: string): Promise<BookResponseDto> {
+  async getBookByIsbn(
+    @Param('isbn') isbn: string,
+  ): Promise<BookWithReviewResponseDto> {
     return this.bookService.getByIsbn(isbn);
   }
 
-  @Get(':isbn/reviews')
-  async getBookReviews(@Param('isbn') isbn: string) {
-    return this.reviewService.getReviewsByIsbn(isbn);
-  }
-
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   async createBook(
     @Body() createBookDto: CreateBookRequestDto,
   ): Promise<BookResponseDto> {

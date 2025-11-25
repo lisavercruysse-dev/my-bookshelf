@@ -4,13 +4,15 @@ import {
   BookListResponseDto,
   BookResponseDto,
   UpdateBookRequestDto,
+  BookDetailListDto,
+  BookWithReviewResponseDto,
 } from './book.dto';
 import {
   type DatabaseProvider,
   InjectDrizzle,
 } from 'src/drizzle/drizzle.provider';
-import { eq } from 'drizzle-orm';
-import { books } from 'src/drizzle/schema';
+import { desc, eq } from 'drizzle-orm';
+import { books, userBooks } from 'src/drizzle/schema';
 
 @Injectable()
 export class BookService {
@@ -19,14 +21,20 @@ export class BookService {
     private readonly db: DatabaseProvider,
   ) {}
 
-  async getAll(): Promise<BookListResponseDto> {
-    const items = await this.db.query.books.findMany();
+  async getPopular(): Promise<BookListResponseDto> {
+    const items = await this.db.query.books.findMany({
+      orderBy: (books) => [desc(books.favoriteCount)],
+    });
+
     return { items };
   }
 
-  async getByIsbn(isbn: string): Promise<BookResponseDto> {
+  async getByIsbn(isbn: string): Promise<BookWithReviewResponseDto> {
     const book = await this.db.query.books.findFirst({
       where: eq(books.isbn, isbn),
+      with: {
+        reviews: true,
+      },
     });
 
     if (!book) {
@@ -34,6 +42,20 @@ export class BookService {
     }
 
     return book;
+  }
+
+  async getBooksByUserId(id: number): Promise<BookDetailListDto> {
+    const items = await this.db.query.userBooks.findMany({
+      where: eq(userBooks.userId, id),
+      with: {
+        book: true,
+      },
+    });
+    if (items.length === 0) {
+      throw new NotFoundException('This user has not saved any books');
+    }
+
+    return { items };
   }
 
   async create(book: CreateBookRequestDto): Promise<BookResponseDto> {

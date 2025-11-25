@@ -8,5 +8,6 @@ import { ReviewModule } from 'src/review/review.module';
   imports: [DrizzleModule, ReviewModule],
   controllers: [BookController],
   providers: [BookService],
+  exports: [BookService],
 })
 export class BookModule {}

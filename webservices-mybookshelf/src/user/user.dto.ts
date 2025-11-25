@@ -4,7 +4,10 @@ export class CreateUserRequestDto {
   email: string;
 }
 
-export class UserResponseDto extends CreateUserRequestDto {}
+export class UserResponseDto {
+  id: number;
+  userName: string;
+}
 
 export class UpdateUserRequestDto extends CreateUserRequestDto {}
 

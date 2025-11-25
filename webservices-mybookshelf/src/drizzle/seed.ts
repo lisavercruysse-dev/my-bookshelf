@@ -46,6 +46,7 @@ async function seedBooks() {
         'A novella about a man with low IQ who undergoes an experimental surgery to increase his intelligence.',
       amountPages: 218,
       author: 'Daniel Keyes',
+      favoriteCount: 200,
     },
     {
       isbn: '9781781103142',
@@ -55,6 +56,7 @@ async function seedBooks() {
         'Young wizard Harry discovers his magical heritage and attends Hogwarts School of Witchcraft and Wizardry.',
       amountPages: 336,
       author: 'J.K. Rowling',
+      favoriteCount: 20,
     },
     {
       isbn: '0721438935188',
@@ -63,6 +65,7 @@ async function seedBooks() {
       description: 'This is a test book for testing purposes.',
       amountPages: 20,
       author: 'Suzanne Collins',
+      favoriteCount: 600,
     },
     {
       isbn: '0123438455178',
@@ -71,6 +74,7 @@ async function seedBooks() {
       description: 'Another short test book.',
       amountPages: 4,
       author: 'Test Person',
+      favoriteCount: 3,
     },
     {
       isbn: '9780140449136',
@@ -80,6 +84,7 @@ async function seedBooks() {
         "Homer's classic tale of Odysseus and his journey home from the Trojan War.",
       amountPages: 560,
       author: 'Homer',
+      favoriteCount: 15,
     },
   ]);
 
@@ -181,8 +186,8 @@ async function main() {
 
   await resetDatabase();
   await seedBooks();
-  await seedReviews();
   await seedUsers();
+  await seedReviews();
 
   console.log('Database seeding completed successfully.');
 }
