@@ -18,15 +18,19 @@ export class ReviewService {
     @InjectDrizzle()
     private readonly db: DatabaseProvider,
   ) {}
-
+  /*
   async getAllReviews(): Promise<ReviewListResponseDto> {
     const items = await this.db.query.reviews.findMany();
     return { items };
   }
-
+*/
   async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
     const items = await this.db.query.reviews.findMany({
       where: eq(reviews.isbn, isbn),
+      with: {
+        book: true,
+        user: true,
+      },
     });
     if (items.length === 0) {
       throw new NotFoundException('No reviews for this ISBN exist');
@@ -37,7 +41,12 @@ export class ReviewService {
   async getReviewById(id: number): Promise<ReviewResponseDto> {
     const item = await this.db.query.reviews.findFirst({
       where: eq(reviews.id, id),
+      with: {
+        book: true,
+        user: true,
+      },
     });
+
     if (!item) {
       throw new NotFoundException('No review with this ID exists');
     }
@@ -47,17 +56,29 @@ export class ReviewService {
   async getReviewsByUserId(id: number): Promise<ReviewListResponseDto> {
     const items = await this.db.query.reviews.findMany({
       where: eq(reviews.userId, id),
+      with: {
+        book: {
+          with: {
+            userBooks: true,
+          },
+        },
+      },
     });
+
     if (items.length === 0) {
       throw new NotFoundException('No reviews for this user exist');
     }
+
     return { items };
   }
 
   async create(review: CreateReviewRequestDto): Promise<ReviewResponseDto> {
     const [newReview] = await this.db
       .insert(reviews)
-      .values(review)
+      .values({
+        ...review,
+        date: new Date(),
+      })
       .$returningId();
 
     return this.getReviewById(newReview.id);
@@ -67,8 +88,11 @@ export class ReviewService {
     id: number,
     review: UpdateReviewRequestDto,
   ): Promise<ReviewResponseDto> {
-    await this.db.update(reviews).set(review).where(eq(reviews.id, id));
-    if (!review) {
+    const [result] = await this.db
+      .update(reviews)
+      .set(review)
+      .where(eq(reviews.id, id));
+    if (result.affectedRows === 0) {
       throw new NotFoundException('No review with this ID exists');
     }
     return this.getReviewById(id);

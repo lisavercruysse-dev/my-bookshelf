@@ -4,12 +4,15 @@ import {
   InjectDrizzle,
 } from 'src/drizzle/drizzle.provider';
 import {
+  CreateSavedBookDto,
   CreateUserRequestDto,
+  savedBookResponseDto,
+  UpdateSavedBookRequestDto,
   UserListResponseDto,
   UserResponseDto,
 } from './user.dto';
-import { eq } from 'drizzle-orm';
-import { users } from 'src/drizzle/schema';
+import { and, eq } from 'drizzle-orm';
+import { userBooks, users } from 'src/drizzle/schema';
 
 @Injectable()
 export class UserService {
@@ -35,10 +38,51 @@ export class UserService {
     return item;
   }
 
+  async getSavedBook(
+    userId: number,
+    isbn: string,
+  ): Promise<savedBookResponseDto> {
+    console.log('Looking for saved book', { userId, isbn });
+
+    const savedBook = await this.db.query.userBooks.findFirst({
+      where: and(eq(userBooks.userId, userId), eq(userBooks.isbn, isbn)),
+    });
+
+    if (!savedBook) {
+      throw new NotFoundException('No saved book found for this user and ISBN');
+    }
+
+    return savedBook;
+  }
+
   async create(user: CreateUserRequestDto): Promise<UserResponseDto> {
     const [newUser] = await this.db.insert(users).values(user).$returningId();
 
     return this.getUserById(newUser.id);
+  }
+
+  async createSavedBook(
+    book: CreateSavedBookDto,
+  ): Promise<savedBookResponseDto> {
+    await this.db.insert(userBooks).values({
+      ...book,
+      dateStarted: book.dateStarted ? new Date(book.dateStarted) : null,
+      dateEnded: book.dateEnded ? new Date(book.dateEnded) : null,
+    });
+
+    return this.getSavedBook(book.userId, book.isbn);
+  }
+
+  async updateSavedBook(
+    userId: number,
+    isbn: string,
+    book: UpdateSavedBookRequestDto,
+  ): Promise<savedBookResponseDto> {
+    await this.db
+      .update(userBooks)
+      .set(book)
+      .where(and(eq(userBooks.userId, userId), eq(userBooks.isbn, isbn)));
+    return this.getSavedBook(userId, isbn);
   }
 
   async update(

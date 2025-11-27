@@ -11,23 +11,24 @@ export class CreateBookRequestDto {
 }
 export class UpdateBookRequestDto extends CreateBookRequestDto {}
 
-export class BookResponseDto extends CreateBookRequestDto {}
+export class BookResponseDto extends CreateBookRequestDto {
+  bookDetails?: BookDetailResponseDto[];
+}
 export class BookListResponseDto {
   items: BookResponseDto[];
 }
 
-export class BookDetailDto {
+export class BookDetailResponseDto {
   userId: number;
   pagesRead: number;
   status: string;
   favorite: boolean;
   dateStarted: Date | null;
   dateEnded: Date | null;
-  book: BookResponseDto;
 }
 
 export class BookDetailListDto {
-  items: BookDetailDto[];
+  items: BookDetailResponseDto[];
 }
 
 export class BookWithReviewResponseDto extends BookResponseDto {

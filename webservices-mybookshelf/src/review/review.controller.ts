@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import {
   CreateReviewRequestDto,
-  ReviewListResponseDto,
   ReviewResponseDto,
   UpdateReviewRequestDto,
 } from './review.dto';
@@ -18,10 +17,11 @@ import { ReviewService } from './review.service';
 @Controller('reviews')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
-  @Get()
+  /*@Get()
   async getAllReviews(): Promise<ReviewListResponseDto> {
     return await this.reviewService.getAllReviews();
   }
+*/
 
   @Get(':id')
   async getReviewById(@Param('id') id: number): Promise<ReviewResponseDto> {
@@ -39,7 +39,7 @@ export class ReviewController {
   async updateReview(
     @Param('id') id: number,
     @Body() updateReviewDto: UpdateReviewRequestDto,
-  ) {
+  ): Promise<ReviewResponseDto> {
     return await this.reviewService.update(id, updateReviewDto);
   }
 

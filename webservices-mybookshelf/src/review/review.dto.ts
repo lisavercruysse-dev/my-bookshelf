@@ -1,14 +1,25 @@
+import { BookResponseDto } from 'src/book/book.dto';
+import { UserResponseDto } from 'src/user/user.dto';
+
 export class CreateReviewRequestDto {
+  isbn: string;
+  userId: number;
+  body: string;
+  stars: number;
+  title: string;
+}
+
+export class ReviewResponseDto {
   id: number;
   isbn: string;
   userId: number;
   body: string;
   stars: number;
-  date: Date;
   title: string;
+  date: Date;
+  user?: UserResponseDto;
+  book?: BookResponseDto;
 }
-
-export class ReviewResponseDto extends CreateReviewRequestDto {}
 
 export class UpdateReviewRequestDto {
   body: string;
@@ -18,4 +29,18 @@ export class UpdateReviewRequestDto {
 
 export class ReviewListResponseDto {
   items: ReviewResponseDto[];
+}
+
+export class UserReviewResponseDto {
+  id: number;
+  userId: number;
+  body: string;
+  stars: number;
+  date: Date;
+  title: string;
+  book: BookResponseDto;
+}
+
+export class UserReviewResponseListDto {
+  items: UserReviewResponseDto[];
 }

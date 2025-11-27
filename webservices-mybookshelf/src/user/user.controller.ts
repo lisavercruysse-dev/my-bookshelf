@@ -12,12 +12,14 @@ import {
   CreateUserRequestDto,
   UserResponseDto,
   UpdateUserRequestDto,
-  UserListResponseDto,
+  CreateSavedBookDto,
+  savedBookResponseDto,
+  UpdateSavedBookRequestDto,
 } from './user.dto';
 import { ReviewService } from 'src/review/review.service';
-import { ReviewListResponseDto } from 'src/review/review.dto';
 import { BookDetailListDto } from 'src/book/book.dto';
 import { BookService } from 'src/book/book.service';
+import { ReviewListResponseDto } from 'src/review/review.dto';
 
 @Controller('users')
 export class UserController {
@@ -26,11 +28,11 @@ export class UserController {
     private readonly reviewService: ReviewService,
     private readonly bookService: BookService,
   ) {}
-
+  /*
   @Get()
   async getAllUsers(): Promise<UserListResponseDto> {
     return await this.userService.getAllUsers();
-  }
+  } */
 
   @Get(':id')
   async getUserById(@Param('id') id: number): Promise<UserResponseDto> {
@@ -56,12 +58,32 @@ export class UserController {
     return await this.userService.create(createUserDto);
   }
 
+  @Post('/books')
+  async saveBook(
+    @Body() createSavedBookDto: CreateSavedBookDto,
+  ): Promise<savedBookResponseDto> {
+    return await this.userService.createSavedBook(createSavedBookDto);
+  }
+
   @Put(':id')
   async updateUser(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserRequestDto,
   ): Promise<UserResponseDto> {
     return await this.userService.update(id, updateUserDto);
+  }
+
+  @Put('/:userId/:isbn')
+  async updateSavedBook(
+    @Param('userId') userId: number,
+    @Param('isbn') isbn: string,
+    @Body() updateSavedBookDto: UpdateSavedBookRequestDto,
+  ): Promise<savedBookResponseDto> {
+    return await this.userService.updateSavedBook(
+      userId,
+      isbn,
+      updateSavedBookDto,
+    );
   }
 
   @Delete(':id')
