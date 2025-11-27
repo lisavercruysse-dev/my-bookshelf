@@ -1,0 +1,1 @@
+ALTER TABLE `books` MODIFY COLUMN `favoriteCount` int unsigned NOT NULL DEFAULT 0;

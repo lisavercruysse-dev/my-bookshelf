@@ -11,11 +11,13 @@ import {
   UserListResponseDto,
   UserResponseDto,
 } from './user.dto';
-import { and, eq } from 'drizzle-orm';
-import { userBooks, users } from 'src/drizzle/schema';
+import { and, eq, sql } from 'drizzle-orm';
+import { books, userBooks, users } from 'src/drizzle/schema';
+import { BookService } from 'src/book/book.service';
 
 @Injectable()
 export class UserService {
+  bookService: BookService;
   constructor(
     @InjectDrizzle()
     private readonly db: DatabaseProvider,
@@ -70,7 +72,17 @@ export class UserService {
       dateEnded: book.dateEnded ? new Date(book.dateEnded) : null,
     });
 
-    return this.getSavedBook(book.userId, book.isbn);
+    const savedBook = await this.getSavedBook(book.userId, book.isbn);
+    if (savedBook.favorite) {
+      await this.db
+        .update(books)
+        .set({
+          favoriteCount: sql`${books.favoriteCount} + 1`,
+        })
+        .where(eq(books.isbn, savedBook.isbn));
+    }
+
+    return savedBook;
   }
 
   async updateSavedBook(
@@ -78,11 +90,23 @@ export class UserService {
     isbn: string,
     book: UpdateSavedBookRequestDto,
   ): Promise<savedBookResponseDto> {
+    const oldBook = await this.getSavedBook(userId, isbn);
     await this.db
       .update(userBooks)
       .set(book)
       .where(and(eq(userBooks.userId, userId), eq(userBooks.isbn, isbn)));
-    return this.getSavedBook(userId, isbn);
+
+    const savedBook = await this.getSavedBook(userId, isbn);
+    if (oldBook.favorite !== savedBook.favorite) {
+      const change = savedBook.favorite ? 1 : -1;
+      await this.db
+        .update(books)
+        .set({
+          favoriteCount: sql`${books.favoriteCount} + ${change}`,
+        })
+        .where(eq(books.isbn, isbn));
+    }
+    return savedBook;
   }
 
   async update(

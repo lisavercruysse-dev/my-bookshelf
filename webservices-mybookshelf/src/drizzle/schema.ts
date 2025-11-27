@@ -19,7 +19,9 @@ export const books = mysqlTable(
     description: varchar('description', { length: 1000 }).notNull(),
     amountPages: int('amountPages', { unsigned: true }).notNull(),
     author: varchar('author', { length: 255 }).notNull(),
-    favoriteCount: int('favoriteCount', { unsigned: true }).notNull(),
+    favoriteCount: int('favoriteCount', { unsigned: true })
+      .notNull()
+      .default(0),
   },
   (table) => [uniqueIndex('idx_isbn').on(table.isbn)],
 );
