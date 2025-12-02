@@ -1,14 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { CorsConfig, ServerConfig } from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService<ServerConfig>);
+  const port = config.get<number>('port')!;
+  const cors = config.get<CorsConfig>('cors')!;
   app.setGlobalPrefix('api');
-  await app.listen(process.env.PORT ?? 3000);
-
   app.enableCors({
-    origin: ['http://localhost:5173'],
-    maxAge: 3 * 60 * 60,
+    origin: cors.origins,
+    maxAge: cors.maxAge,
   });
+
+  await app.listen(port);
 }
 bootstrap();

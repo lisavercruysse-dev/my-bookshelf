@@ -1,19 +1,40 @@
 import axios from 'axios';
 
-const baseUrl = import.meta.env.VITE_GOOGLE_BOOKS_API_URL;
+const googleBooksBaseUrl = import.meta.env.VITE_GOOGLE_BOOKS_API_URL;
 const googleBooksKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+const baseUrl = import.meta.env.VITE_PERSONAL_API_URL;
+;
 
 export async function getBooks(url){
-  const { data } = await axios.get(`${baseUrl}/volumes${url}&key=${googleBooksKey}`);
+  const { data } = await axios.get(`${googleBooksBaseUrl}/volumes${url}&key=${googleBooksKey}`);
   return data.items;
 }
 
 export async function getBooksById(isbn) {
   const { data } = await axios.get(
-    `${baseUrl}/volumes?q=isbn:${isbn}&key=${googleBooksKey}`,
+    `${googleBooksBaseUrl}/volumes?q=isbn:${isbn}&key=${googleBooksKey}`,
   );
   if (!data.items || data.items.length === 0) {
     return null;
   }
   return data.items[0].volumeInfo;
+}
+
+export async function getData(url) {
+  const {data} = await axios.get(`${baseUrl}${url}`);
+  console.log(data);
+  return data.items;
+}
+
+export async function save(url, { arg: {id, ...data} }) {
+  await axios({
+    method: id ? 'PUT' : 'POST',
+    url: `${baseUrl}${url}/${id ?? ''}`,
+    data,
+  });
+}
+
+export async function getById(url) {
+  const { data } = await axios.get(`${baseUrl}${url}`);
+  return data;
 }

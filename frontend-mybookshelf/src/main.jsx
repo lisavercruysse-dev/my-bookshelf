@@ -3,24 +3,27 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import { createBrowserRouter, Navigate } from 'react-router';
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router/dom';
 import NotFound from './pages/NotFound.jsx';
 import Discover from './pages/Discover.jsx';
-import MyReviews from './pages/MyReviews.jsx';
+import MyReviews from './pages/reviews/MyReviews.jsx';
 import MyBooks from './pages/MyBooks.jsx';
 import BookInfo from './pages/BookInfo.jsx';
+import AddOrEditReview from './pages/reviews/AddOrEditReview.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     Component: App,
   },
-  { path: '*', Component: NotFound},
   { path: 'discover', Component: Discover},
   { path: 'myReviews', Component: MyReviews},
   { path: 'myBooks', Component: MyBooks},
   { path: 'Discover/bookInfo', element: <Navigate to='/bookInfo'/>},
   { path: 'bookInfo/:isbn', Component: BookInfo},
+  { path: 'addOrEditReview/:isbn', Component: AddOrEditReview},
+  { path: 'myReviews/addOrEditReview/:id', Component: AddOrEditReview},
+  { path: '*', Component: NotFound},
 ]);
 
 createRoot(document.getElementById('root')).render(

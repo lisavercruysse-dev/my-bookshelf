@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import altBook from '../assets/altBook.jpg';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export default function Book (props) {
 
@@ -32,6 +32,10 @@ export default function Book (props) {
         <button className="border rounded-lg pl-3 pr-3 pt-1 pb-1 bg-emerald-900 
          hover:bg-emerald-950 hover:cursor-pointer w-20" 
         >save</button>
+        <Link to={`addOrEditReview/${isbn}`}>
+          <button className="bg-emerald-900 pb-2 pt-2 hover:cursor-pointer
+        text-emerald-50 rounded-lg hover:bg-emerald-950 w-30">Add Review</button>
+        </Link>
       </div>
     </div>
   );

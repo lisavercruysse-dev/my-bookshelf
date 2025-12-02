@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import useSWR from 'swr';
 import { getBooksById } from '../api';
 import AsyncData from '../components/AsyncData';

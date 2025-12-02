@@ -1,16 +1,23 @@
 import useSWR from 'swr';
-import { getBooks } from '../api';
+import { getData } from '../api';
 import AsyncData from '../components/AsyncData';
 import Book from '../components/Book';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import TopBar from '../components/TopBar';
 
 export default function Overview(){
-  const {
+/*  const {
     data: books = [],
     error,
     isLoading,
   } = useSWR('?q=flowers+inauthor:keyes', getBooks);
+*/
+
+  const {
+    data: books = [],
+    error,
+    isLoading,
+  } = useSWR('/books/popular', getData);
 
   return (
     <>
@@ -35,7 +42,7 @@ export default function Overview(){
           </div>
         </div>
         <div className='flex flex-wrap justify-center gap-10 max-w-400 mx-auto'>
-          <AsyncData loading={isLoading} error={error}>
+          {/* <AsyncData loading={isLoading} error={error}>
             {books.map((book) => {
               const b = book.volumeInfo;
 
@@ -61,6 +68,23 @@ export default function Overview(){
                   author={author}
                   img={img}
                 />
+              );
+            })}
+          </AsyncData> */}
+          <AsyncData loading={isLoading} error={error}>
+            {books.map((book) => {
+              const {isbn = 'unknown', title = 'No title', genre = 'No genre', 
+                description = 'No description', amountPages = 0, author = 'no author'} = book;
+
+              return (
+                <Book
+                  key={isbn}
+                  isbn={isbn}
+                  title={title}
+                  genre={genre}
+                  description={description}
+                  amountPages={amountPages}
+                  author={author} />
               );
             })}
           </AsyncData>
