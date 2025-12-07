@@ -49,7 +49,6 @@ export default function ReviewForm({ book, saveReview, review }) {
 
   const onSubmit = async (values) => {
     if (!isValid || !book.isbn) {
-      console.log('Failed');
       return;
     };
 
@@ -61,48 +60,48 @@ export default function ReviewForm({ book, saveReview, review }) {
       throwOnError: false,
       onSuccess: () => {
         navigate('/myReviews');
-        console.log('Review added');
       },
     });
   };
 
   return (
-  
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className='border rounded-lg max-w-150 p-5 flex flex-col 
+    gap-3 m-3 items-center'>
 
-      <div>
-        <label htmlFor="userId">UserId</label>
-        <input 
-          {...register('userId', validationRules.userId)}
-          id="userId" name="userId" type="number" placeholder="userId" required />
-        {errors.userId && <p className="text-red-500 text-sm mt-1">{errors.userId.message}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="body">Body</label>
-        <input 
-          {...register('body')}
-          id="body" name="body" type="text" placeholder="Your thoughts on the book..." required />
-      </div>
-
-      <div>
-        <label htmlFor="stars">Stars</label>
-        <input 
-          {...register('stars', validationRules.stars)}
-          id="stars" name="stars" type="number" placeholder="Your rating" required />
-        {errors.stars && <p className="text-red-500 text-sm mt-1">{errors.stars.message}</p>}
-      </div>
-
-      <div>
+      <div className='flex flex-col gap-1 items-center'>
         <label htmlFor="title">Title</label>
-        <input 
+        <input className='border rounded-lg p-2'
           {...register('title', validationRules.title)}
           id="title" name="title" type="text" />
         {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
       </div>
 
-      <div>
-        <button type="submit">
+      <div className='flex flex-col gap-1 items-center'>
+        <label htmlFor="userId">UserId</label>
+        <input className='border rounded-lg p-2'
+          {...register('userId', validationRules.userId)}
+          id="userId" name="userId" type="number" placeholder="userId" required />
+        {errors.userId && <p className="text-red-500 text-sm mt-1">{errors.userId.message}</p>}
+      </div>
+
+      <div className='flex flex-col gap-1 items-center'>
+        <label htmlFor="body">Body</label>
+        <input className='border rounded-lg p-2'
+          {...register('body')}
+          id="body" name="body" type="text" placeholder="Your thoughts on the book..." required />
+      </div>
+
+      <div className='flex flex-col gap-1 items-center'>
+        <label htmlFor="stars">Stars</label>
+        <input className='border rounded-lg p-2'
+          {...register('stars', validationRules.stars)}
+          id="stars" name="stars" type="number" placeholder="Your rating" required />
+        {errors.stars && <p className="text-red-500 text-sm mt-1">{errors.stars.message}</p>}
+      </div>
+
+      <div className='flex flex-col gap-1 items-center'>
+        <button type="submit" className='border rounded-lg pl-3 pr-3 pt-2 pb-2 mt-3
+        hover:cursor-pointer'>
           {currentReview?.id ? 'save review' : 'Add review'}
         </button>
       </div>

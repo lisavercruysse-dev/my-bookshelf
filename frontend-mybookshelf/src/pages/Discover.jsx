@@ -122,7 +122,8 @@ export default function Discover() {
                 
               const isbn =
                 b.industryIdentifiers?.find((id) => id.type === 'ISBN_13')?.identifier ||
-                      b.industryIdentifiers?.find((id) => id.type === 'ISBN_10')?.identifier; 
+                b.industryIdentifiers?.find((id) => id.type === 'ISBN_10')?.identifier ||
+                book.id;
                 
               const title = b.title || 'No title';
               const genre = b.categories || [];

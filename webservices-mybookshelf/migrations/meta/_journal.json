@@ -57,6 +57,41 @@
       "when": 1764256665869,
       "tag": "0007_square_ozymandias",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1764841446529,
+      "tag": "0008_old_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1764842577942,
+      "tag": "0009_sad_amazoness",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1764924919357,
+      "tag": "0010_ambiguous_namor",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1765031148849,
+      "tag": "0011_friendly_stellaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1765115184551,
+      "tag": "0012_dazzling_roughhouse",
+      "breakpoints": true
     }
   ]
 }

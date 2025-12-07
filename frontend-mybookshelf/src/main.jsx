@@ -10,6 +10,7 @@ import MyReviews from './pages/reviews/MyReviews.jsx';
 import MyBooks from './pages/MyBooks.jsx';
 import BookInfo from './pages/BookInfo.jsx';
 import AddOrEditReview from './pages/reviews/AddOrEditReview.jsx';
+import AddOrEditSavedBook from './pages/books/AddOrEditSavedBook.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,10 @@ const router = createBrowserRouter([
   { path: 'bookInfo/:isbn', Component: BookInfo},
   { path: 'addOrEditReview/:isbn', Component: AddOrEditReview},
   { path: 'myReviews/addOrEditReview/:id', Component: AddOrEditReview},
+  { path: 'Discover/addOrEditReview/:isbn', Component: AddOrEditReview},
   { path: '*', Component: NotFound},
+  { path: '/bookInfo/:isbn', Component: BookInfo},
+  { path: 'addOrEditSavedBook/:isbn', Component: AddOrEditSavedBook},
 ]);
 
 createRoot(document.getElementById('root')).render(

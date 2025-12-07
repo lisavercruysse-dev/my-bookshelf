@@ -18,6 +18,7 @@ async function resetDatabase() {
   console.log('Deleting existing data...');
 
   await db.delete(schema.userBooks);
+  await db.delete(schema.statuses);
   await db.delete(schema.reviews);
   await db.delete(schema.books);
   await db.delete(schema.users);
@@ -28,6 +29,7 @@ async function resetDatabase() {
 
   await db.execute(`ALTER TABLE books AUTO_INCREMENT = 1`);
   await db.execute(`ALTER TABLE reviews AUTO_INCREMENT = 1`);
+  await db.execute(`ALTER TABLE statuses AUTO_INCREMENT = 1`);
   await db.execute(`ALTER TABLE users AUTO_INCREMENT = 1`);
 
   console.log('AUTO_INCREMENT counters reset.');
@@ -47,7 +49,6 @@ async function seedBooks() {
         'A novella about a man with low IQ who undergoes an experimental surgery to increase his intelligence.',
       amountPages: 218,
       author: 'Daniel Keyes',
-      favoriteCount: 200,
     },
     {
       isbn: '9781781103142',
@@ -57,7 +58,6 @@ async function seedBooks() {
         'Young wizard Harry discovers his magical heritage and attends Hogwarts School of Witchcraft and Wizardry.',
       amountPages: 336,
       author: 'J.K. Rowling',
-      favoriteCount: 20,
     },
     {
       isbn: '0721438935188',
@@ -66,7 +66,6 @@ async function seedBooks() {
       description: 'This is a test book for testing purposes.',
       amountPages: 20,
       author: 'Suzanne Collins',
-      favoriteCount: 600,
     },
     {
       isbn: '0123438455178',
@@ -75,7 +74,6 @@ async function seedBooks() {
       description: 'Another short test book.',
       amountPages: 4,
       author: 'Test Person',
-      favoriteCount: 3,
     },
     {
       isbn: '9780140449136',
@@ -85,7 +83,6 @@ async function seedBooks() {
         "Homer's classic tale of Odysseus and his journey home from the Trojan War.",
       amountPages: 560,
       author: 'Homer',
-      favoriteCount: 15,
     },
   ]);
 
@@ -190,7 +187,7 @@ async function seedUserBooks() {
       userId: 1,
       isbn: '9780435123437', // Flowers for Algernon
       pagesRead: 50,
-      status: 'reading',
+      statusId: 2,
       favorite: true,
       dateStarted: new Date('2025-01-01'),
       dateEnded: null,
@@ -199,7 +196,7 @@ async function seedUserBooks() {
       userId: 2,
       isbn: '9781781103142', // Harry Potter
       pagesRead: 336,
-      status: 'completed',
+      statusId: 3,
       favorite: false,
       dateStarted: new Date('2024-12-01'),
       dateEnded: new Date('2024-12-20'),
@@ -208,7 +205,7 @@ async function seedUserBooks() {
       userId: 3,
       isbn: '0721438935188', // Beautiful Test
       pagesRead: 20,
-      status: 'completed',
+      statusId: 3,
       favorite: true,
       dateStarted: new Date('2025-02-15'),
       dateEnded: new Date('2025-02-16'),
@@ -217,7 +214,7 @@ async function seedUserBooks() {
       userId: 4,
       isbn: '0123438455178', // Another Test Test
       pagesRead: 2,
-      status: 'reading',
+      statusId: 2,
       favorite: false,
       dateStarted: new Date('2025-03-10'),
       dateEnded: null,
@@ -226,7 +223,7 @@ async function seedUserBooks() {
       userId: 5,
       isbn: '9780140449136', // The Odyssey
       pagesRead: 300,
-      status: 'reading',
+      statusId: 2,
       favorite: true,
       dateStarted: new Date('2025-01-20'),
       dateEnded: null,
@@ -236,12 +233,27 @@ async function seedUserBooks() {
   console.log('user_books seed data inserted successfully.');
 }
 
+async function seedStatuses() {
+  console.log('Seeding statuses...');
+
+  await db.insert(schema.statuses).values([
+    { id: 1, name: 'TBR' },
+    { id: 2, name: 'Reading' },
+    { id: 3, name: 'Finished' },
+    { id: 4, name: 'Paused' },
+    { id: 5, name: 'DNF' },
+  ]);
+
+  console.log('Statuses seed data inserted successfully.');
+}
+
 async function main() {
   console.log('Starting database seed...\n');
 
   await resetDatabase();
   await seedBooks();
   await seedUsers();
+  await seedStatuses();
   await seedReviews();
   await seedUserBooks();
 

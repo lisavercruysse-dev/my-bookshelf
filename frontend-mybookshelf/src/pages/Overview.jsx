@@ -4,6 +4,8 @@ import AsyncData from '../components/AsyncData';
 import Book from '../components/Book';
 import { Link } from 'react-router';
 import TopBar from '../components/TopBar';
+import useSWRMutation from 'swr/mutation';
+import { save } from '../api/index';
 
 export default function Overview(){
 /*  const {
@@ -18,6 +20,11 @@ export default function Overview(){
     error,
     isLoading,
   } = useSWR('/books/popular', getData);
+
+  const { trigger: saveBook, error: saveError} = useSWRMutation(
+    '/books',
+    save,
+  );
 
   return (
     <>
@@ -71,10 +78,10 @@ export default function Overview(){
               );
             })}
           </AsyncData> */}
-          <AsyncData loading={isLoading} error={error}>
+          <AsyncData loading={isLoading} error={error || saveError}>
             {books.map((book) => {
               const {isbn = 'unknown', title = 'No title', genre = 'No genre', 
-                description = 'No description', amountPages = 0, author = 'no author'} = book;
+                description = 'No description', amountPages = 0, author = 'no author', img} = book;
 
               return (
                 <Book
@@ -84,7 +91,9 @@ export default function Overview(){
                   genre={genre}
                   description={description}
                   amountPages={amountPages}
-                  author={author} />
+                  author={author}
+                  img={img}
+                  saveBook={saveBook} />
               );
             })}
           </AsyncData>

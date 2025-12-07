@@ -8,20 +8,19 @@ import {
   date,
   primaryKey,
   boolean,
+  text,
 } from 'drizzle-orm/mysql-core';
 
 export const books = mysqlTable(
   'books',
   {
-    isbn: varchar('isbn', { length: 13 }).primaryKey(),
+    isbn: varchar('isbn', { length: 20 }).primaryKey(),
     title: varchar('title', { length: 255 }).notNull(),
     genre: varchar('genre', { length: 100 }).notNull(),
-    description: varchar('description', { length: 1000 }).notNull(),
+    description: text('description').notNull(),
     amountPages: int('amountPages', { unsigned: true }).notNull(),
     author: varchar('author', { length: 255 }).notNull(),
-    favoriteCount: int('favoriteCount', { unsigned: true })
-      .notNull()
-      .default(0),
+    imageLink: varchar('imageLink', { length: 255 }),
   },
   (table) => [uniqueIndex('idx_isbn').on(table.isbn)],
 );
@@ -36,7 +35,7 @@ export const reviews = mysqlTable(
     userId: int('userId', { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    body: varchar('body', { length: 1000 }).notNull(),
+    body: text('body').notNull(),
     stars: smallint('stars', { unsigned: true }).notNull(),
     date: date('date').notNull(),
     title: varchar('title', { length: 255 }).notNull(),
@@ -60,13 +59,20 @@ export const userBooks = mysqlTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     pagesRead: int('pagesRead', { unsigned: true }).notNull(),
-    status: varchar('status', { length: 50 }).notNull(),
+    statusId: int('status', { unsigned: true })
+      .notNull()
+      .references(() => statuses.id),
     favorite: boolean('favorite').notNull().default(false),
     dateStarted: date('dateStarted'),
     dateEnded: date('dateEnded'),
   },
   (table) => [primaryKey({ columns: [table.isbn, table.userId] })],
 );
+
+export const statuses = mysqlTable('statuses', {
+  id: int('id', { unsigned: true }).primaryKey().autoincrement().notNull(),
+  name: varchar('name', { length: 25 }).notNull(),
+});
 
 export const bookRelations = relations(books, ({ many }) => ({
   reviews: many(reviews),
@@ -97,5 +103,9 @@ export const userBookRelations = relations(userBooks, ({ one }) => ({
   user: one(users, {
     fields: [userBooks.userId],
     references: [users.id],
+  }),
+  status: one(statuses, {
+    fields: [userBooks.statusId],
+    references: [statuses.id],
   }),
 }));

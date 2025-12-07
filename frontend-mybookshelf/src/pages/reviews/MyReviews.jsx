@@ -26,6 +26,7 @@ export default function MyReviews() {
             const genre = r.book.genre;
             const pages = r.book.amountPages;
             const author = r.book.author;
+            const img = r.book.imageLink;
 
             return (
               <div key={id}>
@@ -40,6 +41,7 @@ export default function MyReviews() {
                   genre={genre}
                   pages={pages}
                   author={author}
+                  img={img}
                 />
               </div>
             );

@@ -11,7 +11,7 @@ import {
   type DatabaseProvider,
   InjectDrizzle,
 } from 'src/drizzle/drizzle.provider';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, inArray, sql } from 'drizzle-orm';
 import { books, userBooks } from 'src/drizzle/schema';
 
 @Injectable()
@@ -22,11 +22,26 @@ export class BookService {
   ) {}
 
   async getPopular(): Promise<BookListResponseDto> {
-    const items = await this.db.query.books.findMany({
-      orderBy: (books) => [desc(books.favoriteCount)],
-    });
+    const popular = await this.db
+      .select({
+        isbn: userBooks.isbn,
+        count: sql<number>`COUNT(*)`,
+      })
+      .from(userBooks)
+      .groupBy(userBooks.isbn)
+      .orderBy(desc(sql`COUNT(*)`))
+      .limit(10);
 
-    return { items };
+    const isbns = popular.map((p) => p.isbn);
+
+    const booksResult = await this.db
+      .select()
+      .from(books)
+      .where(inArray(books.isbn, isbns));
+
+    return {
+      items: booksResult,
+    };
   }
 
   async getByIsbn(isbn: string): Promise<BookWithReviewResponseDto> {
@@ -49,6 +64,7 @@ export class BookService {
       where: eq(userBooks.userId, id),
       with: {
         book: true,
+        status: true,
       },
     });
     if (items.length === 0) {

@@ -1,3 +1,5 @@
+import { StatusResponseDto } from 'src/status/status.dto';
+
 export class CreateUserRequestDto {
   id: number;
   userName: string;
@@ -19,12 +21,20 @@ export class CreateSavedBookDto {
   isbn: string;
   userId: number;
   pagesRead: number;
-  status: string;
   favorite: boolean;
   dateStarted: Date | null;
   dateEnded: Date | null;
+  statusId: number;
 }
 
 export class UpdateSavedBookRequestDto extends CreateSavedBookDto {}
 
-export class savedBookResponseDto extends CreateSavedBookDto {}
+export class savedBookResponseDto {
+  isbn: string;
+  userId: number;
+  pagesRead: number;
+  favorite: boolean;
+  dateStarted: Date | null;
+  dateEnded: Date | null;
+  status: StatusResponseDto;
+}

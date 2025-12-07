@@ -2,12 +2,12 @@ import { Link } from 'react-router';
 import altBook from '../../assets/altBook.jpg';
 
 export default function Review(props){
-  const {id, title, body, stars, date, bookTitle, pages, author, genre} = props;
+  const {id, title, body, stars, date, bookTitle, pages, author, genre, img} = props;
 
   return (
     <div className="flex flex-col border rounded-lg p-5 gap-3 m-5 shadow-emerald-950 item">
       <div className="flex gap-3">
-        <img src={altBook} className='rounded-lg w-60 object-contain' />
+        <img src={img || altBook} className='rounded-lg w-60 object-contain' />
         <div className="flex flex-col gap-2 flex-1">
           <h4>{bookTitle}</h4>
           <p>{author}</p>

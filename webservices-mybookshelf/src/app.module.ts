@@ -9,10 +9,12 @@ import { ReviewModule } from './review/review.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
+import { StatusModule } from './status/status.module';
 
 @Module({
   imports: [
     UserModule,
+    StatusModule,
     BookModule,
     ReviewModule,
     ConfigModule.forRoot({

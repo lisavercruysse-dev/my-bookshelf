@@ -14,14 +14,10 @@ import {
   CreateBookRequestDto,
 } from './book.dto';
 import { BookService } from './book.service';
-import { ReviewService } from 'src/review/review.service';
 
 @Controller('books')
 export class BookController {
-  constructor(
-    private readonly bookService: BookService,
-    private readonly reviewService: ReviewService,
-  ) {}
+  constructor(private readonly bookService: BookService) {}
 
   @Get('popular')
   async getPopular(): Promise<BookListResponseDto> {
