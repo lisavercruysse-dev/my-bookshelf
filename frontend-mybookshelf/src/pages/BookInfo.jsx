@@ -60,7 +60,7 @@ export default function BookInfo() {
       <AsyncData loading={isLoading || saveLoading} error={error || saveError}>
         <>
           {googleBook  || myBook ? (
-            <div className='p-5 flex flex-col gap-5'>
+            <div className='p-5 flex flex-col gap-5 items-center'>
               <div className='flex gap-3 border rounded-lg p-5 max-w-250'> 
                 <div className='flex flex-col items-center'>
                   <img className='w-60 rounded-lg min-w-60 shadow-lg' 
@@ -87,7 +87,7 @@ export default function BookInfo() {
                 </div>   
               </div>
               <button onClick={handleSave} className="border rounded-lg pl-3 pr-3 pt-1 pb-1 bg-emerald-900 
-         hover:bg-emerald-950 hover:cursor-pointer w-20" 
+         hover:bg-emerald-950 hover:cursor-pointer w-20 text-emerald-50" 
               >save</button>
               <h3>Reviews</h3>
 

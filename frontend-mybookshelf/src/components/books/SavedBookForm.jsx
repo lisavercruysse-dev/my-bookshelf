@@ -58,7 +58,7 @@ export default function SavedBookForm ({statuses = [], savedBook, book, saveBook
       ...values,
     }, {
       throwOnError: false,
-      onSucces: () => {
+      onSuccess: () => {
         navigate('/myBooks');
       },
     },

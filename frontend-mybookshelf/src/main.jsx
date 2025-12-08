@@ -7,7 +7,7 @@ import { RouterProvider } from 'react-router/dom';
 import NotFound from './pages/NotFound.jsx';
 import Discover from './pages/Discover.jsx';
 import MyReviews from './pages/reviews/MyReviews.jsx';
-import MyBooks from './pages/MyBooks.jsx';
+import MyBooks from './pages/books/MyBooks.jsx';
 import BookInfo from './pages/BookInfo.jsx';
 import AddOrEditReview from './pages/reviews/AddOrEditReview.jsx';
 import AddOrEditSavedBook from './pages/books/AddOrEditSavedBook.jsx';
@@ -28,6 +28,7 @@ const router = createBrowserRouter([
   { path: '*', Component: NotFound},
   { path: '/bookInfo/:isbn', Component: BookInfo},
   { path: 'addOrEditSavedBook/:isbn', Component: AddOrEditSavedBook},
+  { path: '/myBooks/addOrEditSavedBook/:isbn', element: <Navigate to='addOrEditSavedBook/:isbn'/>},
 ]);
 
 createRoot(document.getElementById('root')).render(
