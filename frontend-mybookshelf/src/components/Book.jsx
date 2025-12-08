@@ -1,10 +1,7 @@
-import { useState } from 'react';
 import altBook from '../assets/altBook.jpg';
 import { Link } from 'react-router';
 
 export default function Book ({isbn, title, amountPages, author, img}) {
-
-  const [imgUrl, setImgUrl] = useState(img || altBook);
 
   return (
     <div className="flex flex-col p-5 m-2 items-center min-w-90 text-emerald-50 max-w-90
@@ -16,9 +13,8 @@ export default function Book ({isbn, title, amountPages, author, img}) {
         {author}
       </p>
       <img
-        src={imgUrl}
+        src={img || altBook}
         alt="book cover"
-        onError={() => setImgUrl(altBook)}
         className="w-48 rounded-lg border border-emerald-50"
       />
       <p className='mt-2 italic'>

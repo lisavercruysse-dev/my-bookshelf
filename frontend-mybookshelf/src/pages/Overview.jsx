@@ -49,35 +49,6 @@ export default function Overview(){
           </div>
         </div>
         <div className='flex flex-wrap justify-center gap-10 max-w-400 mx-auto'>
-          {/* <AsyncData loading={isLoading} error={error}>
-            {books.map((book) => {
-              const b = book.volumeInfo;
-
-              const isbn =
-                b.industryIdentifiers?.find((id) => id.type === 'ISBN_13')?.identifier ||
-                b.industryIdentifiers?.find((id) => id.type === 'ISBN_10')?.identifier; 
-
-              const title = b.title || 'No title';
-              const genre = b.categories || [];
-              const description = b.description || 'No description';
-              const amountPages = b.pageCount || 0;
-              const author = b.authors || [];
-              const img = b.imageLinks?.thumbnail || null;
-
-              return (
-                <Book
-                  key={isbn}
-                  isbn={isbn}
-                  title={title}
-                  genre={genre}
-                  description={description}
-                  amountPages={amountPages}
-                  author={author}
-                  img={img}
-                />
-              );
-            })}
-          </AsyncData> */}
           <AsyncData loading={isLoading} error={error || saveError}>
             {books.map((book) => {
               const {isbn = 'unknown', title = 'No title', genre = 'No genre', 
@@ -102,7 +73,3 @@ export default function Overview(){
     </>
   );
 }
-
-//{books.map((book) =>
-//  book.volumeInfo.title + ', ',
-// )}

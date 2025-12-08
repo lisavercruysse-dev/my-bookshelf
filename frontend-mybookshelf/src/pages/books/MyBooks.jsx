@@ -47,7 +47,7 @@ export default function MyBooks(){
                         <p><strong>Pages Read:</strong> {pagesRead} / {amountPages}</p>
                         <p><strong>Favorite:</strong> {favorite ? 'Yes' : 'No'}</p>
                         <p><strong>Started:</strong> {dateStarted ? dateStarted.split('T')[0] : 'N/A'}</p>
-                        <p><strong>Finished:</strong> {dateEnded ? dateEnded : 'N/A'}</p>
+                        <p><strong>Finished:</strong> {dateEnded ? dateEnded.split('T')[0] : 'N/A'}</p>
 
                         <div className="border my-2"></div>
 
@@ -56,11 +56,17 @@ export default function MyBooks(){
                         </div>
                       </div>
                     </div>
-                    <div className='flex justify-center mt-5'>
+                    <div className='flex justify-center mt-5 gap-3'>
                       <Link to={`addOrEditSavedBook/${isbn}`}>
                         <button className="bg-emerald-900 pb-2 pt-2 hover:cursor-pointer
                   text-emerald-50 rounded-lg hover:bg-emerald-950 w-30">
                           Edit
+                        </button>
+                      </Link>
+                      <Link to={`addOrEditReview/${isbn}`}>
+                        <button className="bg-emerald-900 pb-2 pt-2 hover:cursor-pointer
+                  text-emerald-50 rounded-lg hover:bg-emerald-950 w-30">
+                          Review
                         </button>
                       </Link>
                     </div>

@@ -17,7 +17,7 @@ export default function MyReviews() {
       <TopBar />
       <div className="flex flex-col">
         <div className='flex items-center flex-col gap-5'>
-          <h4>My Reviews</h4>
+          <h3>My Reviews</h3>
         </div>
         <AsyncData loading={isLoading} error={error}>
           {reviews.map((r) => {

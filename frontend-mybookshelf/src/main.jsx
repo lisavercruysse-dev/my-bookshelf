@@ -23,6 +23,7 @@ const router = createBrowserRouter([
   { path: 'Discover/bookInfo', element: <Navigate to='/bookInfo'/>},
   { path: 'bookInfo/:isbn', Component: BookInfo},
   { path: 'addOrEditReview/:isbn', Component: AddOrEditReview},
+  { path: '/myBooks/addOrEditReview/:isbn', Component: AddOrEditReview },
   { path: 'myReviews/addOrEditReview/:id', Component: AddOrEditReview},
   { path: 'Discover/addOrEditReview/:isbn', Component: AddOrEditReview},
   { path: '*', Component: NotFound},
