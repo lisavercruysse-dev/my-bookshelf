@@ -14,10 +14,12 @@ import {
 import { and, eq } from 'drizzle-orm';
 import { userBooks, users } from 'src/drizzle/schema';
 import { BookService } from 'src/book/book.service';
+import { ReviewService } from 'src/review/review.service';
 
 @Injectable()
 export class UserService {
   bookService: BookService;
+  reviewService: ReviewService;
   constructor(
     @InjectDrizzle()
     private readonly db: DatabaseProvider,
@@ -101,6 +103,17 @@ export class UserService {
     const [result] = await this.db.delete(users).where(eq(users.id, id));
     if (result.affectedRows === 0) {
       throw new NotFoundException('No user with this ID exists');
+    }
+  }
+
+  async deleteUserBook(id: number, isbn: string): Promise<void> {
+    const [result] = await this.db
+      .delete(userBooks)
+      .where(and(eq(userBooks.userId, id), eq(userBooks.isbn, isbn)));
+    if (result.affectedRows === 0) {
+      throw new NotFoundException(
+        'No book with this isbn exists for this user',
+      );
     }
   }
 }

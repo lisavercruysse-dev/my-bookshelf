@@ -21,8 +21,7 @@ export async function getBooksById(isbn) {
 }
 
 export async function getData(url) {
-  const {data} = await axios.get(`${baseUrl}${url}`);
-  console.log(data);
+  const {data} = await axios.get(`${baseUrl}/${url}`);
   return data.items;
 }
 
@@ -34,7 +33,18 @@ export async function save(url, { arg: {id, ...data} }) {
   });
 }
 
+export async function saveUserBook(url, {arg: {userId, isbn, ...data}}){
+  await axios.post(`${baseUrl}/${url}`, { userId, isbn, ...data });
+}
+export async function updateUserBook(url, { arg: { ...data } }) {
+  await axios.put(`${baseUrl}/${url}`, data);
+}
+
 export async function getById(url) {
   const { data } = await axios.get(`${baseUrl}${url}`);
   return data;
+}
+
+export async function deleteById (url, {arg: id}) {
+  await axios.delete(`${baseUrl}/${url}/${id}`);
 }

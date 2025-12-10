@@ -19,7 +19,7 @@ export default function Overview(){
     data: books = [],
     error,
     isLoading,
-  } = useSWR('/books/popular', getData);
+  } = useSWR('books/popular', getData);
 
   const { trigger: saveBook, error: saveError} = useSWRMutation(
     '/books',
@@ -52,8 +52,8 @@ export default function Overview(){
           <AsyncData loading={isLoading} error={error || saveError}>
             {books.map((book) => {
               const {isbn = 'unknown', title = 'No title', genre = 'No genre', 
-                description = 'No description', amountPages = 0, author = 'no author', img} = book;
-
+                description = 'No description', amountPages = 0, author = 'no author', imageLink} = book;
+              console.log(book.img);
               return (
                 <Book
                   key={isbn}
@@ -63,7 +63,7 @@ export default function Overview(){
                   description={description}
                   amountPages={amountPages}
                   author={author}
-                  img={img}
+                  img={imageLink}
                   saveBook={saveBook} />
               );
             })}

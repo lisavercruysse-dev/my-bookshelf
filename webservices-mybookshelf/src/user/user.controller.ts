@@ -51,6 +51,14 @@ export class UserController {
     return await this.bookService.getBooksByUserId(id);
   }
 
+  @Get(':userId/books/:isbn')
+  async getSavedBook(
+    @Param('userId') userId: number,
+    @Param('isbn') isbn: string,
+  ): Promise<savedBookResponseDto> {
+    return await this.userService.getSavedBook(userId, isbn);
+  }
+
   @Post()
   async createUser(
     @Body() createUserDto: CreateUserRequestDto,
@@ -89,5 +97,21 @@ export class UserController {
   @Delete(':id')
   async deleteUser(@Param('id') id: number): Promise<void> {
     await this.userService.delete(id);
+  }
+
+  @Delete(':id/books/:isbn')
+  async deleteUserBook(
+    @Param('id') id: number,
+    @Param('isbn') isbn: string,
+  ): Promise<void> {
+    await this.userService.deleteUserBook(id, isbn);
+  }
+
+  @Delete(':userId/reviews/:id')
+  async deleteReview(
+    @Param('id') id: number,
+    @Param('userId') userId: number,
+  ): Promise<void> {
+    await this.reviewService.delete(id, userId);
   }
 }

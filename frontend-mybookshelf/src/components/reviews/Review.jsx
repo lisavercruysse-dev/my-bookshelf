@@ -1,11 +1,26 @@
 import { Link } from 'react-router';
 import altBook from '../../assets/altBook.jpg';
 
-export default function Review(props){
-  const {id, title, body, stars, date, bookTitle, pages, author, genre, img} = props;
+export default function Review({
+  id,
+  title,
+  body,
+  stars,
+  date,
+  bookTitle,
+  pages,
+  author,
+  genre,
+  img,
+  onDelete = () => {},
+}){
+  
+  const handleDelete = () => {
+    onDelete(id);
+  };
 
   return (
-    <div className="flex flex-col border rounded-lg p-5 gap-3 m-5 shadow-emerald-950 item">
+    <div className="flex flex-col border rounded-lg p-5 gap-3 m-5 shadow-emerald-950 item w-250">
       <div className="flex gap-3">
         <img src={img || altBook} className='rounded-lg w-60 object-contain' />
         <div className="flex flex-col gap-2 flex-1">
@@ -25,13 +40,17 @@ export default function Review(props){
           </div>
         </div>
       </div>
-      <div className="flex justify-center w-full">
-        <Link to={`addOrEditReview/${id}`}>
+      <div className="flex justify-center w-full gap-5">
+        <Link to={`/addOrEditReview/id/${id}`}>
           <button className="bg-emerald-900 pb-2 pt-2 hover:cursor-pointer
       text-emerald-50 rounded-lg hover:bg-emerald-950 w-30">
             Edit
           </button>
         </Link>
+        <button className="bg-emerald-900 pb-2 pt-2 hover:cursor-pointer
+      text-emerald-50 rounded-lg hover:bg-emerald-950 w-30" onClick={handleDelete}>
+          Delete
+        </button>
       </div>
      
     </div>

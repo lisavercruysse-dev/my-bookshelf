@@ -39,7 +39,6 @@ export default function BookInfo() {
     const imageLink = googleBook?.imageLinks?.thumbnail || myBook?.imageLink || altBook;
 
     if(myBook === undefined){
-      console.log('saving book');
       await saveBook({
         isbn,
         title,
@@ -51,7 +50,7 @@ export default function BookInfo() {
       });
       await mutate(`/books/${isbn}`);
     }
-    navigate(`/addOrEditSavedBook/${isbn}`);
+    navigate(`/addOrEditSavedBook/isbn/${isbn}`);
   };
   
   return (

@@ -29,7 +29,7 @@ export default function AddOrEditReview(){
   const bookData = review?.book || book;
 
   return (
-    <diV>
+    <div>
       <TopBar/>
       <div className='flex flex-col items-center'>
       
@@ -38,7 +38,7 @@ export default function AddOrEditReview(){
           <ReviewForm book={bookData} saveReview={saveReview} review={review}/>
         </AsyncData>  
       </div>
-    </diV>
+    </div>
     
   );
 }

@@ -24,11 +24,12 @@ const router = createBrowserRouter([
   { path: 'bookInfo/:isbn', Component: BookInfo},
   { path: 'addOrEditReview/:isbn', Component: AddOrEditReview},
   { path: '/myBooks/addOrEditReview/:isbn', Component: AddOrEditReview },
-  { path: 'myReviews/addOrEditReview/:id', Component: AddOrEditReview},
+  { path: '/addOrEditReview/id/:id', Component: AddOrEditReview},
   { path: 'Discover/addOrEditReview/:isbn', Component: AddOrEditReview},
   { path: '*', Component: NotFound},
   { path: '/bookInfo/:isbn', Component: BookInfo},
-  { path: 'addOrEditSavedBook/:isbn', Component: AddOrEditSavedBook},
+  { path: 'addOrEditSavedBook/isbn/:isbn', Component: AddOrEditSavedBook},
+  { path: 'addOrEditSavedBook/:userId/:isbn', Component: AddOrEditSavedBook},
   { path: '/myBooks/addOrEditSavedBook/:isbn', element: <Navigate to='addOrEditSavedBook/:isbn'/>},
 ]);
 

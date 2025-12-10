@@ -31,7 +31,12 @@ const validationRules = {
   },
 };
 
-export default function SavedBookForm ({statuses = [], savedBook, book, saveBook}) {
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  return dateString.split('T')[0];
+};
+
+export default function SavedBookForm ({statuses = [], updateBook, savedBook, book, saveBook}) {
   const currentSavedBook = savedBook||EMPTY_SAVEDBOOK;
   const navigate = useNavigate();
   const {register, handleSubmit, formState: {errors, isValid}} = useForm({
@@ -42,29 +47,30 @@ export default function SavedBookForm ({statuses = [], savedBook, book, saveBook
       statusId: savedBook?.statusId,
       pagesRead: savedBook?.pagesRead,
       favorite: savedBook?.favorite,
-      dateStarted: savedBook?.dateStarted,
-      dateEnded: savedBook?.dateEnded,
+      dateStarted: formatDate(savedBook?.dateStarted),
+      dateEnded: formatDate(savedBook?.dateEnded),
     },
   });
 
   const onSubmit = async (values) => {
-    if (!isValid || !book?.isbn) {
-      return;
-    };
-    await saveBook({
-      id: currentSavedBook?.id,
-      isbn: book?.isbn,
-      userId: 1,
-      ...values,
-    }, {
-      throwOnError: false,
-      onSuccess: () => {
-        navigate('/myBooks');
-      },
-    },
+    if (!isValid || !book?.isbn) return;
 
+    const method = savedBook ? 'updateBook' : 'saveBook';
+    await (method === 'updateBook' ? updateBook : saveBook)(
+      {
+        userId: 1,
+        isbn: book?.isbn,
+        ...values,
+      },
+      {
+        throwOnError: false,
+        onSuccess: () => {
+          navigate('/myBooks');
+        },
+      },
     );
   };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className='border rounded-lg max-w-150 p-5 flex flex-col 
@@ -96,7 +102,7 @@ export default function SavedBookForm ({statuses = [], savedBook, book, saveBook
         </div>
         <div className='flex flex-col gap-1 items-center'>
           <label>
-            Pages Read
+            Pages Read {book?.amountPages ? `(max: ${book.amountPages})` : ''}
           </label> 
           <input
             placeholder='0'
@@ -104,7 +110,8 @@ export default function SavedBookForm ({statuses = [], savedBook, book, saveBook
             className='border rounded-lg p-2'
             id='pagesRead'
             name="pagesRead"
-            type="number"
+            type="number" 
+            max={book?.amountPages}
             {...register('pagesRead', {
               required: 'Read pages must be at least 0',
               min: { value: 0, message: 'Read pages must be at least 0' },
@@ -134,7 +141,7 @@ export default function SavedBookForm ({statuses = [], savedBook, book, saveBook
         <div>
           <button type='submit' className='border rounded-lg pl-3 pr-3 pt-2 pb-2 mt-3
         hover:cursor-pointer'>
-            {currentSavedBook?.id ? 'Save changes' : 'Save book'}
+            {currentSavedBook?.userId && currentSavedBook.isbn ? 'Save changes' : 'Save book'}
           </button>
         </div>
       </form>

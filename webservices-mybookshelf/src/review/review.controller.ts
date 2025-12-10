@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import {
   CreateReviewRequestDto,
   ReviewResponseDto,
@@ -41,10 +33,5 @@ export class ReviewController {
     @Body() updateReviewDto: UpdateReviewRequestDto,
   ): Promise<ReviewResponseDto> {
     return await this.reviewService.update(id, updateReviewDto);
-  }
-
-  @Delete(':id')
-  async deleteReview(@Param('id') id: number): Promise<void> {
-    await this.reviewService.delete(id);
   }
 }

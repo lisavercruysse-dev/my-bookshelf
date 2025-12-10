@@ -67,9 +67,6 @@ export class BookService {
         status: true,
       },
     });
-    if (items.length === 0) {
-      throw new NotFoundException('This user has not saved any books');
-    }
 
     return { items };
   }
