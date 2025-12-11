@@ -1,0 +1,49 @@
+{
+    "items": [
+        {
+            "isbn": "0123438455178",
+            "title": "Another Test Test",
+            "genre": "Test Fiction",
+            "description": "Another short test book.",
+            "amountPages": 4,
+            "author": "Test Person",
+            "imageLink": null
+        },
+        {
+            "isbn": "0721438935188",
+            "title": "Beautiful Test",
+            "genre": "Test Fiction",
+            "description": "This is a test book for testing purposes.",
+            "amountPages": 20,
+            "author": "Suzanne Collins",
+            "imageLink": null
+        },
+        {
+            "isbn": "9780140449136",
+            "title": "The Odyssey",
+            "genre": "Epic Poetry",
+            "description": "Homer's classic tale of Odysseus and his journey home from the Trojan War.",
+            "amountPages": 560,
+            "author": "Homer",
+            "imageLink": null
+        },
+        {
+            "isbn": "9780435123437",
+            "title": "Flowers for Algernon",
+            "genre": "Science Fiction",
+            "description": "A novella about a man with low IQ who undergoes an experimental surgery to increase his intelligence.",
+            "amountPages": 218,
+            "author": "Daniel Keyes",
+            "imageLink": null
+        },
+        {
+            "isbn": "9781781103142",
+            "title": "Harry Potter and the Philosopher's Stone",
+            "genre": "Fantasy",
+            "description": "Young wizard Harry discovers his magical heritage and attends Hogwarts School of Witchcraft and Wizardry.",
+            "amountPages": 336,
+            "author": "J.K. Rowling",
+            "imageLink": null
+        }
+    ]
+}

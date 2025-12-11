@@ -83,7 +83,8 @@ export default function SavedBookForm ({statuses = [], updateBook, savedBook, bo
             id="statusId" 
             name="statusId"
             required
-            className='rounded-lg border p-2'> 
+            className='rounded-lg border p-2'
+            data-cy='statusId'> 
             <option value='' disabled>
               -- Select status---
             </option>
@@ -97,8 +98,8 @@ export default function SavedBookForm ({statuses = [], updateBook, savedBook, bo
           <label htmlFor="userId">UserId</label>
           <input className='border rounded-lg p-2'
             {...register('userId', validationRules.userId)}
-            id="userId" name="userId" type="number" placeholder="userId" required />
-          {errors.userId && <p className="text-red-500 text-sm mt-1">{errors.userId.message}</p>}
+            data-cy='userId' id="userId" name="userId" type="number" placeholder="userId" required />
+          {errors.userId && <p data-cy='userIdError' className="text-red-500 text-sm mt-1">{errors.userId.message}</p>}
         </div>
         <div className='flex flex-col gap-1 items-center'>
           <label>
@@ -106,12 +107,12 @@ export default function SavedBookForm ({statuses = [], updateBook, savedBook, bo
           </label> 
           <input
             placeholder='0'
-            defaultValue={0}
             className='border rounded-lg p-2'
             id='pagesRead'
             name="pagesRead"
             type="number" 
             max={book?.amountPages}
+            data-cy='pagesRead'
             {...register('pagesRead', {
               required: 'Read pages must be at least 0',
               min: { value: 0, message: 'Read pages must be at least 0' },
@@ -121,26 +122,27 @@ export default function SavedBookForm ({statuses = [], updateBook, savedBook, bo
               },
             })}
           />
-          {errors.pagesRead && <p className="text-red-500 text-sm mt-1">{errors.pagesRead.message}</p>}   
+          {errors.pagesRead && <p data-cy='pagesReadError' 
+            className="text-red-500 text-sm mt-1">{errors.pagesRead.message}</p>}   
         </div>
         <div className='flex flex-col gap-1 items-center'>
           <label>Favorite</label>
           <input className='border rounded-lg p-2' 
-            id="favorite" name='favorite' type="checkbox" {...register('favorite')}/>
+            id="favorite" name='favorite' type="checkbox" data-cy='favorite' {...register('favorite')}/>
         </div>
         <div className='flex flex-col gap-1 items-center'>
           <label>start date</label>
           <input className='border rounded-lg p-2' 
-            id='dateStarted' name="dateStarted" type="date" {...register('dateStarted')}/>
+            id='dateStarted' name="dateStarted" type="date" data-cy='dateStarted' {...register('dateStarted')}/>
         </div>
         <div className='flex flex-col gap-1 items-center'>
           <label>end date</label>
           <input className='border rounded-lg p-2' 
-            id="dateEnded" name="dateEnded" type="date" {...register('dateEnded')}/>
+            id="dateEnded" name="dateEnded" type="date" data-cy='dateEnded' {...register('dateEnded')}/>
         </div>
         <div>
           <button type='submit' className='border rounded-lg pl-3 pr-3 pt-2 pb-2 mt-3
-        hover:cursor-pointer'>
+        hover:cursor-pointer' data-cy='submitButton'>
             {currentSavedBook?.userId && currentSavedBook.isbn ? 'Save changes' : 'Save book'}
           </button>
         </div>

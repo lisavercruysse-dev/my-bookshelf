@@ -55,16 +55,18 @@ export default function Overview(){
                 description = 'No description', amountPages = 0, author = 'no author', imageLink} = book;
               console.log(book.img);
               return (
-                <Book
-                  key={isbn}
-                  isbn={isbn}
-                  title={title}
-                  genre={genre}
-                  description={description}
-                  amountPages={amountPages}
-                  author={author}
-                  img={imageLink}
-                  saveBook={saveBook} />
+                <div data-cy='book'>
+                  <Book
+                    key={isbn}
+                    isbn={isbn}
+                    title={title}
+                    genre={genre}
+                    description={description}
+                    amountPages={amountPages}
+                    author={author}
+                    img={imageLink}
+                    saveBook={saveBook} />
+                </div>
               );
             })}
           </AsyncData>

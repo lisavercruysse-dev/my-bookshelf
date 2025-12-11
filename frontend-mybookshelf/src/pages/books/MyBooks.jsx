@@ -26,7 +26,7 @@ export default function MyBooks(){
   return (
     <>
       <TopBar />
-      <div className='flex flex-col items-center mx-4'>
+      <div className='flex flex-col items-center mx-4' data-cy='bookList'>
         <h3 className='pb-3'>My Books</h3>
         <AsyncData loading={isLoading} error={error || deleteError}>
           {
@@ -47,17 +47,19 @@ export default function MyBooks(){
 
                         <div className="flex flex-col gap-2 flex-1">
                           <h4 className="text-lg font-semibold">{title}</h4>
-                          <p><strong>Author:</strong> {author}</p>
-                          <p><strong>Genre:</strong> {genre}</p>
-                          <p><strong>Pages:</strong> {amountPages}</p>
-                          <p><strong>Status:</strong> {status}</p>
+                          <p data-cy='savedBookAuthor'><strong>Author:</strong> {author}</p>
+                          <p data-cy='savedBookGenre'><strong>Genre:</strong> {genre}</p>
+                          <p data-cy='savedBookPages'><strong>Pages:</strong> {amountPages}</p>
+                          <p data-cy='savedBookStatus'><strong>Status:</strong> {status}</p>
 
                           <div className="border my-2"></div>
 
-                          <p><strong>Pages Read:</strong> {pagesRead} / {amountPages}</p>
-                          <p><strong>Favorite:</strong> {favorite ? 'Yes' : 'No'}</p>
-                          <p><strong>Started:</strong> {dateStarted ? dateStarted.split('T')[0] : 'N/A'}</p>
-                          <p><strong>Finished:</strong> {dateEnded ? dateEnded.split('T')[0] : 'N/A'}</p>
+                          <p data-cy='savedBookPagesRead'><strong>Pages Read:</strong> {pagesRead} / {amountPages}</p>
+                          <p data-cy='savedBookFavorite'><strong>Favorite:</strong> {favorite ? 'Yes' : 'No'}</p>
+                          <p data-cy='savedBookDateStarted'><strong>Started:</strong> 
+                            {dateStarted ? dateStarted.split('T')[0] : 'N/A'}</p>
+                          <p data-cy='savedBookDateEnded'><strong>Finished:</strong> 
+                            {dateEnded ? dateEnded.split('T')[0] : 'N/A'}</p>
 
                           <div className="border my-2"></div>
 
@@ -67,7 +69,7 @@ export default function MyBooks(){
                         </div>
                       </div>
                       <div className='flex justify-center mt-5 gap-3'>
-                        <Link to={`/addOrEditSavedBook/${userId}/${isbn}`}>
+                        <Link to={`/addOrEditSavedBook/${userId}/${isbn}`} data-cy='savedBookEditButton'>
                           <button className="bg-emerald-900 pb-2 pt-2 hover:cursor-pointer
                   text-emerald-50 rounded-lg hover:bg-emerald-950 w-30">
                             Edit
@@ -75,13 +77,13 @@ export default function MyBooks(){
                         </Link>
                         <Link to={`addOrEditReview/${isbn}`}>
                           <button className="bg-emerald-900 pb-2 pt-2 hover:cursor-pointer
-                  text-emerald-50 rounded-lg hover:bg-emerald-950 w-30">
+                  text-emerald-50 rounded-lg hover:bg-emerald-950 w-30" data-cy='savedBookReviewButton'>
                             Review
                           </button>
                         </Link>
                         <button onClick={() => deleteBook(isbn)} className="bg-emerald-900 
                         pb-2 pt-2 hover:cursor-pointer
-                      text-emerald-50 rounded-lg hover:bg-emerald-950 w-30">
+                      text-emerald-50 rounded-lg hover:bg-emerald-950 w-30" data-cy='savedBookDeleteButton'>
                           Delete
                         </button>
                       </div>
