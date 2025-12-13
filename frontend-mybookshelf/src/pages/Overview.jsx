@@ -25,7 +25,6 @@ export default function Overview(){
     '/books',
     save,
   );
-
   return (
     <>
       <div>

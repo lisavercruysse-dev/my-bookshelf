@@ -35,7 +35,7 @@ export const reviews = mysqlTable(
     userId: int('userId', { unsigned: true })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    body: text('body').notNull(),
+    body: text('body'),
     stars: smallint('stars', { unsigned: true }).notNull(),
     date: date('date').notNull(),
     title: varchar('title', { length: 255 }).notNull(),

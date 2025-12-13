@@ -1,21 +1,45 @@
 @import 'tailwindcss';
 
 @layer base {
-    html {
-        @apply bg-emerald-50 font-serif;
-    }
+  html {
+    @apply bg-emerald-50 font-serif;
+  }
 
-    h4 {
+  h1 {
+    @apply text-5xl font-bold; 
+  }
+
+  h2 {
+    @apply text-4xl font-bold;
+  }
+
+  h3 {
+    @apply text-3xl font-bold;
+  }
+
+  h4 {
+    @apply text-2xl font-bold;
+  }
+
+  h5 {
     @apply text-xl font-bold;
+  }
+
+  h6 {
+    @apply text-lg font-semibold; 
+  }
 }
-
-    h5 {
-        @apply text-lg font-bold;
-    }
-
-    h3 {
-        @apply text-2xl font-bold;
-    }
     
+
+
+.ProseMirror:focus {
+    outline: none;
 }
 
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

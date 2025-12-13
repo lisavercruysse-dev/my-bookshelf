@@ -1,5 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import TipTap from '../../components/tiptap/TipTap';
+import { useState } from 'react';
 
 const validationRules = {
   userId: {
@@ -35,6 +37,7 @@ const EMPTY_REVIEW = {
 
 export default function ReviewForm({ book, saveReview, review }) {
   const navigate = useNavigate();
+  const [editor, setEditor] = useState(null);
   const currentReview = review || EMPTY_REVIEW;
   const {register, handleSubmit, formState: {errors, isValid}} = useForm({
     mode: 'onBlur',
@@ -52,10 +55,13 @@ export default function ReviewForm({ book, saveReview, review }) {
       return;
     };
 
+    const body = editor?.getJSON();
+
     await saveReview({
       id: currentReview?.id,
       isbn: book?.isbn,
       ...values,
+      body: JSON.stringify(body),
     }, {
       throwOnError: false,
       onSuccess: () => {
@@ -65,47 +71,49 @@ export default function ReviewForm({ book, saveReview, review }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='border rounded-lg max-w-150 p-5 flex flex-col 
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className='border rounded-lg max-w-150 p-5 flex flex-col 
     gap-3 m-3 items-center'>
 
-      <div className='flex flex-col gap-1 items-center'>
-        <label htmlFor="title">Title</label>
-        <input className='border rounded-lg p-2'
-          {...register('title', validationRules.title)}
-          id="title" name="title" type="text" />
-        {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
-      </div>
+        <div className='flex flex-col gap-1 items-center'>
+          <label htmlFor="title">Title</label>
+          <input className='border rounded-lg p-2'
+            {...register('title', validationRules.title)}
+            id="title" name="title" type="text" />
+          {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>}
+        </div>
 
-      <div className='flex flex-col gap-1 items-center'>
-        <label htmlFor="userId">UserId</label>
-        <input className='border rounded-lg p-2'
-          {...register('userId', validationRules.userId)}
-          id="userId" name="userId" type="number" placeholder="userId" required />
-        {errors.userId && <p className="text-red-500 text-sm mt-1">{errors.userId.message}</p>}
-      </div>
+        <div className='flex flex-col gap-1 items-center'>
+          <label htmlFor="userId">UserId</label>
+          <input className='border rounded-lg p-2'
+            {...register('userId', validationRules.userId)}
+            id="userId" name="userId" type="number" placeholder="userId" required />
+          {errors.userId && <p className="text-red-500 text-sm mt-1">{errors.userId.message}</p>}
+        </div>
 
-      <div className='flex flex-col gap-1 items-center'>
-        <label htmlFor="body">Body</label>
-        <input className='border rounded-lg p-2'
-          {...register('body')}
-          id="body" name="body" type="text" placeholder="Your thoughts on the book..." required />
-      </div>
+        <div className='flex flex-col gap-1 items-center'>
+          <label htmlFor="stars">Stars</label>
+          <input className='border rounded-lg p-2'
+            {...register('stars', validationRules.stars)}
+            id="stars" name="stars" type="number" placeholder="Your rating" required />
+          {errors.stars && <p className="text-red-500 text-sm mt-1">{errors.stars.message}</p>}
+        </div>
+        
+        <div className='flex flex-col gap-1 items-center'>
+          <label>Body</label>
+          <TipTap onEditorReady={setEditor}
+            initialContent={review?.body ? JSON.parse(review.body) : ''}/>
+        </div>
 
-      <div className='flex flex-col gap-1 items-center'>
-        <label htmlFor="stars">Stars</label>
-        <input className='border rounded-lg p-2'
-          {...register('stars', validationRules.stars)}
-          id="stars" name="stars" type="number" placeholder="Your rating" required />
-        {errors.stars && <p className="text-red-500 text-sm mt-1">{errors.stars.message}</p>}
-      </div>
-
-      <div className='flex flex-col gap-1 items-center'>
-        <button type="submit" className='border rounded-lg pl-3 pr-3 pt-2 pb-2 mt-3
+        <div className='flex flex-col gap-1 items-center'>
+          <button type="submit" className='border rounded-lg pl-3 pr-3 pt-2 pb-2 mt-3
         hover:cursor-pointer'>
-          {currentReview?.id ? 'save review' : 'Add review'}
-        </button>
-      </div>
-    </form>
+            {currentReview?.id ? 'save review' : 'Add review'}
+          </button>
+        </div>
+      </form>
+    </>
+  
   );
 }
 

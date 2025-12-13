@@ -1,6 +1,6 @@
 describe('Add and remove saved book', () => {
   it('should add a new saved book', () => {
-    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781743836811');
+    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781781103142');
 
     cy.get('[data-cy=statusId]').select('1');
     cy.get('[data-cy=userId]').type('1');
@@ -11,9 +11,9 @@ describe('Add and remove saved book', () => {
     cy.get('body').click(0, 0);
     cy.get('[data-cy=submitButton]').click();
 
-    cy.get('[data-cy=savedBookAuthor]').eq(1).contains('Suzanne Collins');
-    cy.get('[data-cy=savedBookGenre]').eq(1).contains('Contests');
-    cy.get('[data-cy=savedBookPages]').eq(1).contains('540');
+    cy.get('[data-cy=savedBookAuthor]').eq(1).contains('J.K. Rowling');
+    cy.get('[data-cy=savedBookGenre]').eq(1).contains('Fantasy');
+    cy.get('[data-cy=savedBookPages]').eq(1).contains('336');
     cy.get('[data-cy=savedBookStatus]').eq(1).contains('TBR');
     cy.get('[data-cy=savedBookPagesRead]').eq(1).contains('0');
     cy.get('[data-cy=savedBookFavorite]').eq(1).contains('No');
@@ -30,7 +30,7 @@ describe('Add and remove saved book', () => {
 
 describe('Invalid userId does not save book', () => {
   it('Should show message for invalid userId', () => {
-    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781743836811');
+    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781781103142');
     cy.get('[data-cy=userId]').type('-1');
     cy.get('[data-cy=userId]').blur();
     cy.get('[data-cy=submitButton]').click();
@@ -41,7 +41,7 @@ describe('Invalid userId does not save book', () => {
 
 describe('Too high pagesRead does not save book', () => {
   it('Should show message for too high pagesRead', () => {
-    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781743836811');
+    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781781103142');
     cy.get('[data-cy=pagesRead]').type('541');
     cy.get('[data-cy=pagesRead]').blur();
     cy.get('[data-cy=submitButton]').click();
@@ -52,7 +52,7 @@ describe('Too high pagesRead does not save book', () => {
 
 describe('Too low pagesRead does not save book', () => {
   it('Should show message for too low pagesRead', () => {
-    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781743836811');
+    cy.visit('http://localhost:5173/addOrEditSavedBook/isbn/9781781103142');
     cy.get('[data-cy=pagesRead]').type('-1');
     cy.get('[data-cy=pagesRead]').blur();
     cy.get('[data-cy=submitButton]').click();

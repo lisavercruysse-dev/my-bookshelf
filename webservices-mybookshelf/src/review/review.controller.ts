@@ -5,6 +5,7 @@ import {
   UpdateReviewRequestDto,
 } from './review.dto';
 import { ReviewService } from './review.service';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('reviews')
 export class ReviewController {
@@ -16,7 +17,9 @@ export class ReviewController {
 */
 
   @Get(':id')
-  async getReviewById(@Param('id') id: number): Promise<ReviewResponseDto> {
+  async getReviewById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReviewResponseDto> {
     return await this.reviewService.getReviewById(id);
   }
 

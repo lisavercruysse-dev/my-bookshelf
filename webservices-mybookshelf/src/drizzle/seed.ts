@@ -97,7 +97,7 @@ async function seedReviews() {
       isbn: '9780435123437', // Flowers for Algernon
       userId: 1,
       title: 'A moving story',
-      body: 'I really enjoyed how the book explores human intelligence and emotion.',
+      body: '{"type":"doc","content":[{"type":"heading","attrs":{"level":5},"content":[{"type":"text","text":"I hope this works"}]},{"type":"paragraph"},{"type":"paragraph","content":[{"type":"text","text":"I spent way too much time on this."}]},{"type":"paragraph","content":[{"type":"text","marks":[{"type":"italic"}],"text":"Like "},{"type":"text","marks":[{"type":"bold"},{"type":"italic"}],"text":"way "},{"type":"text","marks":[{"type":"italic"}],"text":"too much."}]},{"type":"paragraph"}]}',
       stars: 5,
       date: new Date('2023-01-15'),
     },
@@ -105,7 +105,7 @@ async function seedReviews() {
       isbn: '9780435123437',
       userId: 2,
       title: 'Thought-provoking',
-      body: 'The transformation of the protagonist is both fascinating and sad.',
+      body: '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"The transformation of the protagonist is fascinating and sad."}]}]}',
       stars: 4,
       date: new Date('2023-02-10'),
     },
@@ -113,7 +113,7 @@ async function seedReviews() {
       isbn: '9781781103142', // Harry Potter
       userId: 3,
       title: 'Magical and fun!',
-      body: 'Loved the magical world and the characters. A must-read for all ages.',
+      body: '{"type":"doc","content":[{"type":"heading","attrs":{"level":3},"content":[{"type":"text","text":"Magical Adventures"}]},{"type":"paragraph","content":[{"type":"text","text":"Loved the magical world and the characters."}]},{"type":"paragraph","content":[{"type":"text","text":"A must-read for all ages."}]}]}',
       stars: 5,
       date: new Date('2023-03-05'),
     },
@@ -121,7 +121,7 @@ async function seedReviews() {
       isbn: '0721438935188', // Beautiful Test
       userId: 4,
       title: 'Quick read',
-      body: 'Short but entertaining. Good for a test run.',
+      body: '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Short but entertaining."}]},{"type":"paragraph","content":[{"type":"text","text":"Good for a test run."}]}]}',
       stars: 3,
       date: new Date('2023-04-20'),
     },
@@ -129,7 +129,7 @@ async function seedReviews() {
       isbn: '0123438455178', // Another Test Test
       userId: 5,
       title: 'Mini story',
-      body: 'Very short book, but surprisingly enjoyable!',
+      body: '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Very short book,"}]},{"type":"paragraph","content":[{"type":"text","text":"but surprisingly enjoyable!"}]}]}',
       stars: 4,
       date: new Date('2023-05-10'),
     },
@@ -137,7 +137,7 @@ async function seedReviews() {
       isbn: '9780140449136', // The Odyssey
       userId: 6,
       title: 'Epic journey',
-      body: 'Homer’s masterpiece. Timeless classic.',
+      body: '{"type":"doc","content":[{"type":"heading","attrs":{"level":4},"content":[{"type":"text","text":"Epic Journey"}]},{"type":"paragraph","content":[{"type":"text","text":"Homer’s masterpiece."}]},{"type":"paragraph","content":[{"type":"text","text":"Timeless classic."}]}]}',
       stars: 5,
       date: new Date('2023-06-01'),
     },

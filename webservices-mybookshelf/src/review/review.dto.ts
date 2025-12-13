@@ -4,7 +4,7 @@ import { UserResponseDto } from 'src/user/user.dto';
 export class CreateReviewRequestDto {
   isbn: string;
   userId: number;
-  body: string;
+  body: string | null;
   stars: number;
   title: string;
 }
@@ -13,7 +13,7 @@ export class ReviewResponseDto {
   id: number;
   isbn: string;
   userId: number;
-  body: string;
+  body: string | null;
   stars: number;
   title: string;
   date: Date;
@@ -22,7 +22,7 @@ export class ReviewResponseDto {
 }
 
 export class UpdateReviewRequestDto {
-  body: string;
+  body: string | null;
   stars: number;
   title: string;
 }
@@ -34,7 +34,7 @@ export class ReviewListResponseDto {
 export class UserReviewResponseDto {
   id: number;
   userId: number;
-  body: string;
+  body: string | null;
   stars: number;
   date: Date;
   title: string;
