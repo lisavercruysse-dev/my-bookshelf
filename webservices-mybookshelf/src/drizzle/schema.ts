@@ -15,7 +15,7 @@ export const books = mysqlTable(
   'books',
   {
     isbn: varchar('isbn', { length: 20 }).primaryKey(),
-    title: varchar('title', { length: 255 }).notNull(),
+    title: varchar('title', { length: 100 }).notNull(),
     genre: varchar('genre', { length: 100 }).notNull(),
     description: text('description').notNull(),
     amountPages: int('amountPages', { unsigned: true }).notNull(),
@@ -45,7 +45,7 @@ export const reviews = mysqlTable(
 
 export const users = mysqlTable('users', {
   id: int('id', { unsigned: true }).primaryKey().autoincrement(),
-  userName: varchar('userName', { length: 100 }).notNull(),
+  userName: varchar('userName', { length: 50 }).notNull(),
   email: varchar('email', { length: 255 }).notNull(),
 });
 

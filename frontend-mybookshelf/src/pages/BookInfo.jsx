@@ -6,6 +6,9 @@ import TopBar from '../components/TopBar';
 import altBook from '../assets/altBook.jpg';
 import useSWRMutation from 'swr/mutation';
 import {save} from '../api/index';
+import { generateHTML } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import DOMPurify from 'dompurify';
 
 export default function BookInfo() {
   const { isbn } = useParams();
@@ -96,9 +99,15 @@ export default function BookInfo() {
 
               {myBook?.reviews?.map((r) => {
                 const {id, userId, body, stars, date, title} = r;
+                
+                const bodyJSON = JSON.parse(body);
+                const bodyHtml = generateHTML(bodyJSON, [
+                  StarterKit,
+                ]);
+                const pureHtml = DOMPurify.sanitize(bodyHtml);
 
                 return (
-                  <div key={id} className='flex flex-col gap-3 border rounded-lg p-5 max-w-250'>
+                  <div key={id} className='flex flex-col gap-2 w-200'>
                     <div className='border rounded-lg p-3 flex flex-col'>
                       <h5>{title}</h5>
                       <div className='flex gap-3 italic text-sm'>
@@ -106,7 +115,8 @@ export default function BookInfo() {
                         <p>{date.split('T')[0]}</p>                    
                       </div>
                       stars: {stars}<br />
-                      {body}
+                      <div className="flex-1 w-full" dangerouslySetInnerHTML={{ __html: pureHtml }}>
+                      </div>
                     </div>
                   </div>
                 );

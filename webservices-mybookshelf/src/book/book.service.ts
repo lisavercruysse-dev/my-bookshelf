@@ -53,7 +53,10 @@ export class BookService {
     });
 
     if (!book) {
-      throw new NotFoundException('No book with this ISBN exists');
+      throw new NotFoundException({
+        message: 'No book with this ISBN exists',
+        details: { isbn },
+      });
     }
 
     return book;

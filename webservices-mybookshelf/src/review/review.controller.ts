@@ -32,7 +32,7 @@ export class ReviewController {
 
   @Put(':id')
   async updateReview(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateReviewDto: UpdateReviewRequestDto,
   ): Promise<ReviewResponseDto> {
     return await this.reviewService.update(id, updateReviewDto);

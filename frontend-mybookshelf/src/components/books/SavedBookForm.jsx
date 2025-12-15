@@ -58,9 +58,13 @@ export default function SavedBookForm ({statuses = [], updateBook, savedBook, bo
     const method = savedBook ? 'updateBook' : 'saveBook';
     await (method === 'updateBook' ? updateBook : saveBook)(
       {
-        userId: 1,
-        isbn: book?.isbn,
-        ...values,
+        isbn: book.isbn,
+        favorite: Boolean(values.favorite),
+        userId: Number(values.userId),
+        pagesRead: Number(values.pagesRead),
+        statusId: Number(values.statusId),
+        dateStarted: values.dateStarted || undefined,
+        dateEnded: values.dateEnded || undefined,
       },
       {
         throwOnError: false,

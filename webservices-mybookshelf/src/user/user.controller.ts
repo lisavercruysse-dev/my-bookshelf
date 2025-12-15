@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -35,25 +36,29 @@ export class UserController {
   } */
 
   @Get(':id')
-  async getUserById(@Param('id') id: number): Promise<UserResponseDto> {
+  async getUserById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<UserResponseDto> {
     return await this.userService.getUserById(id);
   }
 
   @Get(':id/reviews')
   async getReviewsByUserId(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
   ): Promise<ReviewListResponseDto> {
     return await this.reviewService.getReviewsByUserId(id);
   }
 
   @Get(':id/books')
-  async getBooksByUserId(@Param('id') id: number): Promise<BookDetailListDto> {
+  async getBooksByUserId(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<BookDetailListDto> {
     return await this.bookService.getBooksByUserId(id);
   }
 
   @Get(':userId/books/:isbn')
   async getSavedBook(
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
     @Param('isbn') isbn: string,
   ): Promise<savedBookResponseDto> {
     return await this.userService.getSavedBook(userId, isbn);
@@ -75,7 +80,7 @@ export class UserController {
 
   @Put(':id')
   async updateUser(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserRequestDto,
   ): Promise<UserResponseDto> {
     return await this.userService.update(id, updateUserDto);
@@ -83,7 +88,7 @@ export class UserController {
 
   @Put('/:userId/:isbn')
   async updateSavedBook(
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
     @Param('isbn') isbn: string,
     @Body() updateSavedBookDto: UpdateSavedBookRequestDto,
   ): Promise<savedBookResponseDto> {
@@ -95,13 +100,13 @@ export class UserController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: number): Promise<void> {
+  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.userService.delete(id);
   }
 
   @Delete(':id/books/:isbn')
   async deleteUserBook(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Param('isbn') isbn: string,
   ): Promise<void> {
     await this.userService.deleteUserBook(id, isbn);
@@ -109,7 +114,7 @@ export class UserController {
 
   @Delete(':userId/reviews/:id')
   async deleteReview(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Param('userId') userId: number,
   ): Promise<void> {
     await this.reviewService.delete(id, userId);

@@ -1,8 +1,32 @@
+import {
+  IsBoolean,
+  IsDateString,
+  IsDefined,
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+  MaxLength,
+  Min,
+} from 'class-validator';
 import { StatusResponseDto } from 'src/status/status.dto';
 
 export class CreateUserRequestDto {
-  id: number;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(50)
+  @Matches(/^[a-zA-Z0-9]+$/)
   userName: string;
+
+  @IsInt()
+  @Min(0)
+  id: number;
+
+  @IsEmail()
+  @IsNotEmpty()
+  @MaxLength(255)
   email: string;
 }
 
@@ -18,12 +42,33 @@ export class UserListResponseDto {
 }
 
 export class CreateSavedBookDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(20)
   isbn: string;
+
+  @IsInt()
+  @Min(0)
   userId: number;
+
+  @IsInt()
+  @Min(0)
   pagesRead: number;
+
+  @IsBoolean()
+  @IsDefined()
   favorite: boolean;
+
+  @IsDateString()
+  @IsOptional()
   dateStarted: Date | null;
+
+  @IsDateString()
+  @IsOptional()
   dateEnded: Date | null;
+
+  @IsInt()
+  @Min(1)
   statusId: number;
 }
 

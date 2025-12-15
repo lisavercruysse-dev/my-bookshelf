@@ -56,12 +56,20 @@ export default function ReviewForm({ book, saveReview, review }) {
     };
 
     const body = editor?.getJSON();
+    const payLoad = {
+      id: currentReview?.id,
+      stars: Number(values.stars),
+      title: values.title,
+      body: JSON.stringify(body),
+    };
+
+    if(!review?.id) {
+      payLoad.userId = Number(values.userId);
+      payLoad.isbn = book?.isbn;
+    }
 
     await saveReview({
-      id: currentReview?.id,
-      isbn: book?.isbn,
-      ...values,
-      body: JSON.stringify(body),
+      ...payLoad,
     }, {
       throwOnError: false,
       onSuccess: () => {

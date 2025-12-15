@@ -1,11 +1,36 @@
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 import { BookResponseDto } from 'src/book/book.dto';
 import { UserResponseDto } from 'src/user/user.dto';
 
 export class CreateReviewRequestDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(20)
   isbn: string;
+
+  @IsInt()
+  @Min(0)
   userId: number;
+
+  @IsString()
+  @IsNotEmpty()
   body: string | null;
+
+  @IsInt()
+  @Min(1)
+  @Max(5)
   stars: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
   title: string;
 }
 
@@ -22,8 +47,17 @@ export class ReviewResponseDto {
 }
 
 export class UpdateReviewRequestDto {
+  @IsString()
   body: string | null;
+
+  @IsInt()
+  @Min(1)
+  @Max(5)
   stars: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
   title: string;
 }
 
