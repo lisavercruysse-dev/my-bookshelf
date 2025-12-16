@@ -1,0 +1,107 @@
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  type DatabaseProvider,
+  InjectDrizzle,
+} from 'src/drizzle/drizzle.provider';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { ServerConfig, AuthConfig } from '../config/configuration';
+import * as argon2 from 'argon2';
+import { User } from 'src/types/user';
+import { JwtPayload } from 'src/types/auth';
+import { LoginRequestDto } from 'src/session/session.dto';
+import { eq } from 'drizzle-orm';
+import { users } from 'src/drizzle/schema';
+import { RegisterUserRequestDto } from 'src/user/user.dto';
+import { Role } from './roles';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    @InjectDrizzle()
+    private readonly db: DatabaseProvider,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService<ServerConfig>,
+  ) {}
+
+  async hashPassword(password: string): Promise<string> {
+    const authConfig = this.configService.get<AuthConfig>('auth')!;
+    return argon2.hash(password, {
+      type: argon2.argon2id,
+      hashLength: authConfig.hashLength,
+      timeCost: authConfig.timeCost,
+      memoryCost: authConfig.memoryCost,
+    });
+  }
+
+  async verifyPassword(password: string, hash: string): Promise<boolean> {
+    return argon2.verify(hash, password);
+  }
+
+  private signJwt(user: User): string {
+    return this.jwtService.sign({
+      sub: user.id,
+      email: user.email,
+      roles: user.roles,
+    });
+  }
+
+  async verifyJwt(token: string): Promise<JwtPayload> {
+    const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
+
+    if (!payload) {
+      throw new UnauthorizedException('Invalid authentication token');
+    }
+
+    return payload;
+  }
+
+  async login({ email, password }: LoginRequestDto): Promise<string> {
+    const user = await this.db.query.users.findFirst({
+      where: eq(users.email, email),
+    });
+
+    if (!user) {
+      throw new UnauthorizedException(
+        'The given email and password do not match',
+      );
+    }
+
+    const passwordValid = await this.verifyPassword(
+      password,
+      user.passwordHash,
+    );
+
+    if (!passwordValid) {
+      throw new UnauthorizedException(
+        'The given email and password do not match',
+      );
+    }
+
+    return this.signJwt(user);
+  }
+
+  async register({
+    userName,
+    email,
+    password,
+  }: RegisterUserRequestDto): Promise<string> {
+    const passwordHash = await this.hashPassword(password);
+
+    const [newUser] = await this.db
+      .insert(users)
+      .values({
+        userName,
+        email,
+        passwordHash: passwordHash,
+        roles: [Role.USER],
+      })
+      .$returningId();
+
+    const user = await this.db.query.users.findFirst({
+      where: eq(users.id, newUser.id),
+    });
+
+    return this.signJwt(user!);
+  }
+}

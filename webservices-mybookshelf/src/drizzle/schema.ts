@@ -9,6 +9,7 @@ import {
   primaryKey,
   boolean,
   text,
+  json,
 } from 'drizzle-orm/mysql-core';
 
 export const books = mysqlTable(
@@ -43,11 +44,17 @@ export const reviews = mysqlTable(
   (table) => [uniqueIndex('idx_id').on(table.id)],
 );
 
-export const users = mysqlTable('users', {
-  id: int('id', { unsigned: true }).primaryKey().autoincrement(),
-  userName: varchar('userName', { length: 50 }).notNull(),
-  email: varchar('email', { length: 255 }).notNull(),
-});
+export const users = mysqlTable(
+  'users',
+  {
+    id: int('id', { unsigned: true }).primaryKey().autoincrement(),
+    userName: varchar('userName', { length: 50 }).notNull(),
+    email: varchar('email', { length: 255 }).notNull(),
+    passwordHash: varchar('passwordHash', { length: 255 }).notNull(),
+    roles: json('roles').notNull(),
+  },
+  (table) => [uniqueIndex('idx_user_email_unique').on(table.email)],
+);
 
 export const userBooks = mysqlTable(
   'user_books',

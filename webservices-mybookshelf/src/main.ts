@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import CustomLogger from './core/customlogger';
 import { HttpExceptionFilter } from './lib/http-exception.filter';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -49,6 +50,7 @@ async function bootstrap() {
     }),
   );
 
+  app.use(helmet());
   app.useGlobalFilters(new DrizzleQueryErrorFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
 

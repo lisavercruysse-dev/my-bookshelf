@@ -1,6 +1,8 @@
 import { drizzle } from 'drizzle-orm/mysql2';
 import * as mysql from 'mysql2/promise';
 import * as schema from './schema';
+import * as argon2 from 'argon2';
+import { Role } from 'src/auth/roles';
 
 const connection = mysql.createPool({
   uri: process.env.DATABASE_URL,
@@ -11,6 +13,15 @@ const db = drizzle(connection, {
   schema,
   mode: 'default',
 });
+
+async function hashPassword(password: string): Promise<string> {
+  return argon2.hash(password, {
+    type: argon2.argon2id,
+    hashLength: 32,
+    timeCost: 2,
+    memoryCost: 2 ** 16,
+  });
+}
 
 async function resetDatabase() {
   console.log('Resetting database...');
@@ -153,26 +164,38 @@ async function seedUsers() {
     {
       userName: 'Alice',
       email: 'alice@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.ADMIN, Role.USER],
     },
     {
       userName: 'Bob',
       email: 'bob@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.USER],
     },
     {
       userName: 'Charlie',
       email: 'charlie@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.ADMIN, Role.USER],
     },
     {
       userName: 'Diana',
       email: 'diana@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.USER],
     },
     {
       userName: 'Eve',
       email: 'eve@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.ADMIN, Role.USER],
     },
     {
       userName: 'Frank',
       email: 'frank@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.USER],
     },
   ]);
 

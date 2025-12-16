@@ -7,35 +7,34 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  Matches,
   MaxLength,
   Min,
+  MinLength,
 } from 'class-validator';
 import { StatusResponseDto } from 'src/status/status.dto';
+import { Expose } from 'class-transformer';
 
-export class CreateUserRequestDto {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  @Matches(/^[a-zA-Z0-9]+$/)
-  userName: string;
-
-  @IsInt()
-  @Min(0)
+export class UserResponseDto {
+  @Expose()
   id: number;
 
-  @IsEmail()
-  @IsNotEmpty()
-  @MaxLength(255)
+  @Expose()
+  userName: string;
+
+  @Expose()
   email: string;
 }
 
-export class UserResponseDto {
-  id: number;
+export class UpdateUserRequestDto {
+  @IsString()
+  @MinLength(2)
+  @MaxLength(255)
   userName: string;
-}
 
-export class UpdateUserRequestDto extends CreateUserRequestDto {}
+  @IsString()
+  @IsEmail()
+  email: string;
+}
 
 export class UserListResponseDto {
   items: UserResponseDto[];
@@ -82,4 +81,20 @@ export class savedBookResponseDto {
   dateStarted: Date | null;
   dateEnded: Date | null;
   status: StatusResponseDto;
+}
+
+export class RegisterUserRequestDto {
+  @IsString()
+  @MinLength(2)
+  @MaxLength(255)
+  userName: string;
+
+  @IsString()
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(8)
+  @MaxLength(128)
+  password: string;
 }

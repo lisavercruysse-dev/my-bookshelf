@@ -5,7 +5,6 @@ import {
 } from 'src/drizzle/drizzle.provider';
 import {
   CreateSavedBookDto,
-  CreateUserRequestDto,
   savedBookResponseDto,
   UpdateSavedBookRequestDto,
   UserListResponseDto,
@@ -15,6 +14,7 @@ import { and, eq } from 'drizzle-orm';
 import { userBooks, users } from 'src/drizzle/schema';
 import { BookService } from 'src/book/book.service';
 import { ReviewService } from 'src/review/review.service';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -25,8 +25,13 @@ export class UserService {
     private readonly db: DatabaseProvider,
   ) {}
 
-  async getAllUsers(): Promise<UserListResponseDto> {
-    const items = await this.db.query.users.findMany();
+  async getAll(): Promise<UserListResponseDto> {
+    const usersList = await this.db.query.users.findMany();
+    const items = usersList.map((user) =>
+      plainToInstance(UserResponseDto, user, {
+        excludeExtraneousValues: true,
+      }),
+    );
     return { items };
   }
 
@@ -39,7 +44,9 @@ export class UserService {
       throw new NotFoundException('No user with this ID exists');
     }
 
-    return item;
+    return plainToInstance(UserResponseDto, item, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async getSavedBook(
@@ -59,12 +66,13 @@ export class UserService {
 
     return savedBook;
   }
-
+  /*
   async create(user: CreateUserRequestDto): Promise<UserResponseDto> {
     const [newUser] = await this.db.insert(users).values(user).$returningId();
 
     return this.getUserById(newUser.id);
   }
+  */
 
   async createSavedBook(
     book: CreateSavedBookDto,
@@ -90,7 +98,7 @@ export class UserService {
 
     return this.getSavedBook(userId, isbn);
   }
-
+  /*
   async update(
     id: number,
     user: CreateUserRequestDto,
@@ -98,7 +106,7 @@ export class UserService {
     await this.db.update(users).set(user).where(eq(users.id, id));
     return this.getUserById(id);
   }
-
+*/
   async delete(id: number): Promise<void> {
     const [result] = await this.db.delete(users).where(eq(users.id, id));
     if (result.affectedRows === 0) {
