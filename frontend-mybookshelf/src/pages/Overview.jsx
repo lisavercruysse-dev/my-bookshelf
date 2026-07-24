@@ -1,11 +1,8 @@
+import BookList from '../components/refactorBooks/BookList';
+import TopBar from '../components/TopBar';
 import useSWR from 'swr';
 import { getData } from '../api';
 import AsyncData from '../components/AsyncData';
-import Book from '../components/Book';
-import { Link } from 'react-router';
-import TopBar from '../components/TopBar';
-import useSWRMutation from 'swr/mutation';
-import { save } from '../api/index';
 
 export default function Overview(){
 /*  const {
@@ -14,61 +11,43 @@ export default function Overview(){
     isLoading,
   } = useSWR('?q=flowers+inauthor:keyes', getBooks);
 */
-
   const {
-    data: books = [],
+    data: popular = [],
     error,
     isLoading,
   } = useSWR('books/popular', getData);
-
+  console.log(popular);
+  /*
   const { trigger: saveBook, error: saveError} = useSWRMutation(
     '/books',
     save,
-  );
+  );*/
   return (
     <>
       <div>
         <TopBar/>
-        <div className='flex flex-col items-center'>
-          <h1 className="text-7xl text-emerald-900 font-bold font p-14 text-center">My Bookshelf</h1>
-          <div className='hidden sm:flex flex-row items-center justify-center gap-6'>
-            <Link to='myReviews' className='mb-12'>
-              <button className="bg-emerald-900 pb-3 pt-3 hover:cursor-pointer
-            text-emerald-50 rounded-lg hover:bg-emerald-950 w-50">My Reviews</button>
-            </Link>  
-            <Link to='/Discover' className='mb-12'>
-              <button className="bg-emerald-900 pb-3 pt-3 hover:cursor-pointer
-             text-emerald-50 rounded-lg hover:bg-emerald-950 w-50">
-                Discover</button>
-            </Link> 
-            <Link to='/myBooks' className='mb-12'>
-              <button className="bg-emerald-900 pb-3 pt-3 hover:cursor-pointer
-             text-emerald-50 rounded-lg hover:bg-emerald-950 w-50">My Books</button>
-            </Link>  
+        <div className='flex flex-col font-display items-center'>
+          <div className='flex flex-col items-center gap-3 p-10'>
+            <p className='text-7xl font-bold text-[#495C32]'>My Bookshelf</p>
+            <p className='text-4xl text-[#495C32]'>Read, Review, Repeat</p>
           </div>
-        </div>
-        <div className='flex flex-wrap justify-center gap-10 max-w-400 mx-auto'>
-          <AsyncData loading={isLoading} error={error || saveError}>
-            {books.map((book) => {
-              const {isbn = 'unknown', title = 'No title', genre = 'No genre', 
-                description = 'No description', amountPages = 0, author = 'no author', imageLink} = book;
-              console.log(book.img);
-              return (
-                <div data-cy='book'>
-                  <Book
-                    key={isbn}
-                    isbn={isbn}
-                    title={title}
-                    genre={genre}
-                    description={description}
-                    amountPages={amountPages}
-                    author={author}
-                    img={imageLink}
-                    saveBook={saveBook} />
-                </div>
-              );
-            })}
-          </AsyncData>
+          <button className='px-4 py-2 rounded-xl bg-[#495C32] hover:cursor-pointer hover:bg-[#3C4C29] mb-10'>
+            <p className='font-bold text-white'>Start Browsing</p>
+          </button>
+          <div className='flex flex-row w-full justify-evenly'>
+            <div className='flex flex-col'>
+              <p className='text-[#495C32] text-xl'>Popular</p>
+              <AsyncData error={error} isLoading={isLoading}>
+                <BookList direction='horizontal' books={popular} maxWidth="full"/>
+              </AsyncData>
+            </div>
+            <div className='flex flex-col'>
+              <p className='text-[#495C32] text-xl'>Your current reads</p>
+              <AsyncData>
+                <BookList />
+              </AsyncData>
+            </div>
+          </div>
         </div>
       </div>
     </>

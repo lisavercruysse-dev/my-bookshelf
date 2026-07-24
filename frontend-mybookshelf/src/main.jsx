@@ -1,4 +1,3 @@
-import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
@@ -11,6 +10,9 @@ import MyBooks from './pages/books/MyBooks.jsx';
 import BookInfo from './pages/BookInfo.jsx';
 import AddOrEditReview from './pages/reviews/AddOrEditReview.jsx';
 import AddOrEditSavedBook from './pages/books/AddOrEditSavedBook.jsx';
+import { AuthProvider } from './contexts/Auth.context.jsx';
+import Login from './pages/Login.jsx';
+import { StrictMode } from 'react';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,7 @@ const router = createBrowserRouter([
     Component: App,
   },
   { path: 'discover', Component: Discover},
+  {path: 'login', Component: Login},
   { path: 'myReviews', Component: MyReviews},
   { path: 'myBooks', Component: MyBooks},
   { path: 'Discover/bookInfo', element: <Navigate to='/bookInfo'/>},
@@ -35,6 +38,9 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
   </StrictMode>,
+
 );
