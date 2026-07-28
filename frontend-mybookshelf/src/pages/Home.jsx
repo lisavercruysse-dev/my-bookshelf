@@ -2,6 +2,7 @@ import useSWR from 'swr';
 import { getData } from '../api';
 import BookList from '../components/books/BookList';
 import AsyncData from '../components/asyncData/AsyncData';
+import { Link } from 'react-router';
 
 export default function Home() {
   const {
@@ -18,7 +19,9 @@ export default function Home() {
             <p className='font-display text-main font-bold text-[80px]'>My Bookshelf</p>
             <p className='font-display text-gray-900 font-medium text-4xl'>Read, Review, Repeat</p>
           </div>
-          <button className='primary'>Start Browsing</button>
+          <Link to='/discover'>
+            <button className='primary'>Start Browsing</button>
+          </Link>
         </div>
         <div className='grid grid-cols-2 gap-6 w-full'>
           <div className='flex flex-col items-center gap-3'>
