@@ -7,14 +7,17 @@ import NotFound from './pages/NotFound.jsx';
 import { AuthProvider } from './contexts/Auth.context.jsx';
 import Login from './pages/Login.jsx';
 import { StrictMode } from 'react';
+import Layout from './pages/Layout.jsx';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    Component: App,
+    Component: Layout,
+    children: [
+      { path: '/', Component: App },
+      { path: 'login', Component: Login },
+      { path: '*', Component: NotFound },
+    ],
   },
-  {path: 'login', Component: Login},
-  { path: '*', Component: NotFound},
 ]);
 
 createRoot(document.getElementById('root')).render(
