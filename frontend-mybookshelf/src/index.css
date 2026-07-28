@@ -1,8 +1,7 @@
 @import 'tailwindcss';
-
+/*
 @layer base {
   html {
-    @apply bg-emerald-50 font-serif;
   }
 
   h1 {
@@ -29,8 +28,25 @@
     @apply text-lg font-semibold; 
   }
 }
-    
+    */
 
+@theme {
+  --font-display: "Libre Baskerville";
+  --color-main: #495C32;
+  --color-mainDark: #3C4C29;
+  --color-customGray: #A3A3A3;
+  --color-customGrayDark: #969696;
+}
+
+@layer components {
+  .primary {
+    @apply bg-main text-white font-bold font-display py-2 px-5 rounded-3xl hover:bg-mainDark
+              hover:cursor-pointer
+  }
+  .secondary {
+    @apply bg-customGray text-white font-bold font-display py-2 px-5 rounded-3xl hover:bg-customGrayDark
+  }
+}
 
 .ProseMirror:focus {
     outline: none;
