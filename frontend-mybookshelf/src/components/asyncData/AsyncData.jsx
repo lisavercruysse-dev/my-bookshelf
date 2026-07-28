@@ -1,6 +1,5 @@
-// src/components/AsyncData.jsx
-import Loader from './Loader'; 
-import Error from './Error'; 
+import Loader from './Loader';
+import Error from './Error';
 
 export default function AsyncData({
   loading, 

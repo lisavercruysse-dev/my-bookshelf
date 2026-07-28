@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import LabelInput from '../components/LabelInput';
 import { useAuth } from '../contexts/auth';
-import Error from '../components/Error';
+import Error from '../components/asyncData/Error';
 
 const validationRules = {
   email: {
