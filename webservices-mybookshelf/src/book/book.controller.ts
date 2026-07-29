@@ -1,18 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import {
-  BookListResponseDto,
-  BookResponseDto,
-  BookWithReviewResponseDto,
-  CreateBookRequestDto,
-} from './book.dto';
+import { Controller, Get } from '@nestjs/common';
+import { BookListResponseDto } from './book.dto';
 import { BookService } from './book.service';
 
 @Controller('books')
@@ -23,7 +10,7 @@ export class BookController {
   async getPopular(): Promise<BookListResponseDto> {
     return this.bookService.getPopular();
   }
-
+  /*
   @Get(':isbn')
   async getBookByIsbn(
     @Param('isbn') isbn: string,
@@ -49,5 +36,5 @@ export class BookController {
     @Body() updateBookDto: CreateBookRequestDto,
   ): Promise<BookResponseDto> {
     return this.bookService.update(isbn, updateBookDto);
-  }
+  }*/
 }

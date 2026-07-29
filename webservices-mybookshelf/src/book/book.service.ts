@@ -1,18 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  CreateBookRequestDto,
-  BookListResponseDto,
-  BookResponseDto,
-  UpdateBookRequestDto,
-  BookDetailListDto,
-  BookWithReviewResponseDto,
-} from './book.dto';
+import { Injectable } from '@nestjs/common';
+import { BookListResponseDto } from './book.dto';
 import {
   type DatabaseProvider,
   InjectDrizzle,
 } from 'src/drizzle/drizzle.provider';
-import { desc, eq, inArray, sql } from 'drizzle-orm';
-import { books, userBooks } from 'src/drizzle/schema';
+import { desc, inArray, sql } from 'drizzle-orm';
+import { books, reviews } from 'src/drizzle/schema';
 
 @Injectable()
 export class BookService {
@@ -22,14 +15,29 @@ export class BookService {
   ) {}
 
   async getPopular(): Promise<BookListResponseDto> {
+    const MIN_REVIEWS = 10;
+
+    //global average rating across all reviews
+    const [{ globalAvg }] = await this.db
+      .select({ globalAvg: sql<number>`AVG(${reviews.stars})` })
+      .from(reviews);
+
+    const ga = Number(globalAvg) || 0;
+
+    //per-book count, avg, and weighted score
     const popular = await this.db
       .select({
-        isbn: userBooks.isbn,
-        count: sql<number>`COUNT(*)`,
+        isbn: reviews.isbn,
+        reviewCount: sql<number>`COUNT(*)`,
+        avgRating: sql<number>`AVG(${reviews.stars})`,
+        weightedScore: sql<number>`
+        (COUNT(*) / (COUNT(*) + ${MIN_REVIEWS})) * AVG(${reviews.stars})
+        + (${MIN_REVIEWS} / (COUNT(*) + ${MIN_REVIEWS})) * ${ga}
+      `,
       })
-      .from(userBooks)
-      .groupBy(userBooks.isbn)
-      .orderBy(desc(sql`COUNT(*)`))
+      .from(reviews)
+      .groupBy(reviews.isbn)
+      .orderBy(desc(sql`weightedScore`))
       .limit(10);
 
     const isbns = popular.map((p) => p.isbn);
@@ -39,11 +47,16 @@ export class BookService {
       .from(books)
       .where(inArray(books.isbn, isbns));
 
+    const orderMap = new Map(isbns.map((isbn, index) => [isbn, index]));
+    const sortedBooks = booksResult.sort(
+      (a, b) => orderMap.get(a.isbn)! - orderMap.get(b.isbn)!,
+    );
+
     return {
-      items: booksResult,
+      items: sortedBooks,
     };
   }
-
+  /*
   async getByIsbn(isbn: string): Promise<BookWithReviewResponseDto> {
     const book = await this.db.query.books.findFirst({
       where: eq(books.isbn, isbn),
@@ -93,5 +106,5 @@ export class BookService {
     if (result.affectedRows === 0) {
       throw new NotFoundException('No book with this ISBN exists');
     }
-  }
+  }*/
 }
