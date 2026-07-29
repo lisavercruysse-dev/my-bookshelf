@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsInt, IsString, MaxLength, Min } from 'class-validator';
-import { ReviewResponseDto } from '../review/review.dto';
+import { ReviewResponseDto } from 'src/review/review.dto';
 
 export class CreateBookRequestDto {
   @IsString()
@@ -19,7 +19,7 @@ export class CreateBookRequestDto {
 
   @IsInt()
   @Min(0)
-  amountPages: number;
+  pageCount: number;
 
   @IsString()
   @IsNotEmpty()
@@ -38,7 +38,7 @@ export class UpdateBookRequestDto extends CreateBookRequestDto {}
 export class BookResponseDto extends CreateBookRequestDto {
   bookDetails?: BookDetailResponseDto[];
 }
-export class BookListResponseDto {
+export class BookResponseListDTO {
   items: BookResponseDto[];
 }
 

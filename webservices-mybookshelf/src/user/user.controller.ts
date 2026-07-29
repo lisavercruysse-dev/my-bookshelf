@@ -9,6 +9,7 @@ import { type Session } from '../types/auth';
 import { CheckUserAccessGuard } from '../auth/guards/userAcces.guard';
 import { CurrentUser } from '../auth/decorators/currentUser.decorator';
 import { ParseUserIdPipe } from '../auth/pipes/parseUserId.pipe';
+import { BookResponseListDTO } from '../book/book.dto';
 
 @Controller('users')
 export class UserController {
@@ -32,6 +33,16 @@ export class UserController {
   ): Promise<UserResponseDto> {
     const userId = id === 'me' ? user.id : id;
     return await this.userService.getUserById(userId);
+  }
+
+  @Get(':id/reading')
+  @UseGuards(CheckUserAccessGuard)
+  async getCurrentReadsByUserId(
+    @Param('id', ParseUserIdPipe) id: 'me' | number,
+    @CurrentUser() user: Session,
+  ): Promise<BookResponseListDTO> {
+    const userId = id === 'me' ? user.id : id;
+    return await this.bookService.getCurrentReads(userId);
   }
   /*
   @Get(':id/reviews')

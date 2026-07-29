@@ -58,7 +58,7 @@ async function seedBooks() {
       genre: 'Science Fiction',
       description:
         'A novella about a man with low IQ who undergoes an experimental surgery to increase his intelligence.',
-      amountPages: 218,
+      pageCount: 218,
       author: 'Daniel Keyes',
     },
     {
@@ -67,7 +67,7 @@ async function seedBooks() {
       genre: 'Fantasy',
       description:
         'Young wizard Harry discovers his magical heritage and attends Hogwarts School of Witchcraft and Wizardry.',
-      amountPages: 336,
+      pageCount: 336,
       author: 'J.K. Rowling',
     },
     {
@@ -75,7 +75,7 @@ async function seedBooks() {
       title: 'Beautiful Test',
       genre: 'Test Fiction',
       description: 'This is a test book for testing purposes.',
-      amountPages: 20,
+      pageCount: 20,
       author: 'Suzanne Collins',
     },
     {
@@ -83,7 +83,7 @@ async function seedBooks() {
       title: 'Another Test Test',
       genre: 'Test Fiction',
       description: 'Another short test book.',
-      amountPages: 4,
+      pageCount: 4,
       author: 'Test Person',
     },
     {
@@ -92,7 +92,7 @@ async function seedBooks() {
       genre: 'Epic Poetry',
       description:
         "Homer's classic tale of Odysseus and his journey home from the Trojan War.",
-      amountPages: 560,
+      pageCount: 560,
       author: 'Homer',
     },
   ]);

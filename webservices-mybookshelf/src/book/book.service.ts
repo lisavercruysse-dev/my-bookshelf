@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { BookListResponseDto } from './book.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { BookResponseListDTO } from './book.dto';
 import {
   type DatabaseProvider,
   InjectDrizzle,
@@ -14,7 +14,35 @@ export class BookService {
     private readonly db: DatabaseProvider,
   ) {}
 
-  async getPopular(): Promise<BookListResponseDto> {
+  async getCurrentReads(userId: number): Promise<BookResponseListDTO> {
+    //get the current reads shelf
+    const currentReadsShelf = await this.db.query.shelves.findFirst({
+      columns: {
+        id: true,
+      },
+      where: (shelves, { eq }) =>
+        eq(shelves.userId, userId) && eq(shelves.title, 'Current Reads'),
+    });
+
+    if (!currentReadsShelf)
+      throw new NotFoundException(
+        'This user does not have a current reads shelf',
+      );
+
+    //get books from shelf
+    const currentReads = await this.db.query.shelfBooks.findMany({
+      where: (shelfBooks, { eq }) =>
+        eq(shelfBooks.shelfId, currentReadsShelf.id),
+      with: {
+        book: true,
+      },
+    });
+
+    const books = currentReads.map((entry) => entry.book);
+    return { items: books };
+  }
+
+  async getPopular(): Promise<BookResponseListDTO> {
     const MIN_REVIEWS = 10;
 
     const [{ globalAvg }] = await this.db

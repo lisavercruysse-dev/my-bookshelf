@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { BookListResponseDto } from './book.dto';
+import { BookResponseListDTO } from './book.dto';
 import { BookService } from './book.service';
 
 @Controller('books')
@@ -7,9 +7,10 @@ export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @Get('popular')
-  async getPopular(): Promise<BookListResponseDto> {
+  async getPopular(): Promise<BookResponseListDTO> {
     return this.bookService.getPopular();
   }
+
   /*
   @Get(':isbn')
   async getBookByIsbn(

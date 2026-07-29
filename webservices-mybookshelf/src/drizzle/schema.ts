@@ -18,7 +18,7 @@ export const books = mysqlTable(
     title: varchar('title', { length: 100 }).notNull(),
     genre: varchar('genre', { length: 100 }).notNull(),
     description: text('description').notNull(),
-    amountPages: int('amountPages', { unsigned: true }).notNull(),
+    pageCount: int('pageCount', { unsigned: true }).notNull(),
     author: varchar('author', { length: 255 }).notNull(),
     imageLink: varchar('imageLink', { length: 255 }),
   },
