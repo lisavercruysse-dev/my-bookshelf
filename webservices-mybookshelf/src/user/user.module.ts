@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { DrizzleModule } from 'src/drizzle/drizzle.module';
+import { DrizzleModule } from '../drizzle/drizzle.module';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { ReviewService } from 'src/review/review.service';
-import { BookModule } from 'src/book/book.module';
-import { AuthModule } from 'src/auth/auth.module';
+import { ReviewService } from '../review/review.service';
+import { BookModule } from '../book/book.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [DrizzleModule, BookModule, AuthModule],

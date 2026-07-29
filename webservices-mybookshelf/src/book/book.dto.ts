@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsInt, IsString, MaxLength, Min } from 'class-validator';
-import { ReviewResponseDto } from 'src/review/review.dto';
-import { StatusResponseDto } from 'src/status/status.dto';
+import { ReviewResponseDto } from '../review/review.dto';
 
 export class CreateBookRequestDto {
   @IsString()
@@ -46,10 +45,8 @@ export class BookListResponseDto {
 export class BookDetailResponseDto {
   userId: number;
   pagesRead: number;
-  favorite: boolean;
   dateStarted: Date | null;
   dateEnded: Date | null;
-  status: StatusResponseDto;
 }
 
 export class BookDetailListDto {

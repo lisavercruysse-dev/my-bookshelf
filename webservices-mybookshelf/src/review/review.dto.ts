@@ -6,8 +6,8 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { BookResponseDto } from 'src/book/book.dto';
-import { UserResponseDto } from 'src/user/user.dto';
+import { BookResponseDto } from '../book/book.dto';
+import { UserResponseDto } from '../user/user.dto';
 
 export class CreateReviewRequestDto {
   @IsString()

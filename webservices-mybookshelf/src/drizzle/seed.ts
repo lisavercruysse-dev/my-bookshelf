@@ -2,7 +2,7 @@ import { drizzle } from 'drizzle-orm/mysql2';
 import * as mysql from 'mysql2/promise';
 import * as schema from './schema';
 import * as argon2 from 'argon2';
-import { Role } from 'src/auth/roles';
+import { Role } from '../auth/roles';
 
 const connection = mysql.createPool({
   uri: process.env.DATABASE_URL,

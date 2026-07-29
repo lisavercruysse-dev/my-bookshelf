@@ -2,17 +2,17 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   type DatabaseProvider,
   InjectDrizzle,
-} from 'src/drizzle/drizzle.provider';
+} from '../drizzle/drizzle.provider';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ServerConfig, AuthConfig } from '../config/configuration';
 import * as argon2 from 'argon2';
-import { User } from 'src/types/user';
-import { JwtPayload } from 'src/types/auth';
-import { LoginRequestDto } from 'src/session/session.dto';
+import { User } from '../types/user';
+import { JwtPayload } from '../types/auth';
+import { LoginRequestDto } from '../session/session.dto';
 import { eq } from 'drizzle-orm';
-import { users } from 'src/drizzle/schema';
-import { RegisterUserRequestDto } from 'src/user/user.dto';
+import { users } from '../drizzle/schema';
+import { RegisterUserRequestDto } from '../user/user.dto';
 import { Role } from './roles';
 
 @Injectable()

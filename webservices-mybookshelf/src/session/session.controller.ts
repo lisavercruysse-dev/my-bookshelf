@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto, LoginResponseDto } from './session.dto';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Public } from '../auth/decorators/public.decorator';
 import { AuthDelayInterceptor } from '../auth/interceptors/authDelay.interceptor';
 
 @Controller('sessions')

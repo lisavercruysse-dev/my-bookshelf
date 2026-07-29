@@ -3,9 +3,9 @@ import { BookListResponseDto } from './book.dto';
 import {
   type DatabaseProvider,
   InjectDrizzle,
-} from 'src/drizzle/drizzle.provider';
+} from '../drizzle/drizzle.provider';
 import { desc, inArray, sql } from 'drizzle-orm';
-import { books, reviews } from 'src/drizzle/schema';
+import { books, reviews } from '../drizzle/schema';
 
 @Injectable()
 export class BookService {
@@ -17,27 +17,27 @@ export class BookService {
   async getPopular(): Promise<BookListResponseDto> {
     const MIN_REVIEWS = 10;
 
-    //global average rating across all reviews
     const [{ globalAvg }] = await this.db
       .select({ globalAvg: sql<number>`AVG(${reviews.stars})` })
       .from(reviews);
 
     const ga = Number(globalAvg) || 0;
 
-    //per-book count, avg, and weighted score
+    const weightedScore = sql<number>`
+    (COUNT(*) / (COUNT(*) + ${MIN_REVIEWS})) * AVG(${reviews.stars})
+    + (${MIN_REVIEWS} / (COUNT(*) + ${MIN_REVIEWS})) * ${ga}
+  `.as('weightedScore');
+
     const popular = await this.db
       .select({
         isbn: reviews.isbn,
-        reviewCount: sql<number>`COUNT(*)`,
-        avgRating: sql<number>`AVG(${reviews.stars})`,
-        weightedScore: sql<number>`
-        (COUNT(*) / (COUNT(*) + ${MIN_REVIEWS})) * AVG(${reviews.stars})
-        + (${MIN_REVIEWS} / (COUNT(*) + ${MIN_REVIEWS})) * ${ga}
-      `,
+        reviewCount: sql<number>`COUNT(*)`.as('reviewCount'),
+        avgRating: sql<number>`AVG(${reviews.stars})`.as('avgRating'),
+        weightedScore,
       })
       .from(reviews)
       .groupBy(reviews.isbn)
-      .orderBy(desc(sql`weightedScore`))
+      .orderBy(desc(weightedScore))
       .limit(10);
 
     const isbns = popular.map((p) => p.isbn);

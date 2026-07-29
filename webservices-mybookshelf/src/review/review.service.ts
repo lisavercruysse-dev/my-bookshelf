@@ -8,9 +8,9 @@ import {
 import {
   type DatabaseProvider,
   InjectDrizzle,
-} from 'src/drizzle/drizzle.provider';
+} from '../drizzle/drizzle.provider';
 import { and, eq } from 'drizzle-orm';
-import { reviews } from 'src/drizzle/schema';
+import { reviews } from '../drizzle/schema';
 
 @Injectable()
 export class ReviewService {
