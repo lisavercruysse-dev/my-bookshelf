@@ -25,18 +25,18 @@ export async function getAll(url) {
   return data.items;
 }
 
-export async function getBooks(url){
-  const { data } = await axios.get(`${googleBooksBaseUrl}/volumes${url}&key=${googleBooksKey}`);
+export async function getBooks(url) {
+  const { data } = await axiosRoot.get(
+    `${googleBooksBaseUrl}/volumes${url}&key=${googleBooksKey}`,
+  );
   return data.items;
 }
 
 export async function getBooksById(isbn) {
-  const { data } = await axios.get(
+  const { data } = await axiosRoot.get(
     `${googleBooksBaseUrl}/volumes?q=isbn:${isbn}&key=${googleBooksKey}`,
   );
-  if (!data.items || data.items.length === 0) {
-    return null;
-  }
+  if (!data.items?.length) return null;
   return data.items[0].volumeInfo;
 }
 

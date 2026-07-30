@@ -20,8 +20,8 @@ export class BookService {
       columns: {
         id: true,
       },
-      where: (shelves, { eq }) =>
-        eq(shelves.userId, userId) && eq(shelves.title, 'Current Reads'),
+      where: (shelves, { eq, and }) =>
+        and(eq(shelves.userId, userId), eq(shelves.title, 'Current Reads')),
     });
 
     if (!currentReadsShelf)

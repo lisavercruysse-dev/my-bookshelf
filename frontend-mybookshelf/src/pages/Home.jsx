@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <div className='flex flex-col items-center'>
-      <div className='flex flex-col gap-10 items-center pb-20'>
+      <div className='flex flex-col gap-10 items-center pb-10'>
         <div className='text-center'>
           <p className='font-display text-main font-bold text-[80px]'>My Bookshelf</p>
           <p className='font-display text-gray-900 font-medium text-4xl'>Read, Review, Repeat</p>

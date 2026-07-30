@@ -8,12 +8,14 @@ import { AuthProvider } from './contexts/Auth.context.jsx';
 import Login from './pages/Login.jsx';
 import { StrictMode } from 'react';
 import Layout from './pages/Layout.jsx';
+import Discover from './pages/Discover.jsx';
 
 const router = createBrowserRouter([
   {
     Component: Layout,
     children: [
       { path: '/', Component: App },
+      { path: '/discover', Component: Discover},
       { path: 'login', Component: Login },
       { path: '*', Component: NotFound },
     ],

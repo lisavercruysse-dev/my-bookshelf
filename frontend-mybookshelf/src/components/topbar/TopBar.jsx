@@ -20,7 +20,7 @@ export default function TopBar() {
   };
 
   return (
-    <div className='relative flex flex-row bg-main text-white p-2 mb-6 justify-between items-center font-display'>
+    <div className='relative flex flex-row bg-main text-white p-2 mb-4 justify-between items-center font-display'>
       <div className="flex gap-5">
         <NavItem title='Home' icon={<HiOutlineHome size={20}/>} url='/'/>
         <NavItem title='Explore' url='/discover' icon={<FaMagnifyingGlass size={18}/>}/>
