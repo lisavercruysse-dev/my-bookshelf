@@ -252,7 +252,7 @@ async function seedShelves() {
   await db.insert(schema.shelves).values([
     { title: 'Favorites', userId: 1 },
     { title: 'Want to Read', userId: 1 },
-    { title: 'Currently Reading', userId: 1 },
+    { title: 'Current Reads', userId: 1 },
   ]);
 
   console.log('Shelves seed data inserted successfully.');
