@@ -4,16 +4,29 @@ import AsyncData from '../components/asyncData/AsyncData';
 import BookList from '../components/books/BookList';
 import { IoMdArrowDroprightCircle } from 'react-icons/io';
 import { IoMdArrowDropleftCircle } from 'react-icons/io';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Discover() {
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const maxResults = 15;
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(0); 
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [search]);
+
+  const query = debouncedSearch.trim() ? debouncedSearch.trim() : 'harrypotter';
 
   const {
     data: books = [],
   } = useSWR(
-    `?q=harrypotter&startIndex=${page * maxResults}&maxResults=${maxResults}&orderBy=relevance`,
+    `?q=${encodeURIComponent(query)}&startIndex=${page * maxResults}&maxResults=${maxResults}&orderBy=relevance`,
     getBooks,
   );
 
@@ -30,6 +43,8 @@ export default function Discover() {
         <p className='font-display text-main font-bold text-5xl'>Explore</p>
         <div>
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder='Search for books'
             className='font-display border border-gray-900 rounded-l-xl px-4 py-2 w-100 focus:outline-none focus:ring-0'
           />
