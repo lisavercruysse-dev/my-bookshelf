@@ -12,16 +12,9 @@ export default function Discover() {
 
   const {
     data: books = [],
-    error,
-    isLoading,
   } = useSWR(
-    `?q=harry potter&startIndex=${page * maxResults}&maxResults=${maxResults}&orderBy=relevance`,
+    `?q=harrypotter&startIndex=${page * maxResults}&maxResults=${maxResults}&orderBy=relevance`,
     getBooks,
-    {
-      errorRetryCount: 3,
-      errorRetryInterval: 3000,
-      revalidateOnFocus: false,
-    },
   );
 
   const listSize = 5;
@@ -47,7 +40,7 @@ export default function Discover() {
       </div>
 
       <div className='flex flex-col gap-8 w-full items-center'>
-        <AsyncData error={error} isLoading={isLoading}>
+        <AsyncData loading={books.length === 0}>
           {rows.map((row, i) => (
             <BookList key={i} books={row} maxAmount={5} />
           ))}
@@ -68,10 +61,8 @@ export default function Discover() {
           disabled={books.length < maxResults}
         >
           <IoMdArrowDroprightCircle
-            className={`size-10 ${
-              page === 0
-                ? 'text-gray-400 cursor-pointer'
-                : 'text-main hover:text-mainDark cursor-pointer'
+            className={`size-10 hover:cursor-pointer ${
+              books.length < maxResults ? 'text-gray-400 cursor-pointer' : 'text-main hover:text-mainDark'
             }`}
           />
         </button>
