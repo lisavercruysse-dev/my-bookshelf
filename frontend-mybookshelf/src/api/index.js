@@ -32,12 +32,12 @@ export async function getBooks(url) {
   return data.items;
 }
 
-export async function getBooksById(isbn) {
+export async function getBookById(isbn) {
   const { data } = await axiosRoot.get(
     `${googleBooksBaseUrl}/volumes?q=isbn:${isbn}&key=${googleBooksKey}`,
   );
   if (!data.items?.length) return null;
-  return data.items[0].volumeInfo;
+  return data.items[0];
 }
 
 export async function getData(url) {

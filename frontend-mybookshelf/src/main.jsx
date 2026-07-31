@@ -9,6 +9,7 @@ import Login from './pages/Login.jsx';
 import { StrictMode } from 'react';
 import Layout from './pages/Layout.jsx';
 import Discover from './pages/Discover.jsx';
+import BookDetails from './components/books/BookDetails.jsx';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/', Component: App },
       { path: '/discover', Component: Discover},
+      { path: '/books/:isbn', Component: BookDetails},
       { path: 'login', Component: Login },
       { path: '*', Component: NotFound },
     ],

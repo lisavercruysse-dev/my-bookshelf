@@ -1,7 +1,8 @@
 import fallbackImage from '../../assets/altBook.jpg';
+import { Link } from 'react-router';
 
 export default function Book(props) {
-  const { author, imageLink, title } = props;
+  const { author, imageLink, title, isbn } = props;
   const bookImage = imageLink || fallbackImage;
 
   return (
@@ -12,9 +13,11 @@ export default function Book(props) {
       </div>
 
       <img src={bookImage} alt={title} className='h-40 w-28 rounded-md object-cover' />
-      <button className='primary text-sm px-2 py-1'>
-        Details
-      </button>
+      <Link to={`/books/${isbn}`}>
+        <button className='primary text-sm px-2 py-1'>
+          Details
+        </button>
+      </Link>
     </div>
   );
 }
