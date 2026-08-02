@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BookResponseListDTO } from './book.dto';
+import {
+  BookResponseDTO,
+  BookResponseListDTO, CreateBookRequestDTO
+} from './book.dto';
 import {
   type DatabaseProvider,
   InjectDrizzle,
 } from '../drizzle/drizzle.provider';
-import { desc, inArray, sql } from 'drizzle-orm';
+import { desc, eq, inArray, sql } from 'drizzle-orm';
 import { books, reviews } from '../drizzle/schema';
 
 @Injectable()
@@ -84,13 +87,15 @@ export class BookService {
       items: sortedBooks,
     };
   }
-  /*
-  async getByIsbn(isbn: string): Promise<BookWithReviewResponseDto> {
+
+  async create(book: CreateBookRequestDTO): Promise<BookResponseDTO> {
+    await this.db.insert(books).values(book);
+    return this.getByIsbn(book.isbn);
+  }
+
+  async getByIsbn(isbn: string): Promise<BookResponseDTO> {
     const book = await this.db.query.books.findFirst({
       where: eq(books.isbn, isbn),
-      with: {
-        reviews: true,
-      },
     });
 
     if (!book) {
@@ -102,6 +107,10 @@ export class BookService {
 
     return book;
   }
+
+  /*
+
+
 
   async getBooksByUserId(id: number): Promise<BookDetailListDto> {
     const items = await this.db.query.userBooks.findMany({
@@ -115,10 +124,6 @@ export class BookService {
     return { items };
   }
 
-  async create(book: CreateBookRequestDto): Promise<BookResponseDto> {
-    await this.db.insert(books).values(book);
-    return this.getByIsbn(book.isbn);
-  }
 
   async update(
     isbn: string,

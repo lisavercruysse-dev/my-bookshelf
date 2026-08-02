@@ -20,26 +20,6 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
-export async function getAll(url) {
-  const { data } = await axios.get(url); 
-  return data.items;
-}
-
-export async function getBooks(url) {
-  const { data } = await axiosRoot.get(
-    `${googleBooksBaseUrl}/volumes${url}&key=${googleBooksKey}`,
-  );
-  return data.items;
-}
-
-export async function getBookById(isbn) {
-  const { data } = await axiosRoot.get(
-    `${googleBooksBaseUrl}/volumes?q=isbn:${isbn}&key=${googleBooksKey}`,
-  );
-  if (!data.items?.length) return null;
-  return data.items[0];
-}
-
 export async function getData(url) {
   const {data} = await axios.get(`${baseUrl}/${url}`);
   return data.items;
@@ -72,4 +52,20 @@ export async function deleteById (url, {arg: id}) {
 export async function post(url, {arg}) {
   const {data} = await axios.post(`${baseUrl}/${url}`, arg);
   return data;
+}
+
+//Google Books
+export async function getBooks(url) {
+  const { data } = await axiosRoot.get(
+    `${googleBooksBaseUrl}/volumes${url}&key=${googleBooksKey}`,
+  );
+  return data.items;
+}
+
+export async function getBookById(isbn) {
+  const { data } = await axiosRoot.get(
+    `${googleBooksBaseUrl}/volumes?q=isbn:${isbn}&key=${googleBooksKey}`,
+  );
+  if (!data.items?.length) return null;
+  return data.items[0];
 }

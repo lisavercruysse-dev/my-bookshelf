@@ -253,6 +253,9 @@ async function seedShelves() {
     { title: 'Favorites', userId: 1 },
     { title: 'Want to Read', userId: 1 },
     { title: 'Current Reads', userId: 1 },
+    { title: 'Favorites', userId: 2 },
+    { title: 'Want to Read', userId: 2 },
+    { title: 'Current Reads', userId: 2 },
   ]);
 
   console.log('Shelves seed data inserted successfully.');

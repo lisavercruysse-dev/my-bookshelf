@@ -1,6 +1,13 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param, UseGuards
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserResponseDto, UserListResponseDto } from './user.dto';
+import {
+  UserResponseDto,
+  UserListResponseDto
+} from './user.dto';
 import { ReviewService } from '../review/review.service';
 import { BookService } from '../book/book.service';
 import { AuthService } from '../auth/auth.service';
@@ -89,13 +96,6 @@ export class UserController {
   ): Promise<LoginResponseDto> {
     const token = await this.authService.register(registerDto);
     return { token };
-  }
-
-  @Post('/books')
-  async saveBook(
-    @Body() createSavedBookDto: CreateSavedBookDto,
-  ): Promise<savedBookResponseDto> {
-    return await this.userService.createSavedBook(createSavedBookDto);
   }
 
   @Put(':id')

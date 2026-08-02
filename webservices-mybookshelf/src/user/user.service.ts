@@ -65,19 +65,6 @@ export class UserService {
 
     return this.getUserById(newUser.id);
   }
-  
-
-  async createSavedBook(
-    book: CreateSavedBookDto,
-  ): Promise<savedBookResponseDto> {
-    await this.db.insert(userBooks).values({
-      ...book,
-      dateStarted: book.dateStarted ? new Date(book.dateStarted) : null,
-      dateEnded: book.dateEnded ? new Date(book.dateEnded) : null,
-    });
-
-    return await this.getSavedBook(book.userId, book.isbn);
-  }
 
   async updateSavedBook(
     userId: number,

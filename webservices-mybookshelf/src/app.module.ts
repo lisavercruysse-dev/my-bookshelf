@@ -15,12 +15,14 @@ import { SessionModule } from './session/session.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { ShelfModule } from './shelves/shelf.module';
 
 @Module({
   imports: [
     UserModule,
     BookModule,
     ReviewModule,
+    ShelfModule,
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,

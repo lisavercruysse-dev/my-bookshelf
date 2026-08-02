@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsInt, IsString, MaxLength, Min } from 'class-validator';
 import { ReviewResponseDto } from 'src/review/review.dto';
 
-export class CreateBookRequestDto {
+export class CreateBookRequestDTO {
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
@@ -33,26 +33,13 @@ export class CreateBookRequestDto {
   @IsString()
   imageLink: string | null;
 }
-export class UpdateBookRequestDto extends CreateBookRequestDto {}
+export class BookResponseDTO extends CreateBookRequestDTO {}
+export class UpdateBookRequestDto extends CreateBookRequestDTO {}
 
-export class BookResponseDto extends CreateBookRequestDto {
-  bookDetails?: BookDetailResponseDto[];
-}
 export class BookResponseListDTO {
-  items: BookResponseDto[];
+  items: BookResponseDTO[];
 }
 
-export class BookDetailResponseDto {
-  userId: number;
-  pagesRead: number;
-  dateStarted: Date | null;
-  dateEnded: Date | null;
-}
-
-export class BookDetailListDto {
-  items: BookDetailResponseDto[];
-}
-
-export class BookWithReviewResponseDto extends BookResponseDto {
+export class BookWithReviewResponseDto extends BookResponseDTO {
   reviews: ReviewResponseDto[];
 }
