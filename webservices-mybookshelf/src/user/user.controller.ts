@@ -1,33 +1,22 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Post,
-  Put,
-  UseGuards,
+  Param, UseGuards
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
   UserResponseDto,
-  CreateSavedBookDto,
-  savedBookResponseDto,
-  UpdateSavedBookRequestDto,
-  RegisterUserRequestDto,
-  UserListResponseDto,
+  UserListResponseDto
 } from './user.dto';
-import { ReviewService } from 'src/review/review.service';
-import { BookDetailListDto } from 'src/book/book.dto';
-import { BookService } from 'src/book/book.service';
-import { ReviewListResponseDto } from 'src/review/review.dto';
-import { AuthService } from 'src/auth/auth.service';
-import { LoginResponseDto } from 'src/session/session.dto';
+import { ReviewService } from '../review/review.service';
+import { BookService } from '../book/book.service';
+import { AuthService } from '../auth/auth.service';
 import { Role } from '../auth/roles';
 import { type Session } from '../types/auth';
-import { CheckUserAccessGuard } from 'src/auth/guards/userAcces.guard';
-import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
-import { ParseUserIdPipe } from 'src/auth/pipes/parseUserId.pipe';
+import { CheckUserAccessGuard } from '../auth/guards/userAcces.guard';
+import { CurrentUser } from '../auth/decorators/currentUser.decorator';
+import { ParseUserIdPipe } from '../auth/pipes/parseUserId.pipe';
+import { BookResponseListDTO } from '../book/book.dto';
 
 @Controller('users')
 export class UserController {
@@ -53,6 +42,16 @@ export class UserController {
     return await this.userService.getUserById(userId);
   }
 
+  @Get(':id/reading')
+  @UseGuards(CheckUserAccessGuard)
+  async getCurrentReadsByUserId(
+    @Param('id', ParseUserIdPipe) id: 'me' | number,
+    @CurrentUser() user: Session,
+  ): Promise<BookResponseListDTO> {
+    const userId = id === 'me' ? user.id : id;
+    return await this.bookService.getCurrentReads(userId);
+  }
+  /*
   @Get(':id/reviews')
   @UseGuards(CheckUserAccessGuard)
   async getReviewsByUserId(
@@ -83,14 +82,13 @@ export class UserController {
     const userId = id === 'me' ? user.id : id;
     return await this.userService.getSavedBook(userId, isbn);
   }
-  /*
+
   @Post()
   async createUser(
     @Body() createUserDto: CreateUserRequestDto,
   ): Promise<UserResponseDto> {
     return await this.userService.create(createUserDto);
   }
-*/
 
   @Post()
   async registerUser(
@@ -100,13 +98,6 @@ export class UserController {
     return { token };
   }
 
-  @Post('/books')
-  async saveBook(
-    @Body() createSavedBookDto: CreateSavedBookDto,
-  ): Promise<savedBookResponseDto> {
-    return await this.userService.createSavedBook(createSavedBookDto);
-  }
-  /*
   @Put(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -114,7 +105,7 @@ export class UserController {
   ): Promise<UserResponseDto> {
     return await this.userService.update(id, updateUserDto);
   }
-*/
+
   @Put('/:userId/:isbn')
   @UseGuards(CheckUserAccessGuard)
   async updateSavedBook(
@@ -157,5 +148,5 @@ export class UserController {
     @CurrentUser() user: Session,
   ): Promise<void> {
     await this.reviewService.delete(reviewId, id === 'me' ? user.id : id);
-  }
+  }*/
 }

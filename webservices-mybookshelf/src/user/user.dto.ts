@@ -11,7 +11,6 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { StatusResponseDto } from 'src/status/status.dto';
 import { Expose } from 'class-transformer';
 
 export class UserResponseDto {
@@ -80,7 +79,6 @@ export class savedBookResponseDto {
   favorite: boolean;
   dateStarted: Date | null;
   dateEnded: Date | null;
-  status: StatusResponseDto;
 }
 
 export class RegisterUserRequestDto {

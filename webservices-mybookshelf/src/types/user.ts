@@ -1,3 +1,3 @@
-import { users } from 'src/drizzle/schema';
+import { users } from '../drizzle/schema';
 
 export type User = typeof users.$inferSelect;

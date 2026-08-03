@@ -2,18 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   type DatabaseProvider,
   InjectDrizzle,
-} from 'src/drizzle/drizzle.provider';
-import {
-  CreateSavedBookDto,
-  savedBookResponseDto,
-  UpdateSavedBookRequestDto,
-  UserListResponseDto,
-  UserResponseDto,
-} from './user.dto';
+} from '../drizzle/drizzle.provider';
+import { UserListResponseDto, UserResponseDto } from './user.dto';
 import { and, eq } from 'drizzle-orm';
-import { userBooks, users } from 'src/drizzle/schema';
-import { BookService } from 'src/book/book.service';
-import { ReviewService } from 'src/review/review.service';
+import { userBooks, users } from '../drizzle/schema';
+import { BookService } from '../book/book.service';
+import { ReviewService } from '../review/review.service';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -48,7 +42,7 @@ export class UserService {
       excludeExtraneousValues: true,
     });
   }
-
+  /*
   async getSavedBook(
     userId: number,
     isbn: string,
@@ -57,7 +51,6 @@ export class UserService {
 
     const savedBook = await this.db.query.userBooks.findFirst({
       where: and(eq(userBooks.userId, userId), eq(userBooks.isbn, isbn)),
-      with: { status: true },
     });
 
     if (!savedBook) {
@@ -66,24 +59,11 @@ export class UserService {
 
     return savedBook;
   }
-  /*
+  
   async create(user: CreateUserRequestDto): Promise<UserResponseDto> {
     const [newUser] = await this.db.insert(users).values(user).$returningId();
 
     return this.getUserById(newUser.id);
-  }
-  */
-
-  async createSavedBook(
-    book: CreateSavedBookDto,
-  ): Promise<savedBookResponseDto> {
-    await this.db.insert(userBooks).values({
-      ...book,
-      dateStarted: book.dateStarted ? new Date(book.dateStarted) : null,
-      dateEnded: book.dateEnded ? new Date(book.dateEnded) : null,
-    });
-
-    return await this.getSavedBook(book.userId, book.isbn);
   }
 
   async updateSavedBook(
@@ -97,7 +77,7 @@ export class UserService {
       .where(and(eq(userBooks.userId, userId), eq(userBooks.isbn, isbn)));
 
     return this.getSavedBook(userId, isbn);
-  }
+  }*/
   /*
   async update(
     id: number,
