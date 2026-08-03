@@ -66,6 +66,16 @@ export async function saveToShelf(url, { arg: values }) {
   });
 }
 
+export async function getById(url) {
+  const { data } = await axios.get(`${baseUrl}/${url}`);
+  return data;
+}
+
+export async function post(url, { arg }) {
+  const { data } = await axios.post(`${baseUrl}/${url}`, arg);
+  return data;
+}
+
 //Google Books
 export async function getBooks(url) {
   const { data } = await axiosRoot.get(
