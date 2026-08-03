@@ -53,9 +53,11 @@ export default function AddBookToShelfForm({ isbn, book, addToShelf, onClose }) 
             {...register('existingShelf')}
           >
             <option value='' className='text-gray-400'>--Choose a shelf--</option>
-            {shelves?.map((shelf) => (
-              <option key={shelf.id} value={shelf.id}>{shelf.title}</option>
-            ))}
+            {shelves
+              ?.filter((shelf) => !shelf.shelfBooks?.some((sb) => sb.isbn === isbn))
+              .map((shelf) => (
+                <option key={shelf.id} value={shelf.id}>{shelf.title}</option>
+              ))}
           </select>
           <FaChevronDown className='absolute right-4 top-1/2 -translate-y-1/2 
           text-gray-500 pointer-events-none' size={12} />

@@ -68,6 +68,11 @@ export class ShelfService {
   async getShelvesForUser(userId: number): Promise<ShelfListResponseDTO> {
     const items = await this.db.query.shelves.findMany({
       where: (shelves, { eq }) => eq(shelves.userId, userId),
+      with: {
+        shelfBooks: {
+          columns: { isbn: true },
+        },
+      },
     });
 
     return { items };
