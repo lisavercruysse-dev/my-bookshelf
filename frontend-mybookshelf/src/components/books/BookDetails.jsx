@@ -15,12 +15,28 @@ export default function BookDetails() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const {
-    data: book,
+    data: rawBook,
     error,
     isLoading,
   } = useSWR(isbn ? isbn : null, getBookById);
 
   const isGoogleBooksDown = error?.status === 503 || error?.response?.status === 503;
+
+  //change data shape to use the same one
+  const book = rawBook?.volumeInfo
+    ? rawBook
+    : rawBook
+      ? {
+        volumeInfo: {
+          title: rawBook.title,
+          authors: rawBook.author ? [rawBook.author] : [],
+          description: rawBook.description,
+          pageCount: rawBook.pageCount,
+          categories: rawBook.genre ? [rawBook.genre] : [],
+          imageLinks: { thumbnail: rawBook.imageLink },
+        },
+      }
+      : undefined;
 
   const mapAuthors = (book) => {
     return book?.volumeInfo?.authors?.join(', ') ?? 'Unknown author';
@@ -74,6 +90,5 @@ export default function BookDetails() {
         </AsyncData>
       </Modal>
     </>
-
   );
 }
