@@ -1,1 +1,0 @@
-ALTER TABLE `books` ADD `description` varchar(1000);

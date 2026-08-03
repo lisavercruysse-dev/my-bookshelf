@@ -6,8 +6,8 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { BookResponseDto } from 'src/book/book.dto';
-import { UserResponseDto } from 'src/user/user.dto';
+import { BookResponseDTO } from '../book/book.dto';
+import { UserResponseDto } from '../user/user.dto';
 
 export class CreateReviewRequestDto {
   @IsString()
@@ -43,7 +43,7 @@ export class ReviewResponseDto {
   title: string;
   date: Date;
   user?: UserResponseDto;
-  book?: BookResponseDto;
+  book?: BookResponseDTO;
 }
 
 export class UpdateReviewRequestDto {
@@ -72,7 +72,7 @@ export class UserReviewResponseDto {
   stars: number;
   date: Date;
   title: string;
-  book: BookResponseDto;
+  book: BookResponseDTO;
 }
 
 export class UserReviewResponseListDto {

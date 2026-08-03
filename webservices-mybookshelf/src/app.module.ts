@@ -10,19 +10,19 @@ import { ReviewModule } from './review/review.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
-import { StatusModule } from './status/status.module';
 import { AuthModule } from './auth/auth.module';
 import { SessionModule } from './session/session.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { ShelfModule } from './shelves/shelf.module';
 
 @Module({
   imports: [
     UserModule,
-    StatusModule,
     BookModule,
     ReviewModule,
+    ShelfModule,
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,

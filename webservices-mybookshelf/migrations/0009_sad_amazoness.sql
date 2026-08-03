@@ -1,1 +1,0 @@
-ALTER TABLE `books` ADD `imageLink` varchar(255);

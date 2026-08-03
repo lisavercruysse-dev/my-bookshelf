@@ -6,10 +6,9 @@ import {
   uniqueIndex,
   varchar,
   date,
-  primaryKey,
-  boolean,
   text,
   json,
+  primaryKey,
 } from 'drizzle-orm/mysql-core';
 
 export const books = mysqlTable(
@@ -19,11 +18,23 @@ export const books = mysqlTable(
     title: varchar('title', { length: 100 }).notNull(),
     genre: varchar('genre', { length: 100 }).notNull(),
     description: text('description').notNull(),
-    amountPages: int('amountPages', { unsigned: true }).notNull(),
+    pageCount: int('pageCount', { unsigned: true }).notNull(),
     author: varchar('author', { length: 255 }).notNull(),
     imageLink: varchar('imageLink', { length: 255 }),
   },
   (table) => [uniqueIndex('idx_isbn').on(table.isbn)],
+);
+
+export const users = mysqlTable(
+  'users',
+  {
+    id: int('id', { unsigned: true }).primaryKey().autoincrement(),
+    userName: varchar('userName', { length: 50 }).notNull(),
+    email: varchar('email', { length: 255 }).notNull(),
+    passwordHash: varchar('passwordHash', { length: 255 }).notNull(),
+    roles: json('roles').notNull(),
+  },
+  (table) => [uniqueIndex('idx_user_email_unique').on(table.email)],
 );
 
 export const reviews = mysqlTable(
@@ -44,17 +55,13 @@ export const reviews = mysqlTable(
   (table) => [uniqueIndex('idx_id').on(table.id)],
 );
 
-export const users = mysqlTable(
-  'users',
-  {
-    id: int('id', { unsigned: true }).primaryKey().autoincrement(),
-    userName: varchar('userName', { length: 50 }).notNull(),
-    email: varchar('email', { length: 255 }).notNull(),
-    passwordHash: varchar('passwordHash', { length: 255 }).notNull(),
-    roles: json('roles').notNull(),
-  },
-  (table) => [uniqueIndex('idx_user_email_unique').on(table.email)],
-);
+export const shelves = mysqlTable('shelves', {
+  id: int('id', { unsigned: true }).primaryKey().autoincrement(),
+  title: varchar('title', { length: 255 }).notNull(),
+  userId: int('userId', { unsigned: true })
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+});
 
 export const userBooks = mysqlTable(
   'user_books',
@@ -66,29 +73,30 @@ export const userBooks = mysqlTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     pagesRead: int('pagesRead', { unsigned: true }).notNull(),
-    statusId: int('status', { unsigned: true })
-      .notNull()
-      .references(() => statuses.id),
-    favorite: boolean('favorite').notNull().default(false),
     dateStarted: date('dateStarted'),
     dateEnded: date('dateEnded'),
   },
   (table) => [primaryKey({ columns: [table.isbn, table.userId] })],
 );
 
-export const statuses = mysqlTable('statuses', {
-  id: int('id', { unsigned: true }).primaryKey().autoincrement().notNull(),
-  name: varchar('name', { length: 25 }).notNull(),
-});
+export const shelfBooks = mysqlTable(
+  'shelfBooks',
+  {
+    shelfId: int('id', { unsigned: true })
+      .notNull()
+      .references(() => shelves.id, { onDelete: 'cascade' }),
+    isbn: varchar('isbn', { length: 13 })
+      .notNull()
+      .references(() => books.isbn, { onDelete: 'cascade' }),
+  },
+  (table) => [primaryKey({ columns: [table.shelfId, table.isbn] })],
+);
 
+//Relations
 export const bookRelations = relations(books, ({ many }) => ({
   reviews: many(reviews),
   userBooks: many(userBooks),
-}));
-
-export const userRelations = relations(users, ({ many }) => ({
-  reviews: many(reviews),
-  userBooks: many(userBooks),
+  shelves: many(shelves),
 }));
 
 export const reviewRelations = relations(reviews, ({ one }) => ({
@@ -102,6 +110,20 @@ export const reviewRelations = relations(reviews, ({ one }) => ({
   }),
 }));
 
+export const userRelations = relations(users, ({ many }) => ({
+  reviews: many(reviews),
+  shelves: many(shelves),
+  userBooks: many(userBooks),
+}));
+
+export const shelfRelations = relations(shelves, ({ many, one }) => ({
+  shelfBooks: many(shelfBooks),
+  user: one(users, {
+    fields: [shelves.userId],
+    references: [users.id],
+  }),
+}));
+
 export const userBookRelations = relations(userBooks, ({ one }) => ({
   book: one(books, {
     fields: [userBooks.isbn],
@@ -111,8 +133,15 @@ export const userBookRelations = relations(userBooks, ({ one }) => ({
     fields: [userBooks.userId],
     references: [users.id],
   }),
-  status: one(statuses, {
-    fields: [userBooks.statusId],
-    references: [statuses.id],
+}));
+
+export const shelfBookRelations = relations(shelfBooks, ({ one }) => ({
+  shelf: one(shelves, {
+    fields: [shelfBooks.shelfId],
+    references: [shelves.id],
+  }),
+  book: one(books, {
+    fields: [shelfBooks.isbn],
+    references: [books.isbn],
   }),
 }));

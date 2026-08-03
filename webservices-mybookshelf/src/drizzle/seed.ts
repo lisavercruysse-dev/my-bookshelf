@@ -2,7 +2,7 @@ import { drizzle } from 'drizzle-orm/mysql2';
 import * as mysql from 'mysql2/promise';
 import * as schema from './schema';
 import * as argon2 from 'argon2';
-import { Role } from 'src/auth/roles';
+import { Role } from '../auth/roles';
 
 const connection = mysql.createPool({
   uri: process.env.DATABASE_URL,
@@ -28,9 +28,10 @@ async function resetDatabase() {
 
   console.log('Deleting existing data...');
 
+  await db.delete(schema.shelfBooks);
   await db.delete(schema.userBooks);
-  await db.delete(schema.statuses);
   await db.delete(schema.reviews);
+  await db.delete(schema.shelves);
   await db.delete(schema.books);
   await db.delete(schema.users);
 
@@ -38,14 +39,13 @@ async function resetDatabase() {
 
   console.log('Resetting AUTO_INCREMENT counters...');
 
-  await db.execute(`ALTER TABLE books AUTO_INCREMENT = 1`);
   await db.execute(`ALTER TABLE reviews AUTO_INCREMENT = 1`);
-  await db.execute(`ALTER TABLE statuses AUTO_INCREMENT = 1`);
   await db.execute(`ALTER TABLE users AUTO_INCREMENT = 1`);
+  await db.execute(`ALTER TABLE shelves AUTO_INCREMENT = 1`);
 
   console.log('AUTO_INCREMENT counters reset.');
 
-  console.log('database reset complete.');
+  console.log('Database reset complete.');
 }
 
 async function seedBooks() {
@@ -58,7 +58,7 @@ async function seedBooks() {
       genre: 'Science Fiction',
       description:
         'A novella about a man with low IQ who undergoes an experimental surgery to increase his intelligence.',
-      amountPages: 218,
+      pageCount: 218,
       author: 'Daniel Keyes',
     },
     {
@@ -67,7 +67,7 @@ async function seedBooks() {
       genre: 'Fantasy',
       description:
         'Young wizard Harry discovers his magical heritage and attends Hogwarts School of Witchcraft and Wizardry.',
-      amountPages: 336,
+      pageCount: 336,
       author: 'J.K. Rowling',
     },
     {
@@ -75,7 +75,7 @@ async function seedBooks() {
       title: 'Beautiful Test',
       genre: 'Test Fiction',
       description: 'This is a test book for testing purposes.',
-      amountPages: 20,
+      pageCount: 20,
       author: 'Suzanne Collins',
     },
     {
@@ -83,7 +83,7 @@ async function seedBooks() {
       title: 'Another Test Test',
       genre: 'Test Fiction',
       description: 'Another short test book.',
-      amountPages: 4,
+      pageCount: 4,
       author: 'Test Person',
     },
     {
@@ -92,12 +92,57 @@ async function seedBooks() {
       genre: 'Epic Poetry',
       description:
         "Homer's classic tale of Odysseus and his journey home from the Trojan War.",
-      amountPages: 560,
+      pageCount: 560,
       author: 'Homer',
     },
   ]);
 
   console.log('Book seed data inserted successfully.');
+}
+
+async function seedUsers() {
+  console.log('Seeding users...');
+
+  await db.insert(schema.users).values([
+    {
+      userName: 'Alice',
+      email: 'alice@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.ADMIN, Role.USER],
+    },
+    {
+      userName: 'Bob',
+      email: 'bob@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.USER],
+    },
+    {
+      userName: 'Charlie',
+      email: 'charlie@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.ADMIN, Role.USER],
+    },
+    {
+      userName: 'Diana',
+      email: 'diana@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.USER],
+    },
+    {
+      userName: 'Eve',
+      email: 'eve@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.ADMIN, Role.USER],
+    },
+    {
+      userName: 'Frank',
+      email: 'frank@example.com',
+      passwordHash: await hashPassword('12345678'),
+      roles: [Role.USER],
+    },
+  ]);
+
+  console.log('User seed data inserted successfully.');
 }
 
 async function seedReviews() {
@@ -157,51 +202,6 @@ async function seedReviews() {
   console.log('Review seed data inserted successfully.');
 }
 
-async function seedUsers() {
-  console.log('Seeding users...');
-
-  await db.insert(schema.users).values([
-    {
-      userName: 'Alice',
-      email: 'alice@example.com',
-      passwordHash: await hashPassword('12345678'),
-      roles: [Role.ADMIN, Role.USER],
-    },
-    {
-      userName: 'Bob',
-      email: 'bob@example.com',
-      passwordHash: await hashPassword('12345678'),
-      roles: [Role.USER],
-    },
-    {
-      userName: 'Charlie',
-      email: 'charlie@example.com',
-      passwordHash: await hashPassword('12345678'),
-      roles: [Role.ADMIN, Role.USER],
-    },
-    {
-      userName: 'Diana',
-      email: 'diana@example.com',
-      passwordHash: await hashPassword('12345678'),
-      roles: [Role.USER],
-    },
-    {
-      userName: 'Eve',
-      email: 'eve@example.com',
-      passwordHash: await hashPassword('12345678'),
-      roles: [Role.ADMIN, Role.USER],
-    },
-    {
-      userName: 'Frank',
-      email: 'frank@example.com',
-      passwordHash: await hashPassword('12345678'),
-      roles: [Role.USER],
-    },
-  ]);
-
-  console.log('User seed data inserted successfully.');
-}
-
 async function seedUserBooks() {
   console.log('Seeding user_books...');
 
@@ -210,8 +210,6 @@ async function seedUserBooks() {
       userId: 1,
       isbn: '9780435123437', // Flowers for Algernon
       pagesRead: 50,
-      statusId: 2,
-      favorite: true,
       dateStarted: new Date('2025-01-01'),
       dateEnded: null,
     },
@@ -219,8 +217,6 @@ async function seedUserBooks() {
       userId: 2,
       isbn: '9781781103142', // Harry Potter
       pagesRead: 336,
-      statusId: 3,
-      favorite: false,
       dateStarted: new Date('2024-12-01'),
       dateEnded: new Date('2024-12-20'),
     },
@@ -228,8 +224,6 @@ async function seedUserBooks() {
       userId: 3,
       isbn: '0721438935188', // Beautiful Test
       pagesRead: 20,
-      statusId: 3,
-      favorite: true,
       dateStarted: new Date('2025-02-15'),
       dateEnded: new Date('2025-02-16'),
     },
@@ -237,8 +231,6 @@ async function seedUserBooks() {
       userId: 4,
       isbn: '0123438455178', // Another Test Test
       pagesRead: 2,
-      statusId: 2,
-      favorite: false,
       dateStarted: new Date('2025-03-10'),
       dateEnded: null,
     },
@@ -246,8 +238,6 @@ async function seedUserBooks() {
       userId: 5,
       isbn: '9780140449136', // The Odyssey
       pagesRead: 300,
-      statusId: 2,
-      favorite: true,
       dateStarted: new Date('2025-01-20'),
       dateEnded: null,
     },
@@ -256,18 +246,32 @@ async function seedUserBooks() {
   console.log('user_books seed data inserted successfully.');
 }
 
-async function seedStatuses() {
-  console.log('Seeding statuses...');
+async function seedShelves() {
+  console.log('Seeding shelves...');
 
-  await db.insert(schema.statuses).values([
-    { id: 1, name: 'TBR' },
-    { id: 2, name: 'Reading' },
-    { id: 3, name: 'Finished' },
-    { id: 4, name: 'Paused' },
-    { id: 5, name: 'DNF' },
+  await db.insert(schema.shelves).values([
+    { title: 'Favorites', userId: 1 },
+    { title: 'Want to Read', userId: 1 },
+    { title: 'Current Reads', userId: 1 },
+    { title: 'Favorites', userId: 2 },
+    { title: 'Want to Read', userId: 2 },
+    { title: 'Current Reads', userId: 2 },
   ]);
 
-  console.log('Statuses seed data inserted successfully.');
+  console.log('Shelves seed data inserted successfully.');
+}
+
+async function seedShelfBooks() {
+  console.log('Seeding shelfBooks...');
+
+  await db.insert(schema.shelfBooks).values([
+    { shelfId: 1, isbn: '9780435123437' },
+    { shelfId: 1, isbn: '9780140449136' },
+    { shelfId: 2, isbn: '9781781103142' },
+    { shelfId: 3, isbn: '0721438935188' },
+  ]);
+
+  console.log('shelfBooks seed data inserted successfully.');
 }
 
 async function main() {
@@ -276,9 +280,10 @@ async function main() {
   await resetDatabase();
   await seedBooks();
   await seedUsers();
-  await seedStatuses();
   await seedReviews();
   await seedUserBooks();
+  await seedShelves();
+  await seedShelfBooks();
 
   console.log('Database seeding completed successfully.');
 }
