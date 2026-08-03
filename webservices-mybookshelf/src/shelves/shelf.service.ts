@@ -7,6 +7,7 @@ import {
   ShelfListResponseDTO,
   ShelfResponseDto,
 } from './shelf.dto';
+import { and, eq } from 'drizzle-orm';
 
 @Injectable()
 export class ShelfService {
@@ -102,5 +103,32 @@ export class ShelfService {
 
     const items = shelfBookEntries.map((entry) => entry.book);
     return { items };
+  }
+
+  async removeFromShelf(userId: number, shelfId: number, isbn: string) {
+    const shelf = await this.db.query.shelves.findFirst({
+      where: (shelves, { eq, and }) =>
+        and(eq(shelves.id, shelfId), eq(shelves.userId, userId)),
+    });
+
+    if (!shelf) {
+      throw new NotFoundException(
+        `No shelf with id ${shelfId} exists for this user`,
+      );
+    }
+
+    const book = await this.db.query.books.findFirst({
+      where: (books, { eq }) => eq(books.isbn, isbn),
+    });
+
+    if (!book) {
+      throw new NotFoundException(`No book with ISBN ${isbn} exists`);
+    }
+
+    await this.db
+      .delete(shelfBooks)
+      .where(
+        and(eq(shelfBooks.shelfId, shelfId), eq(shelfBooks.isbn, book.isbn)),
+      );
   }
 }

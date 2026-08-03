@@ -25,7 +25,7 @@ export default function TopBar() {
         <NavItem title='Home' icon={<HiOutlineHome size={20}/>} url='/'/>
         <NavItem title='Explore' url='/discover' icon={<FaMagnifyingGlass size={18}/>}/>
         <NavItem title='Reviews' url='/myReviews' icon={<LuNotebookPen size={20}/>}/>
-        <NavItem title='My Shelf' url='/myBooks' icon={<PiBooks size={20}/>}/>
+        <NavItem title='My Shelf' url='/yourShelf' icon={<PiBooks size={20}/>}/>
       </div>
       <div className='flex items-center gap-2'>
         {ready && isAuthed && user ? (

@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
-  Get, Param,
+  Delete,
+  Get,
+  Param,
   ParseIntPipe,
   Post,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ShelfService } from './shelf.service';
 import { BookResponseDTO, BookResponseListDTO } from 'src/book/book.dto';
@@ -52,5 +54,14 @@ export class ShelfController {
     @CurrentUser() user: Session,
   ): Promise<BookResponseListDTO> {
     return await this.shelfService.getBooksFromShelf(user.id, shelfId);
+  }
+
+  @Delete(':shelfId/books/:isbn')
+  async removeFromShelf(
+    @Param('shelfId', ParseIntPipe) shelfId: number,
+    @Param('isbn') isbn: string,
+    @CurrentUser() user: Session,
+  ) {
+    await this.shelfService.removeFromShelf(user.id, shelfId, isbn);
   }
 }

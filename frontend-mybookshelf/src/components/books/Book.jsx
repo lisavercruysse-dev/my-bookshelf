@@ -6,18 +6,32 @@ export default function Book(props) {
   const bookImage = imageLink || fallbackImage;
 
   return (
-    <div className='flex w-[150px] flex-col items-center gap-3 text-center'>
-      <div className='flex flex-col items-center'>
-        <p className='font-display font-bold text-gray-900 truncate max-w-40'>{title}</p>
-        <p className='font-display text-sm text-gray-500 truncate max-w-40'>{author}</p>
+    <div className="flex w-[140px] shrink-0 flex-col items-center gap-3 text-center group/book">
+      <div className="relative">
+        <Link to={`/books/${isbn}`} className="flex flex-col items-center gap-3">
+          <div
+            className="relative overflow-hidden rounded-lg
+            shadow-sm group-hover/book:shadow-lg transition-shadow duration-200"
+          >
+            <img
+              src={bookImage}
+              alt={title}
+              className="h-44 w-32 object-cover transition-transform duration-200 group-hover/book:scale-105"
+            />
+          </div>
+
+          <p
+            className="font-display font-semibold text-sm
+            text-gray-900 truncate max-w-36 hover:text-main transition-colors"
+          >
+            {title}
+          </p>
+        </Link>
       </div>
 
-      <img src={bookImage} alt={title} className='h-40 w-28 rounded-md object-cover' />
-      <Link to={`/books/${isbn}`}>
-        <button className='primary text-sm px-2 py-1'>
-          Details
-        </button>
-      </Link>
+      <p className="font-display text-xs text-gray-400 truncate max-w-36">
+        {author}
+      </p>
     </div>
   );
 }

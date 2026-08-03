@@ -29,7 +29,7 @@ export default function AddBookToShelfForm({ isbn, book, addToShelf, onClose }) 
       bookData: {
         title: book?.volumeInfo?.title,
         author: book?.volumeInfo?.authors?.join(', '),
-        description: book?.volumeInfo?.description,
+        description: book?.volumeInfo?.description || 'No Description',
         pageCount: book?.volumeInfo?.pageCount,
         genre: book?.volumeInfo?.categories?.[0] ?? 'Uncategorized',
         imageLink: book?.volumeInfo?.imageLinks?.thumbnail ?? '',
