@@ -34,7 +34,6 @@ export class CreateBookRequestDTO {
   imageLink: string | null;
 }
 export class BookResponseDTO extends CreateBookRequestDTO {}
-export class UpdateBookRequestDto extends CreateBookRequestDTO {}
 
 export class BookResponseListDTO {
   items: BookResponseDTO[];

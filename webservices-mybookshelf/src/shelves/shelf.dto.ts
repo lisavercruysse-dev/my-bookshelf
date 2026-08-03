@@ -12,3 +12,7 @@ export class ShelfResponseDto {
   title: string;
   userId: number;
 }
+
+export class ShelfListResponseDTO {
+  items: ShelfResponseDto[];
+}

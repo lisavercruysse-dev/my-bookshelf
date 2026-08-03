@@ -7,8 +7,8 @@ import Review from '../reviews/Review';
 import Modal from '../general/Modal';
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { save } from '../../api';
 import AddBookToShelfForm from '../books/AddBookToShelfForm';
+import { saveToShelf } from '../../api';
 
 export default function BookDetails() {
   const {isbn} = useParams();
@@ -27,8 +27,8 @@ export default function BookDetails() {
   };
 
   const {trigger: addToShelf, error: saveError} = useSWRMutation(
-    'url',
-    save,
+    'shelves',
+    saveToShelf,
   );
 
   const bookImage = book?.volumeInfo?.imageLinks?.thumbnail || fallbackImage;
@@ -69,7 +69,8 @@ export default function BookDetails() {
       </AsyncData>
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <AsyncData error={saveError}>
-          <AddBookToShelfForm addToShelf={addToShelf} onClose={() => setModalOpen(false)} />
+          <AddBookToShelfForm isbn={isbn} book={book} 
+            addToShelf={addToShelf} onClose={() => setModalOpen(false)} />
         </AsyncData>
       </Modal>
     </>

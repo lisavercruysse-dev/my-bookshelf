@@ -1,8 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BookResponseDTO } from 'src/book/book.dto';
+import { BookResponseDTO, BookResponseListDTO } from 'src/book/book.dto';
 import { DatabaseProvider, InjectDrizzle } from 'src/drizzle/drizzle.provider';
 import { shelfBooks, shelves } from 'src/drizzle/schema';
-import { CreateShelfDto, ShelfResponseDto } from './shelf.dto';
+import {
+  CreateShelfDto,
+  ShelfListResponseDTO,
+  ShelfResponseDto,
+} from './shelf.dto';
 
 @Injectable()
 export class ShelfService {
@@ -59,5 +63,39 @@ export class ShelfService {
     }
 
     return newShelf;
+  }
+
+  async getShelvesForUser(userId: number): Promise<ShelfListResponseDTO> {
+    const items = await this.db.query.shelves.findMany({
+      where: (shelves, { eq }) => eq(shelves.userId, userId),
+    });
+
+    return { items };
+  }
+
+  async getBooksFromShelf(
+    userId: number,
+    shelfId: number,
+  ): Promise<BookResponseListDTO> {
+    const shelf = await this.db.query.shelves.findFirst({
+      where: (shelves, { eq, and }) =>
+        and(eq(shelves.id, shelfId), eq(shelves.userId, userId)),
+    });
+
+    if (!shelf) {
+      throw new NotFoundException(
+        `No shelf with id ${shelfId} exists for this user`,
+      );
+    }
+
+    const shelfBookEntries = await this.db.query.shelfBooks.findMany({
+      where: (shelfBooks, { eq }) => eq(shelfBooks.shelfId, shelfId),
+      with: {
+        book: true,
+      },
+    });
+
+    const items = shelfBookEntries.map((entry) => entry.book);
+    return { items };
   }
 }

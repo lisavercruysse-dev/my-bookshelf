@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import {
   BookResponseDTO,
   BookResponseListDTO,
@@ -25,6 +25,14 @@ export class BookController {
     @Body() createBookDto: CreateBookRequestDTO,
   ): Promise<BookResponseDTO> {
     return this.bookService.create(createBookDto);
+  }
+
+  @Put(':isbn')
+  async updateBook(
+    @Param('isbn') isbn: string,
+    @Body() createBookDto: CreateBookRequestDTO,
+  ): Promise<BookResponseDTO> {
+    return this.bookService.update(isbn, createBookDto);
   }
   /*
 

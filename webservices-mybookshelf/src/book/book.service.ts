@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   BookResponseDTO,
-  BookResponseListDTO, CreateBookRequestDTO
+  BookResponseListDTO,
+  CreateBookRequestDTO,
 } from './book.dto';
 import {
   type DatabaseProvider,
@@ -89,8 +90,34 @@ export class BookService {
   }
 
   async create(book: CreateBookRequestDTO): Promise<BookResponseDTO> {
-    await this.db.insert(books).values(book);
+    await this.db
+      .insert(books)
+      .values(book)
+      .onDuplicateKeyUpdate({ set: { ...book } });
     return this.getByIsbn(book.isbn);
+  }
+
+  async update(
+    isbn: string,
+    book: CreateBookRequestDTO,
+  ): Promise<BookResponseDTO> {
+    const existing = await this.db.query.books.findFirst({
+      where: eq(books.isbn, isbn),
+    });
+
+    if (!existing) {
+      throw new NotFoundException({
+        message: 'No book with this ISBN exists',
+        details: { isbn },
+      });
+    }
+
+    await this.db
+      .update(books)
+      .set({ ...book, isbn })
+      .where(eq(books.isbn, isbn));
+
+    return this.getByIsbn(isbn);
   }
 
   async getByIsbn(isbn: string): Promise<BookResponseDTO> {
