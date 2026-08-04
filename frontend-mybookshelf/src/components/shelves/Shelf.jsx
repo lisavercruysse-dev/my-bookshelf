@@ -1,9 +1,10 @@
 import { useRef } from 'react';
 import useSWR from 'swr';
-import { getData } from '../../api';
+import { deleteFromShelf, getData } from '../../api';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa6';
 import AsyncData from '../asyncData/AsyncData';
 import BookList from '../books/BookList';
+import useSWRMutation from 'swr/mutation';
 
 export default function Shelf({ shelfId, title }) {
   const {
@@ -11,6 +12,11 @@ export default function Shelf({ shelfId, title }) {
     error,
     isLoading,
   } = useSWR(shelfId ? `shelves/${shelfId}/books` : null, getData);
+
+  const {trigger: removeFromShelf} = useSWRMutation(
+    `shelves/${shelfId}/books`,
+    deleteFromShelf,
+  );
 
   const scrollRef = useRef(null);
 
@@ -43,6 +49,8 @@ export default function Shelf({ shelfId, title }) {
               removeButtons
               containerRef={scrollRef}
               className="overflow-x-hidden scroll-smooth"
+              onDelete={removeFromShelf}
+              hasDeleteBtns={true}
             />
 
             <button

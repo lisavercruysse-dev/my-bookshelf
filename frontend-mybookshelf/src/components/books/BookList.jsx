@@ -3,9 +3,10 @@ import Book from './Book';
 export default function BookList({
   books,
   maxAmount,
-  removeButtons = false,
   className = '',
   containerRef,
+  onDelete,
+  hasDeleteBtns = false,
 }) {
   const visibleBooks =
     typeof maxAmount === 'number' ? books.slice(0, maxAmount) : books;
@@ -34,7 +35,8 @@ export default function BookList({
           title={b.title || b.volumeInfo?.title}
           author={b.author || mapAuthors(b)}
           imageLink={b.imageLink || b.volumeInfo?.imageLinks?.thumbnail || null}
-          removeButton={removeButtons}
+          onDelete={onDelete}
+          hasDeleteBtn={hasDeleteBtns}
         />
       ))}
     </div>
