@@ -5,18 +5,23 @@ import { FaChevronRight, FaChevronLeft } from 'react-icons/fa6';
 import AsyncData from '../asyncData/AsyncData';
 import BookList from '../books/BookList';
 import useSWRMutation from 'swr/mutation';
+import { FaTrash, FaPen } from 'react-icons/fa6';
 
-export default function Shelf({ shelfId, title }) {
+export default function Shelf({ shelf, onDelete, onEdit }) {
   const {
     data: books,
     error,
     isLoading,
-  } = useSWR(shelfId ? `shelves/${shelfId}/books` : null, getData);
+  } = useSWR(shelf?.id ? `shelves/${shelf?.id}/books` : null, getData);
 
-  const {trigger: removeFromShelf} = useSWRMutation(
-    `shelves/${shelfId}/books`,
+  const { trigger: removeFromShelf } = useSWRMutation(
+    `shelves/${shelf?.id}/books`,
     deleteById,
   );
+
+  const handleDeleteShelf = () => {
+    onDelete?.(shelf?.id);
+  };
 
   const scrollRef = useRef(null);
 
@@ -31,10 +36,35 @@ export default function Shelf({ shelfId, title }) {
   return (
     <div className="flex flex-col gap-4 py-6">
       <div className="flex items-baseline justify-between">
-        <p className="font-display text-main font-bold text-xl">{title}</p>
-        <p className="font-display text-gray-300 text-xs">
-          {books?.length ?? 0} books
-        </p>
+        <p className="font-display text-main font-bold text-xl">{shelf?.title}</p>
+        <div className="flex items-center gap-3">
+          <p className="font-display text-gray-300 text-xs">
+            {books?.length ?? 0} books
+          </p>
+          {shelf.canDelete && (
+            <>
+              <button
+                onClick={handleDeleteShelf}
+                className="flex items-center gap-2 rounded-md border border-red-200
+             bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600
+             transition hover:bg-red-100 hover:border-red-300 hover:cursor-pointer"
+              >
+                <FaTrash size={12} />
+                Delete
+              </button>
+
+              <button
+                onClick={() => onEdit(shelf)}
+                className="flex items-center gap-2 rounded-md border border-main
+                px-3 py-1.5 text-xs font-medium text-main hover:cursor-pointer
+                transition hover:bg-main hover:text-white"
+              >
+                <FaPen size={12} />
+                Edit
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <AsyncData error={error} loading={isLoading}>

@@ -1,0 +1,1 @@
+ALTER TABLE `shelves` ADD `canDelete` boolean DEFAULT true NOT NULL;

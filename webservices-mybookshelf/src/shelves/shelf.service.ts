@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { BookResponseDTO, BookResponseListDTO } from 'src/book/book.dto';
 import { DatabaseProvider, InjectDrizzle } from 'src/drizzle/drizzle.provider';
 import { shelfBooks, shelves } from 'src/drizzle/schema';
@@ -53,6 +57,7 @@ export class ShelfService {
     const [result] = await this.db.insert(shelves).values({
       title: dto.title,
       userId,
+      canDelete: true,
     });
 
     const newShelf = await this.db.query.shelves.findFirst({
@@ -130,5 +135,54 @@ export class ShelfService {
       .where(
         and(eq(shelfBooks.shelfId, shelfId), eq(shelfBooks.isbn, book.isbn)),
       );
+  }
+
+  async deleteShelf(userId: number, shelfId: number): Promise<void> {
+    const shelf = await this.db.query.shelves.findFirst({
+      where: (shelves, { eq, and }) =>
+        and(eq(shelves.id, shelfId), eq(shelves.userId, userId)),
+    });
+
+    if (!shelf) {
+      throw new NotFoundException(
+        `No shelf with id ${shelfId} exists for this user`,
+      );
+    }
+
+    if (!shelf.canDelete) {
+      throw new ForbiddenException(
+        `Shelf with id ${shelfId} cannot be deleted`,
+      );
+    }
+
+    await this.db.delete(shelves).where(eq(shelves.id, shelfId));
+  }
+
+  async editShelf(
+    userId: number,
+    shelfId: number,
+    dto: CreateShelfDto,
+  ): Promise<void> {
+    const shelf = await this.db.query.shelves.findFirst({
+      where: (shelves, { eq, and }) =>
+        and(eq(shelves.id, shelfId), eq(shelves.userId, userId)),
+    });
+
+    if (!shelf) {
+      throw new NotFoundException(
+        `No shelf with id ${shelfId} exists for this user`,
+      );
+    }
+
+    if (!shelf.canDelete) {
+      throw new ForbiddenException(`Shelf with id ${shelfId} cannot be edited`);
+    }
+
+    await this.db
+      .update(shelves)
+      .set({
+        title: dto.title,
+      })
+      .where(eq(shelves.id, shelfId));
   }
 }

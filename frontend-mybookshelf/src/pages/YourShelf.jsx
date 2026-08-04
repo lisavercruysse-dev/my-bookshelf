@@ -1,17 +1,16 @@
+// YourShelf.jsx
 import useSWR from 'swr';
-import { getData, save } from '../api';
+import { deleteById, getData, save } from '../api';
 import Shelf from '../components/shelves/Shelf';
+import ShelfForm from '../components/shelves/ShelfForm';
 import AsyncData from '../components/asyncData/AsyncData';
 import { useState } from 'react';
 import Modal from '../components/general/modal';
-import { useForm, FormProvider } from 'react-hook-form';
-import LabelInput from '../components/LabelInput';
 import useSWRMutation from 'swr/mutation';
 
 export default function YourShelf() {
   const [modal, setModal] = useState(false);
-  const methods = useForm();
-  const { handleSubmit, formState:{isValid} } = methods;
+  const [editingShelf, setEditingShelf] = useState(null);
 
   const {
     data: shelves,
@@ -19,17 +18,22 @@ export default function YourShelf() {
     isLoading,
   } = useSWR('shelves', getData);
 
-  const {
-    trigger: saveShelf, error: saveError,
-  } = useSWRMutation('shelves', save);
+  const { trigger: saveShelf, error: saveError } = useSWRMutation('shelves', save);
+  const { trigger: deleteShelf } = useSWRMutation('shelves', deleteById);
 
-  const onSubmit = async (values) => {
-    if (!isValid) return;
+  const closeModal = () => {
+    setModal(false);
+    setEditingShelf(null);
+  };
 
-    await saveShelf(values, {
-      throwOnError: false,
-      onSuccess: () => setModal(false),
-    });
+  const handleCreate = () => {
+    setEditingShelf(null);
+    setModal(true);
+  };
+
+  const handleEdit = (shelf) => {
+    setEditingShelf(shelf);
+    setModal(true);
   };
 
   return (
@@ -41,34 +45,20 @@ export default function YourShelf() {
       <AsyncData error={error} loading={isLoading}>
         <div className='flex flex-col divide-y divide-gray-100'>
           {shelves?.map((shelf) => (
-            <Shelf key={shelf.id} shelfId={shelf.id} title={shelf.title} />
+            <Shelf shelf={shelf} key={shelf.id} onDelete={deleteShelf} onEdit={handleEdit} />
           ))}
         </div>
       </AsyncData>
-      <button className='primary self-center' onClick={() => setModal(true)}>
+      <button className='primary self-center' onClick={handleCreate}>
         Create New Shelf
       </button>
-      <Modal isOpen={modal} onClose={() => setModal(false)}>
+      <Modal isOpen={modal} onClose={closeModal}>
         <div className="flex w-full flex-col items-center justify-center">
-          <p className='font-display justify-self-center text-2xl pb-5'>Add New Shelf</p>
+          <p className='font-display justify-self-center text-2xl pb-5'>
+            {editingShelf ? 'Edit Shelf' : 'Add New Shelf'}
+          </p>
           <AsyncData error={saveError}>
-            <FormProvider {...methods}>
-              <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex w-full max-w-sm flex-col items-center gap-4"
-              >
-                <LabelInput
-                  label=""
-                  name="title"
-                  placeholder="title"
-                  type="text"
-                  validationRules={{ required: 'Title is required' }}
-                />
-                <button type="submit" className="primary">
-                  Create
-                </button>
-              </form>
-            </FormProvider>
+            <ShelfForm shelf={editingShelf} saveShelf={saveShelf} onDone={closeModal} />
           </AsyncData>
         </div>
       </Modal>

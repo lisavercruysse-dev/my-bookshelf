@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { ShelfService } from './shelf.service';
@@ -63,5 +64,22 @@ export class ShelfController {
     @CurrentUser() user: Session,
   ) {
     await this.shelfService.removeFromShelf(user.id, shelfId, isbn);
+  }
+
+  @Delete(':shelfId')
+  async deleteShelf(
+    @Param('shelfId', ParseIntPipe) shelfId: number,
+    @CurrentUser() user: Session,
+  ) {
+    await this.shelfService.deleteShelf(user.id, shelfId);
+  }
+
+  @Put(':shelfId')
+  async editShelf(
+    @Param('shelfId', ParseIntPipe) shelfId: number,
+    @CurrentUser() user: Session,
+    @Body() dto: CreateShelfDto,
+  ) {
+    await this.shelfService.editShelf(user.id, shelfId, dto);
   }
 }

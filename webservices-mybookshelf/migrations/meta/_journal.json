@@ -15,6 +15,13 @@
       "when": 1785333398351,
       "tag": "0001_flimsy_salo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1785846317597,
+      "tag": "0002_superb_meltdown",
+      "breakpoints": true
     }
   ]
 }

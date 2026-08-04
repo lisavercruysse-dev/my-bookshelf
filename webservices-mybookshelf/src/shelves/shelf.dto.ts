@@ -11,6 +11,7 @@ export class ShelfResponseDto {
   id: number;
   title: string;
   userId: number;
+  canDelete: boolean;
 }
 
 export class ShelfListResponseDTO {
