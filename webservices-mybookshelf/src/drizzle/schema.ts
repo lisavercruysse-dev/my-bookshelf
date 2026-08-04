@@ -9,6 +9,7 @@ import {
   text,
   json,
   primaryKey,
+  boolean,
 } from 'drizzle-orm/mysql-core';
 
 export const books = mysqlTable(
@@ -61,6 +62,7 @@ export const shelves = mysqlTable('shelves', {
   userId: int('userId', { unsigned: true })
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
+  canDelete: boolean('canDelete').notNull().default(true),
 });
 
 export const userBooks = mysqlTable(

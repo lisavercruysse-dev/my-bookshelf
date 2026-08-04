@@ -250,12 +250,12 @@ async function seedShelves() {
   console.log('Seeding shelves...');
 
   await db.insert(schema.shelves).values([
-    { title: 'Favorites', userId: 1 },
-    { title: 'Want to Read', userId: 1 },
-    { title: 'Current Reads', userId: 1 },
-    { title: 'Favorites', userId: 2 },
-    { title: 'Want to Read', userId: 2 },
-    { title: 'Current Reads', userId: 2 },
+    { title: 'Favorites', userId: 1, canDelete: false },
+    { title: 'Want to Read', userId: 1, canDelete: false },
+    { title: 'Current Reads', userId: 1, canDelete: false },
+    { title: 'Favorites', userId: 2, canDelete: false },
+    { title: 'Want to Read', userId: 2, canDelete: false },
+    { title: 'Current Reads', userId: 2, canDelete: false },
   ]);
 
   console.log('Shelves seed data inserted successfully.');

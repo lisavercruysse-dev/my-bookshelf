@@ -76,6 +76,10 @@ export async function post(url, { arg }) {
   return data;
 }
 
+export const deleteById = async(url, {arg: id}) => {
+  await axios.delete(`${baseUrl}/${url}/${id}`);
+};
+
 //Google Books
 export async function getBooks(url) {
   const { data } = await axiosRoot.get(

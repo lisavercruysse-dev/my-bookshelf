@@ -10,6 +10,7 @@ import { StrictMode } from 'react';
 import Layout from './pages/Layout.jsx';
 import Discover from './pages/Discover.jsx';
 import BookDetails from './components/books/BookDetails.jsx';
+import YourShelf from './pages/YourShelf.jsx';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: '/books/:isbn', Component: BookDetails},
       { path: 'login', Component: Login },
       { path: '*', Component: NotFound },
+      { path: '/yourShelf', Component: YourShelf},
     ],
   },
 ]);
