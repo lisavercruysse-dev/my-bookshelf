@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import useSWR from 'swr';
-import { deleteFromShelf, getData } from '../../api';
+import { deleteById, getData } from '../../api';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa6';
 import AsyncData from '../asyncData/AsyncData';
 import BookList from '../books/BookList';
@@ -15,7 +15,7 @@ export default function Shelf({ shelfId, title }) {
 
   const {trigger: removeFromShelf} = useSWRMutation(
     `shelves/${shelfId}/books`,
-    deleteFromShelf,
+    deleteById,
   );
 
   const scrollRef = useRef(null);

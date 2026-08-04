@@ -76,8 +76,8 @@ export async function post(url, { arg }) {
   return data;
 }
 
-export const deleteFromShelf = async(url, {arg: isbn}) => {
-  await axios.delete(`${baseUrl}/${url}/${isbn}`);
+export const deleteById = async(url, {arg: id}) => {
+  await axios.delete(`${baseUrl}/${url}/${id}`);
 };
 
 //Google Books
