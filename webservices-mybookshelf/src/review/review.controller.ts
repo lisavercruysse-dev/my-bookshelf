@@ -1,21 +1,20 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import {
-  CreateReviewRequestDto,
-  ReviewResponseDto,
-  UpdateReviewRequestDto,
-} from './review.dto';
+import { Controller, Get } from '@nestjs/common';
 import { ReviewService } from './review.service';
-import { ParseIntPipe } from '@nestjs/common';
+import { ReviewListResponseDto } from './review.dto';
+import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
+import { Session } from 'src/types/auth';
 
 @Controller('reviews')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
-  /*@Get()
-  async getAllReviews(): Promise<ReviewListResponseDto> {
-    return await this.reviewService.getAllReviews();
+  @Get()
+  async getAllReviews(
+    @CurrentUser() user: Session,
+  ): Promise<ReviewListResponseDto> {
+    return await this.reviewService.getAllReviews(user.id);
   }
-*/
 
+  /*
   @Get(':id')
   async getReviewById(
     @Param('id', ParseIntPipe) id: number,
@@ -36,5 +35,5 @@ export class ReviewController {
     @Body() updateReviewDto: UpdateReviewRequestDto,
   ): Promise<ReviewResponseDto> {
     return await this.reviewService.update(id, updateReviewDto);
-  }
+  }*/
 }

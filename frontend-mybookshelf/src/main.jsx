@@ -11,6 +11,7 @@ import Layout from './pages/Layout.jsx';
 import Discover from './pages/Discover.jsx';
 import BookDetails from './components/books/BookDetails.jsx';
 import YourShelf from './pages/YourShelf.jsx';
+import Reviews from './pages/Reviews.jsx';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: 'login', Component: Login },
       { path: '*', Component: NotFound },
       { path: '/yourShelf', Component: YourShelf},
+      { path: '/myReviews', Component: Reviews  },
     ],
   },
 ]);

@@ -1,16 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  CreateReviewRequestDto,
-  ReviewListResponseDto,
-  ReviewResponseDto,
-  UpdateReviewRequestDto,
-} from './review.dto';
+import { ReviewListResponseDto } from './review.dto';
 import {
   type DatabaseProvider,
   InjectDrizzle,
 } from '../drizzle/drizzle.provider';
-import { and, eq } from 'drizzle-orm';
-import { reviews } from '../drizzle/schema';
 
 @Injectable()
 export class ReviewService {
@@ -18,12 +11,21 @@ export class ReviewService {
     @InjectDrizzle()
     private readonly db: DatabaseProvider,
   ) {}
-  /*
-  async getAllReviews(): Promise<ReviewListResponseDto> {
-    const items = await this.db.query.reviews.findMany();
+
+  async getAllReviews(userId: number): Promise<ReviewListResponseDto> {
+    const items = await this.db.query.reviews.findMany({
+      where: (reviews, { eq }) => eq(reviews.userId, userId),
+      with: {
+        book: true,
+      },
+    });
+
+    if (!items)
+      throw new NotFoundException('This user does not have any reviews.');
+
     return { items };
   }
-*/
+  /*
   async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
     const items = await this.db.query.reviews.findMany({
       where: eq(reviews.isbn, isbn),
@@ -101,5 +103,5 @@ export class ReviewService {
     if (result.affectedRows === 0) {
       throw new NotFoundException('No review with this id exists');
     }
-  }
+  }*/
 }

@@ -1,27 +1,50 @@
-import { useAuth } from '../../contexts/auth';
 import { FaStar } from 'react-icons/fa6';
+import { generateHTML } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+import DOMPurify from 'dompurify';
 
-export default function Review() {
-  const { user } = useAuth();
+const extensions = [StarterKit];
+
+function renderReviewBody(body) {
+  try {
+    const json = typeof body === 'string' ? JSON.parse(body) : body;
+    const html = generateHTML(json, extensions);
+    return DOMPurify.sanitize(html);
+  } catch {
+    return DOMPurify.sanitize(body ?? '');
+  }
+}
+
+export default function Review({ userName, rating, date, body }) {
+  const initial = userName?.charAt(0).toUpperCase();
+  const shortDate = date?.split('T')[0];
 
   return (
-    <div className='bg-[#F3F6EE] p-5 rounded-2xl min-w-50 max-w-130 w-full'>
-      <div className='flex gap-5 items-center'>
-        <p className='font-display font-bold'>
-          {user.userName}
-        </p>
-        <div className='flex gap-1'>
+    <div className='bg-white p-5 rounded-2xl shadow-sm border border-black/5 w-full transition-shadow hover:shadow-md'>
+      <div className='flex items-center justify-between'>
+        <div className='flex items-center gap-3'>
+          <div className='flex h-9 w-9 items-center justify-center 
+          rounded-full bg-main text-white font-display font-bold text-sm shrink-0'>
+            {initial}
+          </div>
+          <div>
+            <p className='font-display font-bold leading-tight'>{userName}</p>
+            <p className='font-display text-xs text-gray-400'>{shortDate}</p>
+          </div>
+        </div>
+
+        <div className='flex gap-0.5'>
           {[...Array(5)].map((_, i) => (
-            <FaStar key={i} className='text-[#E4B65F]' />
+            <FaStar
+              key={i}
+              className={i < rating ? 'text-[#E4B65F]' : 'text-gray-200'}
+              size={14}
+            />
           ))}
         </div>
       </div>
-      <p className='font-display text-gray-500'>31/07/2026</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-        Saepe praesentium cum nemo tempore ex et facilis, voluptas 
-        nesciunt facere fugit recusandae laborum itaque odit inventore
-        vel ab cupiditate ipsum nam.
-      </p>
+      <div className='reviewBody mt-3 text-gray-600 text-sm leading-relaxed'
+        dangerouslySetInnerHTML={{ __html: renderReviewBody(body) }} />
     </div>
   );
 }
