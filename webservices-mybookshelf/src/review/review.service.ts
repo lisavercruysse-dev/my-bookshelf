@@ -4,6 +4,8 @@ import {
   type DatabaseProvider,
   InjectDrizzle,
 } from '../drizzle/drizzle.provider';
+import { eq } from 'drizzle-orm';
+import { reviews } from 'src/drizzle/schema';
 
 @Injectable()
 export class ReviewService {
@@ -23,6 +25,20 @@ export class ReviewService {
     if (!items)
       throw new NotFoundException('This user does not have any reviews.');
 
+    return { items };
+  }
+
+  async getReviewsForIsbn(isbn: string): Promise<ReviewListResponseDto> {
+    const items = await this.db.query.reviews.findMany({
+      where: eq(reviews.isbn, isbn),
+      with: {
+        book: true,
+        user: true,
+      },
+    });
+    if (items.length === 0) {
+      throw new NotFoundException('No reviews for this ISBN exist');
+    }
     return { items };
   }
   /*

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { ReviewListResponseDto } from './review.dto';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
@@ -12,6 +12,13 @@ export class ReviewController {
     @CurrentUser() user: Session,
   ): Promise<ReviewListResponseDto> {
     return await this.reviewService.getAllReviews(user.id);
+  }
+
+  @Get(':isbn')
+  async getReviewsForIsbn(
+    @Param('isbn') isbn: string,
+  ): Promise<ReviewListResponseDto> {
+    return await this.reviewService.getReviewsForIsbn(isbn);
   }
 
   /*

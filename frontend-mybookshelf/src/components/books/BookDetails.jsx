@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { getBookById } from '../../api';
+import { getBookById, getData } from '../../api';
 import { useParams } from 'react-router';
 import AsyncData from '../asyncData/AsyncData';
 import fallbackImage from '../../assets/altBook.jpg';
@@ -20,6 +20,12 @@ export default function BookDetails() {
     isLoading,
   } = useSWR(isbn ? isbn : null, getBookById);
 
+  const {
+    data: reviews,
+    reviewsError,
+    reviewsLoading,
+  } = useSWR(`reviews/${isbn}`, getData);
+ 
   const isGoogleBooksDown = error?.status === 503 || error?.response?.status === 503;
 
   //change data shape to use the same one
@@ -79,7 +85,17 @@ export default function BookDetails() {
           </div>
           <div className='flex flex-col gap-5'>
             <p className='font-display text-gray-900 text-3xl max-w-150'>Reviews</p>
-            <Review/>
+            <AsyncData loading={reviewsLoading} error={reviewsError}>
+              {reviews?.map((r) => (
+                <Review
+                  userName={r.user.userName}
+                  rating={r.stars}
+                  date={r.date}
+                  body={r.body}
+                />
+              ))}
+
+            </AsyncData>
           </div>
         </div>
       </AsyncData>
