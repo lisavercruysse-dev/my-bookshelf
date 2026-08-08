@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 import { getData } from '../../api';
 import { FaChevronDown } from 'react-icons/fa6';
 
@@ -12,6 +12,7 @@ export default function AddBookToShelfForm({ isbn, book, addToShelf, onClose }) 
   const [shelfError, setShelfError] = useState('');
 
   const { data: shelves } = useSWR('shelves', getData);
+  const { mutate } = useSWRConfig();
 
   const onSubmit = async (values) => {
     if (values.existingShelf && values.newShelf) {
@@ -24,22 +25,30 @@ export default function AddBookToShelfForm({ isbn, book, addToShelf, onClose }) 
     }
     setShelfError('');
 
-    await addToShelf({
-      isbn,
-      bookData: {
-        title: book?.volumeInfo?.title,
-        author: book?.volumeInfo?.authors?.join(', '),
-        description: book?.volumeInfo?.description || 'No Description',
-        pageCount: book?.volumeInfo?.pageCount,
-        genre: book?.volumeInfo?.categories?.[0] ?? 'Uncategorized',
-        imageLink: book?.volumeInfo?.imageLinks?.thumbnail ?? '',
+    await addToShelf(
+      {
+        isbn,
+        bookData: {
+          title: book?.volumeInfo?.title,
+          author: book?.volumeInfo?.authors?.join(', '),
+          description: book?.volumeInfo?.description || 'No Description',
+          pageCount: book?.volumeInfo?.pageCount,
+          genre: book?.volumeInfo?.categories?.[0] ?? 'Uncategorized',
+          imageLink: book?.volumeInfo?.imageLinks?.thumbnail ?? '',
+        },
+        existingShelf: values.existingShelf,
+        newShelf: values.newShelf,
       },
-      existingShelf: values.existingShelf,
-      newShelf: values.newShelf,
-    });
+      {
+        throwOnError: false,
+        onSuccess: () => {
+          mutate('shelves/finished');
+          onClose?.();
+        },
+      },
+    );
 
     reset();
-    onClose?.();
   };
 
   return (
