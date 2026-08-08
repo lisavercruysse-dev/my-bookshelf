@@ -36,10 +36,11 @@ export async function getBookById(isbn) {
     return data.items[0];
   }
 }
-export async function save(url, { arg: {id, ...data} }) {
-  const {data: result} = await axios({
+export async function save(url, { arg: {id, isbn, ...data} }) {
+  const path = id ? `reviews/${id}` : `reviews/${isbn}`;
+  const { data: result } = await axios({
     method: id ? 'PUT' : 'POST',
-    url: `${baseUrl}/${url}/${id ?? ''}`,
+    url: `${baseUrl}/${path}`,
     data,
   });
   return result;
@@ -64,6 +65,24 @@ export async function saveToShelf(url, { arg: values }) {
     method: 'POST',
     url: `${baseUrl}/shelves/${shelfId}/books/${isbn}`,
   });
+}
+
+export async function saveReview(url, { arg: values }) {
+  const { isbn, bookData, ...review } = values;
+
+  await axios({
+    method: 'POST',
+    url: `${baseUrl}/books`,
+    data: { isbn, ...bookData },
+  });
+
+  const { data: result } = await axios({
+    method: 'POST',
+    url: `${baseUrl}/reviews/${isbn}`,
+    data: review,
+  });
+
+  return result;
 }
 
 export async function getById(url) {

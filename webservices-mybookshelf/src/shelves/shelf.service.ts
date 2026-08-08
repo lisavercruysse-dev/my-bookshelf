@@ -10,8 +10,9 @@ import {
   CreateShelfDto,
   ShelfListResponseDTO,
   ShelfResponseDto,
+  ShelfWithBooksResponseDTO,
 } from './shelf.dto';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 
 @Injectable()
 export class ShelfService {
@@ -76,12 +77,25 @@ export class ShelfService {
       where: (shelves, { eq }) => eq(shelves.userId, userId),
       with: {
         shelfBooks: {
-          columns: { isbn: true },
+          with: {
+            book: true,
+          },
         },
       },
     });
 
-    return { items };
+    const shelvesWithBooks: ShelfWithBooksResponseDTO[] = items.map(
+      (shelf) => ({
+        id: shelf.id,
+        title: shelf.title,
+        userId: shelf.userId,
+        canDelete: shelf.canDelete,
+        shelfBooks: shelf.shelfBooks.map(({ isbn }) => ({ isbn })),
+        books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
+      }),
+    );
+
+    return { items: shelvesWithBooks };
   }
 
   async getBooksFromShelf(
@@ -184,5 +198,34 @@ export class ShelfService {
         title: dto.title,
       })
       .where(eq(shelves.id, shelfId));
+  }
+
+  async getFinishedShelf(userId: number): Promise<ShelfWithBooksResponseDTO> {
+    const shelf = await this.db.query.shelves.findFirst({
+      where: (shelves, { eq, and }) =>
+        and(
+          eq(shelves.userId, userId),
+          eq(sql`lower(${shelves.title})`, 'finished'),
+        ),
+      with: {
+        shelfBooks: {
+          with: {
+            book: true,
+          },
+        },
+      },
+    });
+
+    if (!shelf) {
+      throw new NotFoundException(`This user does not have a 'finished' shelf`);
+    }
+
+    return {
+      id: shelf.id,
+      title: shelf.title,
+      userId: shelf.userId,
+      canDelete: shelf.canDelete,
+      books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
+    };
   }
 }

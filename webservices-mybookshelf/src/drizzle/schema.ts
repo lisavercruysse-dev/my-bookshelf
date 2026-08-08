@@ -51,7 +51,6 @@ export const reviews = mysqlTable(
     body: text('body'),
     stars: smallint('stars', { unsigned: true }).notNull(),
     date: date('date').notNull(),
-    title: varchar('title', { length: 255 }).notNull(),
   },
   (table) => [uniqueIndex('idx_id').on(table.id)],
 );

@@ -1,33 +1,49 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { ReviewService } from './review.service';
 import {
   CreateReviewRequestDto,
+  ReviewListResponseDto,
   ReviewResponseDto,
   UpdateReviewRequestDto,
 } from './review.dto';
-import { ReviewService } from './review.service';
-import { ParseIntPipe } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
+import { Session } from 'src/types/auth';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('reviews')
+@UseGuards(AuthGuard)
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
-  /*@Get()
-  async getAllReviews(): Promise<ReviewListResponseDto> {
-    return await this.reviewService.getAllReviews();
-  }
-*/
-
-  @Get(':id')
-  async getReviewById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<ReviewResponseDto> {
-    return await this.reviewService.getReviewById(id);
+  @Get()
+  async getAllReviews(
+    @CurrentUser() user: Session,
+  ): Promise<ReviewListResponseDto> {
+    return await this.reviewService.getAllReviews(user.id);
   }
 
-  @Post()
+  @Get(':isbn')
+  async getReviewsForIsbn(
+    @Param('isbn') isbn: string,
+  ): Promise<ReviewListResponseDto> {
+    return await this.reviewService.getReviewsForIsbn(isbn);
+  }
+
+  @Post(':isbn')
   async createReview(
+    @Param('isbn') isbn: string,
+    @CurrentUser() user: Session,
     @Body() createReviewDto: CreateReviewRequestDto,
   ): Promise<ReviewResponseDto> {
-    return await this.reviewService.create(createReviewDto);
+    return await this.reviewService.create(isbn, user.id, createReviewDto);
   }
 
   @Put(':id')
@@ -37,4 +53,13 @@ export class ReviewController {
   ): Promise<ReviewResponseDto> {
     return await this.reviewService.update(id, updateReviewDto);
   }
+
+  /*
+  @Get(':id')
+  async getReviewById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ReviewResponseDto> {
+    return await this.reviewService.getReviewById(id);
+  }
+*/
 }

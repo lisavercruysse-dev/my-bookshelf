@@ -59,3 +59,8 @@
   height: 0;
   pointer-events: none;
 }
+
+.reviewBody h3 { @apply font-display font-bold text-base mt-2 mb-1; }
+.reviewBody h4 { @apply font-display font-bold text-sm mt-2 mb-1; }
+.reviewBody p { @apply mb-2; }
+.reviewBody p:last-child { @apply mb-0; }

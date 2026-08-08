@@ -1,18 +1,22 @@
 import useSWR from 'swr';
-import { getBookById } from '../../api';
+import { getBookById, getData, getById, save } from '../../api';
 import { useParams } from 'react-router';
 import AsyncData from '../asyncData/AsyncData';
 import fallbackImage from '../../assets/altBook.jpg';
 import Review from '../reviews/Review';
+import ReviewForm from '../reviews/ReviewForm';
 import Modal from '../general/Modal';
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import AddBookToShelfForm from '../books/AddBookToShelfForm';
 import { saveToShelf } from '../../api';
+import { useAuth } from '../../contexts/auth';
 
 export default function BookDetails() {
   const {isbn} = useParams();
+  const {user} = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   const {
     data: rawBook,
@@ -20,9 +24,18 @@ export default function BookDetails() {
     isLoading,
   } = useSWR(isbn ? isbn : null, getBookById);
 
+  const {
+    data: reviews,
+    isLoading: reviewsLoading,
+  } = useSWR(`reviews/${isbn}`, getData);
+  const myReview = reviews?.find((r) => r.user.id === user?.id);
+
+  const {
+    data: finishedShelf,
+  } = useSWR('shelves/finished', getById);
+
   const isGoogleBooksDown = error?.status === 503 || error?.response?.status === 503;
 
-  //change data shape to use the same one
   const book = rawBook?.volumeInfo
     ? rawBook
     : rawBook
@@ -47,7 +60,14 @@ export default function BookDetails() {
     saveToShelf,
   );
 
+  const { trigger: submitReview, error: reviewSaveError } = useSWRMutation(
+    `reviews/${isbn}`,
+    save,
+  );
+
   const bookImage = book?.volumeInfo?.imageLinks?.thumbnail || fallbackImage;
+
+  const isFinished = finishedShelf?.books?.some((b) => b.isbn === isbn);
 
   if (isGoogleBooksDown) {
     return (
@@ -79,14 +99,57 @@ export default function BookDetails() {
           </div>
           <div className='flex flex-col gap-5'>
             <p className='font-display text-gray-900 text-3xl max-w-150'>Reviews</p>
-            <Review/>
+            <AsyncData loading={reviewsLoading}>
+              {!myReview && (
+                isFinished ? (
+                  <button onClick={() => setReviewModalOpen(true)} className='primary self-start'>
+                    Write a review
+                  </button>
+                ) : (
+                  <div className='mt-4 mb-5 rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-center'>
+                    <p className='font-display text-sm text-gray-600'>
+                      Finish reading this book to share your thoughts and post a review.
+                    </p>
+                  </div>
+                )
+              )}
+              {reviews?.length > 0 ? (
+                reviews.map((r) => (
+                  <Review
+                    key={r.id}
+                    userName={r.user.userName}
+                    rating={r.stars}
+                    date={r.date}
+                    body={r.body}
+                    isOwner={r.user.id === user?.id}
+                    onEdit={() => setReviewModalOpen(true)}
+                  />
+                ))
+              ) : (
+                <p className='font-display text-gray-500 text-sm self-center'>
+                  No reviews yet for this book.
+                </p>
+              )}
+            </AsyncData>
           </div>
         </div>
       </AsyncData>
+
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
         <AsyncData error={saveError}>
-          <AddBookToShelfForm isbn={isbn} book={book} 
+          <AddBookToShelfForm isbn={isbn} book={book}
             addToShelf={addToShelf} onClose={() => setModalOpen(false)} />
+        </AsyncData>
+      </Modal>
+
+      <Modal isOpen={reviewModalOpen} onClose={() => setReviewModalOpen(false)}>
+        <AsyncData error={reviewSaveError}>
+          <ReviewForm
+            isbn={isbn}
+            review={myReview}
+            saveReview={submitReview}
+            onClose={() => setReviewModalOpen(false)}
+          />
         </AsyncData>
       </Modal>
     </>
