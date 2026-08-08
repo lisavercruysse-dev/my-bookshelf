@@ -1,6 +1,10 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserResponseDto, UserListResponseDto } from './user.dto';
+import {
+  UserResponseDto,
+  UserListResponseDto,
+  RegisterUserRequestDto,
+} from './user.dto';
 import { ReviewService } from '../review/review.service';
 import { BookService } from '../book/book.service';
 import { AuthService } from '../auth/auth.service';
@@ -10,6 +14,8 @@ import { CheckUserAccessGuard } from '../auth/guards/userAcces.guard';
 import { CurrentUser } from '../auth/decorators/currentUser.decorator';
 import { ParseUserIdPipe } from '../auth/pipes/parseUserId.pipe';
 import { BookResponseListDTO } from '../book/book.dto';
+import { LoginResponseDto } from 'src/session/session.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('users')
 export class UserController {
@@ -44,6 +50,16 @@ export class UserController {
     const userId = id === 'me' ? user.id : id;
     return await this.bookService.getCurrentReads(userId);
   }
+
+  @Public()
+  @Post()
+  async registerUser(
+    @Body() registerDto: RegisterUserRequestDto,
+  ): Promise<LoginResponseDto> {
+    const token = await this.authService.register(registerDto);
+    return { token };
+  }
+
   /*
   @Get(':id/reviews')
   @UseGuards(CheckUserAccessGuard)
@@ -81,14 +97,6 @@ export class UserController {
     @Body() createUserDto: CreateUserRequestDto,
   ): Promise<UserResponseDto> {
     return await this.userService.create(createUserDto);
-  }
-
-  @Post()
-  async registerUser(
-    @Body() registerDto: RegisterUserRequestDto,
-  ): Promise<LoginResponseDto> {
-    const token = await this.authService.register(registerDto);
-    return { token };
   }
 
   @Put(':id')

@@ -13,6 +13,7 @@ import BookDetails from './components/books/BookDetails.jsx';
 import YourShelf from './pages/YourShelf.jsx';
 import Reviews from './pages/Reviews.jsx';
 import PrivateRoute from './components/general/PrivateRoute.jsx';
+import Register from './pages/Register.jsx';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
       { path: '/', Component: App },
       { path: 'login', Component: Login },
       { path: '/discover', Component: Discover },
+      { path: '/register', Component: Register },
       {
         Component: PrivateRoute,
         children: [

@@ -83,13 +83,13 @@ export class savedBookResponseDto {
 
 export class RegisterUserRequestDto {
   @IsString()
+  @IsEmail()
+  email: string;
+
+  @IsString()
   @MinLength(2)
   @MaxLength(255)
   userName: string;
-
-  @IsString()
-  @IsEmail()
-  email: string;
 
   @IsString()
   @MinLength(8)

@@ -20,6 +20,7 @@ export class ShelfService {
     @InjectDrizzle()
     private readonly db: DatabaseProvider,
   ) {}
+  DEFAULT_SHELVES = ['Favorites', 'Want to Read', 'Finished', 'Current Reads'];
 
   async addToShelf(
     userId: number,
@@ -227,5 +228,15 @@ export class ShelfService {
       canDelete: shelf.canDelete,
       books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
     };
+  }
+
+  async createDefaultShelves(userId: number, tx = this.db) {
+    await tx.insert(shelves).values(
+      this.DEFAULT_SHELVES.map((title) => ({
+        title,
+        userId,
+        canDelete: false,
+      })),
+    );
   }
 }

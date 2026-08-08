@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import LabelInput from '../components/LabelInput';
 import { useAuth } from '../contexts/auth';
 import Error from '../components/asyncData/Error';
+import { Link } from 'react-router';
 
 const validationRules = {
   email: {
@@ -92,13 +93,16 @@ export default function Login() {
         </form>
         <div className='flex flex-col gap-5'>
           <p className='font-display text-main text-lg'>No account yet?</p>
-          <button
-            type='button'
-            className='primary'
-            disabled={loading}
-          >
-            Sign up
-          </button>
+          <Link to='/register'>
+            <button
+              type='button'
+              className='primary'
+              disabled={loading}
+            >
+              Sign up
+            </button>
+          </Link>
+
         </div>
       </div>
     </FormProvider>

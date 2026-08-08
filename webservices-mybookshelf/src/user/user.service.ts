@@ -4,8 +4,8 @@ import {
   InjectDrizzle,
 } from '../drizzle/drizzle.provider';
 import { UserListResponseDto, UserResponseDto } from './user.dto';
-import { and, eq } from 'drizzle-orm';
-import { userBooks, users } from '../drizzle/schema';
+import { eq } from 'drizzle-orm';
+import { users } from '../drizzle/schema';
 import { BookService } from '../book/book.service';
 import { ReviewService } from '../review/review.service';
 import { plainToInstance } from 'class-transformer';
@@ -86,8 +86,8 @@ export class UserService {
     await this.db.update(users).set(user).where(eq(users.id, id));
     return this.getUserById(id);
   }
-*/
-  async delete(id: number): Promise<void> {
+
+    async delete(id: number): Promise<void> {
     const [result] = await this.db.delete(users).where(eq(users.id, id));
     if (result.affectedRows === 0) {
       throw new NotFoundException('No user with this ID exists');
@@ -104,4 +104,5 @@ export class UserService {
       );
     }
   }
+*/
 }

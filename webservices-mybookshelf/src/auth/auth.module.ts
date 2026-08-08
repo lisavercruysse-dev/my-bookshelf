@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { DrizzleModule } from '../drizzle/drizzle.module';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ServerConfig, AuthConfig } from '../config/configuration';
+import { ShelfModule } from 'src/shelves/shelf.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ServerConfig, AuthConfig } from '../config/configuration';
       },
     }),
     DrizzleModule,
+    forwardRef(() => ShelfModule),
   ],
   providers: [AuthService],
   exports: [AuthService],

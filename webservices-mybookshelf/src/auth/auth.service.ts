@@ -14,6 +14,7 @@ import { eq } from 'drizzle-orm';
 import { users } from '../drizzle/schema';
 import { RegisterUserRequestDto } from '../user/user.dto';
 import { Role } from './roles';
+import { ShelfService } from 'src/shelves/shelf.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private readonly db: DatabaseProvider,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService<ServerConfig>,
+    private readonly shelfService: ShelfService,
   ) {}
 
   async hashPassword(password: string): Promise<string> {
@@ -101,6 +103,10 @@ export class AuthService {
     const user = await this.db.query.users.findFirst({
       where: eq(users.id, newUser.id),
     });
+
+    if (user) {
+      await this.shelfService.createDefaultShelves(user.id);
+    }
 
     return this.signJwt(user!);
   }
