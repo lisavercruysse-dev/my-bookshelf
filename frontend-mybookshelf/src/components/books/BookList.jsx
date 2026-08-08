@@ -1,5 +1,12 @@
 import Book from './Book';
 
+const getISBN = (volumeInfo) => {
+  const identifiers = volumeInfo?.industryIdentifiers || [];
+  const isbn13 = identifiers.find((id) => id.type === 'ISBN_13');
+  const isbn10 = identifiers.find((id) => id.type === 'ISBN_10');
+  return (isbn13 || isbn10)?.identifier ?? null;
+};
+
 export default function BookList({
   books,
   maxAmount,
@@ -13,13 +20,6 @@ export default function BookList({
 
   const mapAuthors = (book) => {
     return book.volumeInfo?.authors?.join(', ') ?? 'Unknown author';
-  };
-
-  const getISBN = (volumeInfo) => {
-    const identifiers = volumeInfo?.industryIdentifiers || [];
-    const isbn13 = identifiers.find((id) => id.type === 'ISBN_13');
-    const isbn10 = identifiers.find((id) => id.type === 'ISBN_10');
-    return (isbn13 || isbn10)?.identifier ?? null;
   };
 
   return (

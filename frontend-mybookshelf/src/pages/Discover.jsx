@@ -6,11 +6,13 @@ import { IoMdArrowDroprightCircle } from 'react-icons/io';
 import { IoMdArrowDropleftCircle } from 'react-icons/io';
 import { useState, useEffect } from 'react';
 
+const maxResults = 15;  
+const listSize = 5;
+
 export default function Discover() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  const maxResults = 15;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -30,7 +32,6 @@ export default function Discover() {
     getBooks,
   );
 
-  const listSize = 5;
   const rows = [
     books.slice(0, listSize),
     books.slice(listSize, listSize * 2),

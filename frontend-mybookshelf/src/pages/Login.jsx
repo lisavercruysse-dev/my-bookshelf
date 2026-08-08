@@ -35,6 +35,7 @@ export default function Login() {
   const handleLogin = useCallback(
     async ({ email, password }) => {
       const loggedIn = await login(email, password);
+
       if (loggedIn) {
         const params = new URLSearchParams(search);
         navigate({
@@ -43,7 +44,7 @@ export default function Login() {
         });
       }
     },
-    [login, navigate, search], 
+    [login, navigate, search], // 👈
   );
 
   return (

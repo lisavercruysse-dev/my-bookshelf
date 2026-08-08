@@ -9,6 +9,14 @@ const extensions = [StarterKit, Placeholder.configure({
   placeholder: 'Write your review here...',
 })];
 
+const buttonClass = (isActive) =>
+  `flex items-center justify-center h-8 w-8 rounded-lg cursor-pointer 
+    font-display text-xs font-bold transition-colors
+    ${isActive
+        ? 'bg-main text-white'
+        : 'bg-transparent text-gray-500 hover:bg-[#F3F6EE] hover:text-main'
+    }`;
+
 function MenuBar({ editor }) {
   const editorState = useEditorState({
     editor,
@@ -19,14 +27,6 @@ function MenuBar({ editor }) {
       canItalic: ctx.editor.can().chain().toggleItalic().run() ?? false,
     }),
   });
-
-  const buttonClass = (isActive) =>
-    `flex items-center justify-center h-8 w-8 rounded-lg cursor-pointer 
-    font-display text-xs font-bold transition-colors
-    ${isActive
-        ? 'bg-main text-white'
-        : 'bg-transparent text-gray-500 hover:bg-[#F3F6EE] hover:text-main'
-    }`;
 
   return (
     <div className='flex items-center gap-1 flex-wrap pb-2 mb-3 border-b border-black/5'>

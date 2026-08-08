@@ -12,6 +12,10 @@ import AddBookToShelfForm from '../books/AddBookToShelfForm';
 import { saveToShelf } from '../../api';
 import { useAuth } from '../../contexts/auth';
 
+const mapAuthors = (book) => {
+  return book?.volumeInfo?.authors?.join(', ') ?? 'Unknown author';
+};
+
 export default function BookDetails() {
   const {isbn} = useParams();
   const {user} = useAuth();
@@ -50,10 +54,6 @@ export default function BookDetails() {
         },
       }
       : undefined;
-
-  const mapAuthors = (book) => {
-    return book?.volumeInfo?.authors?.join(', ') ?? 'Unknown author';
-  };
 
   const {trigger: addToShelf, error: saveError} = useSWRMutation(
     'shelves',

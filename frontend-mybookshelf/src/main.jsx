@@ -12,18 +12,24 @@ import Discover from './pages/Discover.jsx';
 import BookDetails from './components/books/BookDetails.jsx';
 import YourShelf from './pages/YourShelf.jsx';
 import Reviews from './pages/Reviews.jsx';
+import PrivateRoute from './components/general/PrivateRoute.jsx';
 
 const router = createBrowserRouter([
   {
     Component: Layout,
     children: [
       { path: '/', Component: App },
-      { path: '/discover', Component: Discover},
-      { path: '/books/:isbn', Component: BookDetails},
       { path: 'login', Component: Login },
+      { path: '/discover', Component: Discover },
+      {
+        Component: PrivateRoute,
+        children: [
+          { path: '/books/:isbn', Component: BookDetails },
+          { path: '/yourShelf', Component: YourShelf },
+          { path: '/myReviews', Component: Reviews },
+        ],
+      },
       { path: '*', Component: NotFound },
-      { path: '/yourShelf', Component: YourShelf},
-      { path: '/myReviews', Component: Reviews  },
     ],
   },
 ]);
@@ -31,8 +37,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>,
-
 );
