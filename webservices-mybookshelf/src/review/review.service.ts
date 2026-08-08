@@ -3,6 +3,7 @@ import {
   CreateReviewRequestDto,
   ReviewListResponseDto,
   ReviewResponseDto,
+  UpdateReviewRequestDto,
 } from './review.dto';
 import {
   type DatabaseProvider,
@@ -79,6 +80,20 @@ export class ReviewService {
     return item;
   }
 
+  async update(
+    id: number,
+    review: UpdateReviewRequestDto,
+  ): Promise<ReviewResponseDto> {
+    const [result] = await this.db
+      .update(reviews)
+      .set(review)
+      .where(eq(reviews.id, id));
+    if (result.affectedRows === 0) {
+      throw new NotFoundException('No review with this ID exists');
+    }
+    return this.getReviewById(id);
+  }
+
   /*
   async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
     const items = await this.db.query.reviews.findMany({
@@ -112,19 +127,6 @@ export class ReviewService {
 
 
 
-  async update(
-    id: number,
-    review: UpdateReviewRequestDto,
-  ): Promise<ReviewResponseDto> {
-    const [result] = await this.db
-      .update(reviews)
-      .set(review)
-      .where(eq(reviews.id, id));
-    if (result.affectedRows === 0) {
-      throw new NotFoundException('No review with this ID exists');
-    }
-    return this.getReviewById(id);
-  }
 
   async delete(id: number, userId: number): Promise<void> {
     const [result] = await this.db

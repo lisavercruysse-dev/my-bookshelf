@@ -34,7 +34,6 @@ export default function ReviewForm({
   review = EMPTY_REVIEW,
   saveReview,
   onClose,
-  book,
 }) {
   const methods = useForm({
     mode: 'onBlur',
@@ -57,22 +56,12 @@ export default function ReviewForm({
   const onSubmit = async (values) => {
     await saveReview(
       {
+        id: review?.id,
         isbn,
-        bookData: {
-          title: book?.volumeInfo?.title,
-          author: book?.volumeInfo?.authors?.join(', '),
-          description: book?.volumeInfo?.description || 'No Description',
-          pageCount: book?.volumeInfo?.pageCount,
-          genre: book?.volumeInfo?.categories?.[0] ?? 'Uncategorized',
-          imageLink: book?.volumeInfo?.imageLinks?.thumbnail ?? '',
-        },
         stars: values.stars,
         body: values.body,
       },
-      {
-        throwOnError: false,
-        onSuccess: () => onClose?.(),
-      },
+      { throwOnError: false, onSuccess: () => onClose?.() },
     );
   };
 

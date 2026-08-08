@@ -1,20 +1,30 @@
 import Review from '../components/reviews/Review';
+import ReviewForm from '../components/reviews/ReviewForm';
+import Modal from '../components/general/Modal';
 import fallbackImage from '../assets/altBook.jpg';
 import { Link } from 'react-router';
 import { FaStar } from 'react-icons/fa6';
-import { getData } from '../api';
+import { getData, save } from '../api';
 import AsyncData from '../components/asyncData/AsyncData';
 import useSWR from 'swr';
 import { useAuth } from '../contexts/auth';
+import { useState } from 'react';
+import useSWRMutation from 'swr/mutation';
 
 export default function Reviews() {
   const { user } = useAuth();
+  const [editingReview, setEditingReview] = useState(null);
 
   const {
     data: reviews,
     error,
     isLoading,
   } = useSWR('reviews', getData);
+
+  const { trigger: submitReview, error: reviewSaveError } = useSWRMutation(
+    'reviews',
+    save,
+  );
 
   const averageRating =
     reviews?.length > 0
@@ -43,6 +53,8 @@ export default function Reviews() {
         <AsyncData loading={isLoading} error={error}>
           {reviews?.map((r) => (
             <div key={r.id} className='flex gap-6 items-stretch'>
+              {            console.log(r)
+              }
               <Link to={`/books/${r.book.isbn}`} className='shrink-0 group'>
                 <img
                   src={r.book.imageLink || fallbackImage}
@@ -53,15 +65,30 @@ export default function Reviews() {
               </Link>
 
               <Review
-                userName={user.userName}
+                userName={user?.userName}
                 rating={r.stars}
                 date={r.date}
+                isOwner={r.userId === user?.id}
+                onEdit={() => setEditingReview(r)}
                 body={r.body}
               />
             </div>
           ))}
         </AsyncData>
       </div>
+
+      <Modal isOpen={!!editingReview} onClose={() => setEditingReview(null)}>
+        <AsyncData error={reviewSaveError}>
+          {editingReview && (
+            <ReviewForm
+              isbn={editingReview.book.isbn}
+              review={editingReview}
+              saveReview={submitReview}
+              onClose={() => setEditingReview(null)}
+            />
+          )}
+        </AsyncData>
+      </Modal>
     </div>
   );
 }

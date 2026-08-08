@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ReviewService } from './review.service';
 import {
   CreateReviewRequestDto,
   ReviewListResponseDto,
   ReviewResponseDto,
+  UpdateReviewRequestDto,
 } from './review.dto';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { Session } from 'src/types/auth';
@@ -36,6 +46,14 @@ export class ReviewController {
     return await this.reviewService.create(isbn, user.id, createReviewDto);
   }
 
+  @Put(':id')
+  async updateReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateReviewDto: UpdateReviewRequestDto,
+  ): Promise<ReviewResponseDto> {
+    return await this.reviewService.update(id, updateReviewDto);
+  }
+
   /*
   @Get(':id')
   async getReviewById(
@@ -43,13 +61,5 @@ export class ReviewController {
   ): Promise<ReviewResponseDto> {
     return await this.reviewService.getReviewById(id);
   }
-
-
-  @Put(':id')
-  async updateReview(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateReviewDto: UpdateReviewRequestDto,
-  ): Promise<ReviewResponseDto> {
-    return await this.reviewService.update(id, updateReviewDto);
-  }*/
+*/
 }

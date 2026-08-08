@@ -1,4 +1,4 @@
-import { FaStar } from 'react-icons/fa6';
+import { FaStar, FaPen } from 'react-icons/fa6';
 import { generateHTML } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import DOMPurify from 'dompurify';
@@ -15,7 +15,7 @@ function renderReviewBody(body) {
   }
 }
 
-export default function Review({ userName, rating, date, body }) {
+export default function Review({ userName, rating, date, body, isOwner, onEdit }) {
   const initial = userName?.charAt(0).toUpperCase();
   const shortDate = date?.split('T')[0];
 
@@ -34,14 +34,27 @@ export default function Review({ userName, rating, date, body }) {
           </div>
         </div>
 
-        <div className='flex gap-0.5'>
-          {[...Array(5)].map((_, i) => (
-            <FaStar
-              key={i}
-              className={i < rating ? 'text-[#E4B65F]' : 'text-gray-200'}
-              size={14}
-            />
-          ))}
+        <div className='flex items-center gap-3'>
+          <div className='flex gap-0.5'>
+            {[...Array(5)].map((_, i) => (
+              <FaStar
+                key={i}
+                className={i < rating ? 'text-[#E4B65F]' : 'text-gray-200'}
+                size={14}
+              />
+            ))}
+          </div>
+
+          {isOwner && (
+            <button
+              onClick={onEdit}
+              aria-label='Edit review'
+              className='flex h-7 w-7 items-center justify-center rounded-full text-gray-400
+              hover:text-main hover:bg-gray-100 transition-colors shrink-0'
+            >
+              <FaPen size={12} />
+            </button>
+          )}
         </div>
       </div>
       <div className='reviewBody mt-3 text-gray-600 text-sm leading-relaxed'

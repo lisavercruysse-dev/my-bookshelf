@@ -36,10 +36,11 @@ export async function getBookById(isbn) {
     return data.items[0];
   }
 }
-export async function save(url, { arg: {id, ...data} }) {
-  const {data: result} = await axios({
+export async function save(url, { arg: {id, isbn, ...data} }) {
+  const path = id ? `reviews/${id}` : `reviews/${isbn}`;
+  const { data: result } = await axios({
     method: id ? 'PUT' : 'POST',
-    url: `${baseUrl}/${url}/${id ?? ''}`,
+    url: `${baseUrl}/${path}`,
     data,
   });
   return result;

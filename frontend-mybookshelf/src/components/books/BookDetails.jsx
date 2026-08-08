@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { getBookById, getData, getById, saveReview } from '../../api';
+import { getBookById, getData, getById, save } from '../../api';
 import { useParams } from 'react-router';
 import AsyncData from '../asyncData/AsyncData';
 import fallbackImage from '../../assets/altBook.jpg';
@@ -60,9 +60,9 @@ export default function BookDetails() {
     saveToShelf,
   );
 
-  const {trigger: submitReview, error: reviewSaveError} = useSWRMutation(
+  const { trigger: submitReview, error: reviewSaveError } = useSWRMutation(
     `reviews/${isbn}`,
-    saveReview,
+    save,
   );
 
   const bookImage = book?.volumeInfo?.imageLinks?.thumbnail || fallbackImage;
@@ -121,6 +121,8 @@ export default function BookDetails() {
                     rating={r.stars}
                     date={r.date}
                     body={r.body}
+                    isOwner={r.user.id === user?.id}
+                    onEdit={() => setReviewModalOpen(true)}
                   />
                 ))
               ) : (
@@ -144,7 +146,6 @@ export default function BookDetails() {
         <AsyncData error={reviewSaveError}>
           <ReviewForm
             isbn={isbn}
-            book={book}
             review={myReview}
             saveReview={submitReview}
             onClose={() => setReviewModalOpen(false)}
