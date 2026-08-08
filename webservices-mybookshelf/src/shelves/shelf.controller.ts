@@ -18,6 +18,7 @@ import {
   CreateShelfDto,
   ShelfListResponseDTO,
   ShelfResponseDto,
+  ShelfWithBooksResponseDTO,
 } from './shelf.dto';
 
 @Controller('shelves')
@@ -81,5 +82,12 @@ export class ShelfController {
     @Body() dto: CreateShelfDto,
   ) {
     await this.shelfService.editShelf(user.id, shelfId, dto);
+  }
+
+  @Get('finished')
+  async getFinishedShelf(
+    @CurrentUser() user: Session,
+  ): Promise<ShelfWithBooksResponseDTO> {
+    return await this.shelfService.getFinishedShelf(user.id);
   }
 }

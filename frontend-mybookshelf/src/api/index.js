@@ -66,6 +66,24 @@ export async function saveToShelf(url, { arg: values }) {
   });
 }
 
+export async function saveReview(url, { arg: values }) {
+  const { isbn, bookData, ...review } = values;
+
+  await axios({
+    method: 'POST',
+    url: `${baseUrl}/books`,
+    data: { isbn, ...bookData },
+  });
+
+  const { data: result } = await axios({
+    method: 'POST',
+    url: `${baseUrl}/reviews/${isbn}`,
+    data: review,
+  });
+
+  return result;
+}
+
 export async function getById(url) {
   const { data } = await axios.get(`${baseUrl}/${url}`);
   return data;

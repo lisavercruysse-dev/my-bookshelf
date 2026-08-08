@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
+import { BookResponseDTO } from 'src/book/book.dto';
 
 export class CreateShelfDto {
   @IsString()
@@ -12,6 +13,10 @@ export class ShelfResponseDto {
   title: string;
   userId: number;
   canDelete: boolean;
+}
+
+export class ShelfWithBooksResponseDTO extends ShelfResponseDto {
+  books: BookResponseDTO[];
 }
 
 export class ShelfListResponseDTO {

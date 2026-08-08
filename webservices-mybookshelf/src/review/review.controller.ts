@@ -1,10 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ReviewService } from './review.service';
-import { ReviewListResponseDto } from './review.dto';
+import {
+  CreateReviewRequestDto,
+  ReviewListResponseDto,
+  ReviewResponseDto,
+} from './review.dto';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { Session } from 'src/types/auth';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('reviews')
+@UseGuards(AuthGuard)
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
   @Get()
@@ -21,6 +27,15 @@ export class ReviewController {
     return await this.reviewService.getReviewsForIsbn(isbn);
   }
 
+  @Post(':isbn')
+  async createReview(
+    @Param('isbn') isbn: string,
+    @CurrentUser() user: Session,
+    @Body() createReviewDto: CreateReviewRequestDto,
+  ): Promise<ReviewResponseDto> {
+    return await this.reviewService.create(isbn, user.id, createReviewDto);
+  }
+
   /*
   @Get(':id')
   async getReviewById(
@@ -29,12 +44,6 @@ export class ReviewController {
     return await this.reviewService.getReviewById(id);
   }
 
-  @Post()
-  async createReview(
-    @Body() createReviewDto: CreateReviewRequestDto,
-  ): Promise<ReviewResponseDto> {
-    return await this.reviewService.create(createReviewDto);
-  }
 
   @Put(':id')
   async updateReview(

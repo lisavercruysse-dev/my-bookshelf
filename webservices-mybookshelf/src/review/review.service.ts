@@ -1,5 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ReviewListResponseDto } from './review.dto';
+import {
+  CreateReviewRequestDto,
+  ReviewListResponseDto,
+  ReviewResponseDto,
+} from './review.dto';
 import {
   type DatabaseProvider,
   InjectDrizzle,
@@ -41,19 +45,23 @@ export class ReviewService {
     }
     return { items };
   }
-  /*
-  async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
-    const items = await this.db.query.reviews.findMany({
-      where: eq(reviews.isbn, isbn),
-      with: {
-        book: true,
-        user: true,
-      },
-    });
-    if (items.length === 0) {
-      throw new NotFoundException('No reviews for this ISBN exist');
-    }
-    return { items };
+
+  async create(
+    isbn: string,
+    userId: number,
+    review: CreateReviewRequestDto,
+  ): Promise<ReviewResponseDto> {
+    const [newReview] = await this.db
+      .insert(reviews)
+      .values({
+        ...review,
+        isbn,
+        userId,
+        date: new Date(),
+      })
+      .$returningId();
+
+    return this.getReviewById(newReview.id);
   }
 
   async getReviewById(id: number): Promise<ReviewResponseDto> {
@@ -71,6 +79,22 @@ export class ReviewService {
     return item;
   }
 
+  /*
+  async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
+    const items = await this.db.query.reviews.findMany({
+      where: eq(reviews.isbn, isbn),
+      with: {
+        book: true,
+        user: true,
+      },
+    });
+    if (items.length === 0) {
+      throw new NotFoundException('No reviews for this ISBN exist');
+    }
+    return { items };
+  }
+
+
   async getReviewsByUserId(id: number): Promise<ReviewListResponseDto> {
     const items = await this.db.query.reviews.findMany({
       where: eq(reviews.userId, id),
@@ -86,17 +110,7 @@ export class ReviewService {
     return { items };
   }
 
-  async create(review: CreateReviewRequestDto): Promise<ReviewResponseDto> {
-    const [newReview] = await this.db
-      .insert(reviews)
-      .values({
-        ...review,
-        date: new Date(),
-      })
-      .$returningId();
 
-    return this.getReviewById(newReview.id);
-  }
 
   async update(
     id: number,

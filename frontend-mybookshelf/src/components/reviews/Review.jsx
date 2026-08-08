@@ -20,7 +20,8 @@ export default function Review({ userName, rating, date, body }) {
   const shortDate = date?.split('T')[0];
 
   return (
-    <div className='bg-white p-5 rounded-2xl shadow-sm border border-black/5 w-full transition-shadow hover:shadow-md'>
+    <div className='bg-white p-5 rounded-2xl shadow-sm border border-black/5 w-full transition-shadow hover:shadow-md
+    min-w-100'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <div className='flex h-9 w-9 items-center justify-center 
