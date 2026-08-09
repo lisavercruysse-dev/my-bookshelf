@@ -94,7 +94,6 @@ export class ShelfService {
         canDelete: shelf.canDelete,
         shelfBooks: shelf.shelfBooks.map(({ isbn }) => ({ isbn })),
         books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
-        description: shelf.description,
       }),
     );
 
@@ -228,18 +227,16 @@ export class ShelfService {
       title: shelf.title,
       userId: shelf.userId,
       canDelete: shelf.canDelete,
-      description: shelf.description,
       books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
     };
   }
 
   async createDefaultShelves(userId: number, tx = this.db) {
     await tx.insert(shelves).values(
-      DEFAULT_SHELVES.map(({ title, description }) => ({
+      DEFAULT_SHELVES.map(({ title }) => ({
         title,
         userId,
         canDelete: false,
-        description,
         dateAdded: new Date(),
       })),
     );

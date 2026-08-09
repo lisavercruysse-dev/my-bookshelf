@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { getBookById, getData, getById, save } from '../../api';
+import { getBookById, getData, getById, save, deleteById } from '../../api';
 import { useParams } from 'react-router';
 import AsyncData from '../asyncData/AsyncData';
 import fallbackImage from '../../assets/altBook.jpg';
@@ -65,6 +65,11 @@ export default function BookDetails() {
     save,
   );
 
+  const {trigger: deleteReview} = useSWRMutation(
+    'reviews',
+    deleteById,
+  );
+
   const bookImage = book?.volumeInfo?.imageLinks?.thumbnail || fallbackImage;
 
   const isFinished = finishedShelf?.books?.some((b) => b.isbn === isbn);
@@ -125,6 +130,8 @@ export default function BookDetails() {
                     onEdit={() => setReviewModalOpen(true)}
                     recommended={r.recommended}
                     title={r.title}
+                    id={r.id}
+                    onDelete={deleteReview}
                   />
                 ))
               ) : (

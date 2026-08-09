@@ -58,16 +58,16 @@ export default function Home() {
                   Popular
                 </p>
                 <AsyncData error={error} isLoading={isLoading}>
-                  <BookList books={popular} maxAmount={3} />
+                  <BookList books={popular} maxAmount={3} className="flex-wrap justify-center"/>
                 </AsyncData>
               </div>
 
               <div className="flex flex-col items-center gap-4 
-bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+            bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
                 <p className="font-display text-gray-900 text-2xl font-semibold">
                   Your current reads
                 </p>
-                <AsyncData error={currentReadsError} loading={currentReadsLoading}>
+                <AsyncData error={currentReadsError} loading={currentReadsLoading} className="flex-wrap justify-center">
                   {currentReads.length === 0 ? (
                     <p className="font-display text-gray-500 text-sm">
                       You don't have any current reads yet.

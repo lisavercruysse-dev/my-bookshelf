@@ -1,4 +1,4 @@
-import { FaStar, FaPen, FaThumbsUp, FaThumbsDown } from 'react-icons/fa6';
+import { FaStar, FaPen, FaTrash, FaThumbsUp, FaThumbsDown } from 'react-icons/fa6';
 import { generateHTML } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import DOMPurify from 'dompurify';
@@ -15,7 +15,18 @@ function renderReviewBody(body) {
   }
 }
 
-export default function Review({ userName, rating, date, body, isOwner, onEdit, title, recommended }) {
+export default function Review({
+  id,
+  userName,
+  rating,
+  date,
+  body,
+  isOwner,
+  onEdit,
+  onDelete = () => {},
+  title,
+  recommended,
+}) {
   const initial = userName?.charAt(0).toUpperCase();
   const shortDate = date?.split('T')[0];
 
@@ -46,14 +57,25 @@ export default function Review({ userName, rating, date, body, isOwner, onEdit, 
           </div>
 
           {isOwner && (
-            <button
-              onClick={onEdit}
-              aria-label='Edit review'
-              className='flex h-7 w-7 items-center justify-center rounded-full text-gray-400
-              hover:text-main hover:bg-gray-100 transition-colors shrink-0'
-            >
-              <FaPen size={12} />
-            </button>
+            <div className='flex items-center gap-1'>
+              <button
+                onClick={onEdit}
+                aria-label='Edit review'
+                className='flex h-7 w-7 items-center justify-center rounded-full text-gray-400
+                hover:text-main hover:bg-gray-100 transition-colors shrink-0'
+              >
+                <FaPen size={12} />
+              </button>
+
+              <button
+                onClick={() => onDelete(id)}
+                aria-label='Delete review'
+                className='flex h-7 w-7 items-center justify-center rounded-full text-gray-400
+                hover:text-red-500 hover:bg-red-50 transition-colors shrink-0'
+              >
+                <FaTrash size={12} />
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -68,13 +90,13 @@ export default function Review({ userName, rating, date, body, isOwner, onEdit, 
             <span className='flex items-center gap-1 shrink-0 rounded-full bg-green-50 
             text-green-600 text-xs font-display font-semibold px-2.5 py-1'>
               <FaThumbsUp size={10} />
-              Recommends
+              Recommended
             </span>
           ) : (
             <span className='flex items-center gap-1 shrink-0 rounded-full bg-red-50 
             text-red-500 text-xs font-display font-semibold px-2.5 py-1'>
               <FaThumbsDown size={10} />
-              Doesn&apos;t recommend
+              Not recommended
             </span>
           )
         )}

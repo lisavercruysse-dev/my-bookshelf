@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -52,6 +53,14 @@ export class ReviewController {
     @Body() updateReviewDto: UpdateReviewRequestDto,
   ): Promise<ReviewResponseDto> {
     return await this.reviewService.update(id, updateReviewDto);
+  }
+
+  @Delete(':id')
+  async deleteReview(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: Session,
+  ) {
+    await this.reviewService.deleteReview(user.id, id);
   }
 
   /*

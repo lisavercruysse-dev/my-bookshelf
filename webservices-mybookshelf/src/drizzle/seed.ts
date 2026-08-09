@@ -260,58 +260,48 @@ async function seedShelves() {
       title: 'Favorites',
       userId: 1,
       canDelete: false,
-      description: 'A shelf to keep track of all your favorite books',
       dateAdded: new Date('2026-08-09'),
     },
     {
       title: 'Want to Read',
       userId: 1,
       canDelete: false,
-      description: 'A shelf to keep track of all the books you want to read',
       dateAdded: new Date('2026-08-09'),
     },
     {
       title: 'Finished',
       userId: 1,
       canDelete: false,
-      description: 'A shelf to keep track of all the books you have read',
       dateAdded: new Date('2026-08-09'),
     },
     {
       title: 'Current Reads',
       userId: 1,
       canDelete: false,
-      description:
-        'A shelf to keep track of all the books you are currently reading',
       dateAdded: new Date('2026-08-09'),
     },
     {
       title: 'Favorites',
       userId: 2,
       canDelete: false,
-      description: 'A shelf to keep track of all your favorite books',
       dateAdded: new Date('2026-08-09'),
     },
     {
       title: 'Want to Read',
       userId: 2,
       canDelete: false,
-      description: 'A shelf to keep track of all the books you want to read',
       dateAdded: new Date('2026-08-09'),
     },
     {
       title: 'Current Reads',
       userId: 2,
       canDelete: false,
-      description:
-        'A shelf to keep track of all the books you are currently reading',
       dateAdded: new Date('2026-08-09'),
     },
     {
       title: 'Finished',
       userId: 2,
       canDelete: false,
-      description: 'A shelf to keep track of all the books you have read',
       dateAdded: new Date('2026-08-09'),
     },
   ]);

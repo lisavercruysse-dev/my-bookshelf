@@ -11,7 +11,7 @@ export default function Book({author, imageLink, title, isbn, onDelete = () => {
   };
 
   return (
-    <div className="flex w-[140px] shrink-0 flex-col items-center gap-3 text-center group/book">
+    <div className="flex w-[140px] flex-col items-center gap-3 text-center group/book">
       <div className="relative">
         {hasDeleteBtn && 
         <button

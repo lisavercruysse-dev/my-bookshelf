@@ -64,7 +64,6 @@ export const shelves = mysqlTable('shelves', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   canDelete: boolean('canDelete').notNull().default(true),
-  description: varchar('description', { length: 500 }),
   dateAdded: date('dateAdded'),
 });
 

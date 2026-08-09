@@ -6,13 +6,34 @@ import { IoMdArrowDroprightCircle } from 'react-icons/io';
 import { IoMdArrowDropleftCircle } from 'react-icons/io';
 import { useState, useEffect } from 'react';
 
-const maxResults = 15;  
-const listSize = 5;
+const maxResults = 15;
+
+function useListSize() {
+  const getSize = () => {
+    if (typeof window === 'undefined') return 5;
+    const width = window.innerWidth;
+    if (width < 480) return 2;
+    if (width < 768) return 3;
+    if (width < 1024) return 4;
+    return 5;
+  };
+
+  const [listSize, setListSize] = useState(getSize);
+
+  useEffect(() => {
+    const handleResize = () => setListSize(getSize());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return listSize;
+}
 
 export default function Discover() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const listSize = useListSize();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -47,18 +68,15 @@ export default function Discover() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder='Search for books'
-            className='font-display border border-gray-900 rounded-l-xl px-4 py-2 w-100 focus:outline-none focus:ring-0'
+            className='font-display border border-gray-900 rounded-xl px-4 py-2 w-100 focus:outline-none focus:ring-0'
           />
-          <button className='primary rounded-r-xl rounded-l-none'>
-            Advanced search
-          </button>
         </div>
       </div>
 
       <div className='flex flex-col gap-8 w-full items-center'>
         <AsyncData loading={books.length === 0}>
           {rows.map((row, i) => (
-            <BookList key={i} books={row} maxAmount={5} />
+            <BookList key={i} books={row} maxAmount={listSize} />
           ))}
         </AsyncData>
       </div>

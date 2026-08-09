@@ -9,7 +9,7 @@ import {
   type DatabaseProvider,
   InjectDrizzle,
 } from '../drizzle/drizzle.provider';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { reviews } from 'src/drizzle/schema';
 
 @Injectable()
@@ -94,6 +94,15 @@ export class ReviewService {
     return this.getReviewById(id);
   }
 
+  async deleteReview(userId: number, id: number): Promise<void> {
+    const [result] = await this.db
+      .delete(reviews)
+      .where(and(eq(reviews.id, id), eq(reviews.userId, userId)));
+    if (result.affectedRows === 0) {
+      throw new NotFoundException('No review with this id exists');
+    }
+  }
+
   /*
   async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
     const items = await this.db.query.reviews.findMany({
@@ -128,12 +137,5 @@ export class ReviewService {
 
 
 
-  async delete(id: number, userId: number): Promise<void> {
-    const [result] = await this.db
-      .delete(reviews)
-      .where(and(eq(reviews.id, id), eq(reviews.userId, userId)));
-    if (result.affectedRows === 0) {
-      throw new NotFoundException('No review with this id exists');
-    }
-  }*/
+  */
 }

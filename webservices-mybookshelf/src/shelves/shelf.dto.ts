@@ -6,17 +6,12 @@ export class CreateShelfDto {
   @IsNotEmpty()
   @MaxLength(100)
   title: string;
-
-  @IsString()
-  @MaxLength(500)
-  description?: string;
 }
 
 export class ShelfResponseDto {
   id: number;
   title: string;
   userId: number;
-  description: string | null;
   canDelete: boolean;
 }
 
@@ -30,25 +25,19 @@ export class ShelfListResponseDTO {
 
 export class DefaultShelfDto {
   title: string;
-  description: string;
 }
 
 export const DEFAULT_SHELVES: DefaultShelfDto[] = [
   {
     title: 'Favorites',
-    description: 'A shelf to keep track of all your favorite books',
   },
   {
     title: 'Want to Read',
-    description: 'A shelf to keep track of all the books you want to read',
   },
   {
     title: 'Finished',
-    description: 'A shelf to keep track of all the books you have read',
   },
   {
     title: 'Current Reads',
-    description:
-      'A shelf to keep track of all the books you are currently reading',
   },
 ];
