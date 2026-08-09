@@ -8,6 +8,7 @@ import { DatabaseProvider, InjectDrizzle } from 'src/drizzle/drizzle.provider';
 import { shelfBooks, shelves } from 'src/drizzle/schema';
 import {
   CreateShelfDto,
+  DEFAULT_SHELVES,
   ShelfListResponseDTO,
   ShelfResponseDto,
   ShelfWithBooksResponseDTO,
@@ -20,7 +21,6 @@ export class ShelfService {
     @InjectDrizzle()
     private readonly db: DatabaseProvider,
   ) {}
-  DEFAULT_SHELVES = ['Favorites', 'Want to Read', 'Finished', 'Current Reads'];
 
   async addToShelf(
     userId: number,
@@ -60,6 +60,7 @@ export class ShelfService {
       title: dto.title,
       userId,
       canDelete: true,
+      dateAdded: new Date(),
     });
 
     const newShelf = await this.db.query.shelves.findFirst({
@@ -93,6 +94,7 @@ export class ShelfService {
         canDelete: shelf.canDelete,
         shelfBooks: shelf.shelfBooks.map(({ isbn }) => ({ isbn })),
         books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
+        description: shelf.description,
       }),
     );
 
@@ -226,16 +228,19 @@ export class ShelfService {
       title: shelf.title,
       userId: shelf.userId,
       canDelete: shelf.canDelete,
+      description: shelf.description,
       books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
     };
   }
 
   async createDefaultShelves(userId: number, tx = this.db) {
     await tx.insert(shelves).values(
-      this.DEFAULT_SHELVES.map((title) => ({
+      DEFAULT_SHELVES.map(({ title, description }) => ({
         title,
         userId,
         canDelete: false,
+        description,
+        dateAdded: new Date(),
       })),
     );
   }

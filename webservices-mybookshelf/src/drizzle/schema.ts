@@ -51,6 +51,8 @@ export const reviews = mysqlTable(
     body: text('body'),
     stars: smallint('stars', { unsigned: true }).notNull(),
     date: date('date').notNull(),
+    title: varchar('title', { length: 255 }).notNull(),
+    recommended: boolean('recommended').notNull(),
   },
   (table) => [uniqueIndex('idx_id').on(table.id)],
 );
@@ -62,6 +64,8 @@ export const shelves = mysqlTable('shelves', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   canDelete: boolean('canDelete').notNull().default(true),
+  description: varchar('description', { length: 500 }),
+  dateAdded: date('dateAdded'),
 });
 
 export const userBooks = mysqlTable(

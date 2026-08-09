@@ -29,6 +29,20 @@
       "when": 1785921812219,
       "tag": "0003_hot_pete_wisdom",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1786264452188,
+      "tag": "0004_pink_wild_pack",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1786264624874,
+      "tag": "0005_dizzy_absorbing_man",
+      "breakpoints": true
     }
   ]
 }

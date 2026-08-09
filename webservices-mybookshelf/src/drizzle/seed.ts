@@ -155,6 +155,8 @@ async function seedReviews() {
       body: '{"type":"doc","content":[{"type":"heading","attrs":{"level":5},"content":[{"type":"text","text":"I hope this works"}]},{"type":"paragraph"},{"type":"paragraph","content":[{"type":"text","text":"I spent way too much time on this."}]},{"type":"paragraph","content":[{"type":"text","marks":[{"type":"italic"}],"text":"Like "},{"type":"text","marks":[{"type":"bold"},{"type":"italic"}],"text":"way "},{"type":"text","marks":[{"type":"italic"}],"text":"too much."}]},{"type":"paragraph"}]}',
       stars: 5,
       date: new Date('2023-01-15'),
+      title: 'Absolute must-read',
+      recommended: true,
     },
     {
       isbn: '9780435123437',
@@ -162,6 +164,8 @@ async function seedReviews() {
       body: '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"The transformation of the protagonist is fascinating and sad."}]}]}',
       stars: 4,
       date: new Date('2023-02-10'),
+      title: 'Loved this!',
+      recommended: true,
     },
     {
       isbn: '9781781103142', // Harry Potter
@@ -169,6 +173,8 @@ async function seedReviews() {
       body: '{"type":"doc","content":[{"type":"heading","attrs":{"level":3},"content":[{"type":"text","text":"Magical Adventures"}]},{"type":"paragraph","content":[{"type":"text","text":"Loved the magical world and the characters."}]},{"type":"paragraph","content":[{"type":"text","text":"A must-read for all ages."}]}]}',
       stars: 5,
       date: new Date('2023-03-05'),
+      title: 'Going on my favorites',
+      recommended: true,
     },
     {
       isbn: '0721438935188', // Beautiful Test
@@ -176,6 +182,8 @@ async function seedReviews() {
       body: '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Short but entertaining."}]},{"type":"paragraph","content":[{"type":"text","text":"Good for a test run."}]}]}',
       stars: 3,
       date: new Date('2023-04-20'),
+      title: 'Expected better, but still fun',
+      recommended: false,
     },
     {
       isbn: '0123438455178', // Another Test Test
@@ -183,6 +191,8 @@ async function seedReviews() {
       body: '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Very short book,"}]},{"type":"paragraph","content":[{"type":"text","text":"but surprisingly enjoyable!"}]}]}',
       stars: 4,
       date: new Date('2023-05-10'),
+      title: 'Aaaah! so good!',
+      recommended: true,
     },
     {
       isbn: '9780140449136', // The Odyssey
@@ -190,6 +200,8 @@ async function seedReviews() {
       body: '{"type":"doc","content":[{"type":"heading","attrs":{"level":4},"content":[{"type":"text","text":"Epic Journey"}]},{"type":"paragraph","content":[{"type":"text","text":"Homer’s masterpiece."}]},{"type":"paragraph","content":[{"type":"text","text":"Timeless classic."}]}]}',
       stars: 5,
       date: new Date('2023-06-01'),
+      title: 'GREAT',
+      recommended: true,
     },
   ]);
 
@@ -244,14 +256,64 @@ async function seedShelves() {
   console.log('Seeding shelves...');
 
   await db.insert(schema.shelves).values([
-    { title: 'Favorites', userId: 1, canDelete: false },
-    { title: 'Want to Read', userId: 1, canDelete: false },
-    { title: 'Finished', userId: 1, canDelete: false },
-    { title: 'Current Reads', userId: 1, canDelete: false },
-    { title: 'Favorites', userId: 2, canDelete: false },
-    { title: 'Want to Read', userId: 2, canDelete: false },
-    { title: 'Current Reads', userId: 2, canDelete: false },
-    { title: 'Finished', userId: 2, canDelete: false },
+    {
+      title: 'Favorites',
+      userId: 1,
+      canDelete: false,
+      description: 'A shelf to keep track of all your favorite books',
+      dateAdded: new Date('2026-08-09'),
+    },
+    {
+      title: 'Want to Read',
+      userId: 1,
+      canDelete: false,
+      description: 'A shelf to keep track of all the books you want to read',
+      dateAdded: new Date('2026-08-09'),
+    },
+    {
+      title: 'Finished',
+      userId: 1,
+      canDelete: false,
+      description: 'A shelf to keep track of all the books you have read',
+      dateAdded: new Date('2026-08-09'),
+    },
+    {
+      title: 'Current Reads',
+      userId: 1,
+      canDelete: false,
+      description:
+        'A shelf to keep track of all the books you are currently reading',
+      dateAdded: new Date('2026-08-09'),
+    },
+    {
+      title: 'Favorites',
+      userId: 2,
+      canDelete: false,
+      description: 'A shelf to keep track of all your favorite books',
+      dateAdded: new Date('2026-08-09'),
+    },
+    {
+      title: 'Want to Read',
+      userId: 2,
+      canDelete: false,
+      description: 'A shelf to keep track of all the books you want to read',
+      dateAdded: new Date('2026-08-09'),
+    },
+    {
+      title: 'Current Reads',
+      userId: 2,
+      canDelete: false,
+      description:
+        'A shelf to keep track of all the books you are currently reading',
+      dateAdded: new Date('2026-08-09'),
+    },
+    {
+      title: 'Finished',
+      userId: 2,
+      canDelete: false,
+      description: 'A shelf to keep track of all the books you have read',
+      dateAdded: new Date('2026-08-09'),
+    },
   ]);
 
   console.log('Shelves seed data inserted successfully.');

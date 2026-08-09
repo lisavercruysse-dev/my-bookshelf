@@ -4,12 +4,15 @@ import { BookResponseDTO } from '../book/book.dto';
 export class CreateReviewRequestDto {
   @IsString()
   @IsNotEmpty()
-  body: string | null;
+  body: string;
 
   @IsInt()
   @Min(1)
   @Max(5)
   stars: number;
+
+  title: string;
+  recommended: boolean;
 }
 
 export class ReviewResponseDto {

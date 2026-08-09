@@ -1,0 +1,1 @@
+ALTER TABLE `shelves` MODIFY COLUMN `dateAdded` date;
