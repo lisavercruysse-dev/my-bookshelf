@@ -1,8 +1,15 @@
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaStar } from 'react-icons/fa6';
+import { FaStar, FaThumbsUp, FaThumbsDown } from 'react-icons/fa6';
 import TipTap from '../tiptap/TipTap';
 
 const validationRules = {
+  title: {
+    required: 'Title is required',
+    maxLength: {
+      value: 255,
+      message: 'Title must be under 255 characters',
+    },
+  },
   stars: {
     required: 'Rating is required',
     validate: (value) => {
@@ -11,6 +18,9 @@ const validationRules = {
       }
       return true;
     },
+  },
+  recommended: {
+    required: 'Please indicate whether you recommend this book',
   },
   body: {
     required: 'Review text is required',
@@ -25,8 +35,10 @@ const validationRules = {
 
 const EMPTY_REVIEW = {
   id: undefined,
+  title: '',
   stars: 0,
   body: '',
+  recommended: undefined,
 };
 
 export default function ReviewForm({
@@ -38,8 +50,10 @@ export default function ReviewForm({
   const methods = useForm({
     mode: 'onBlur',
     defaultValues: {
+      title: review?.title ?? '',
       stars: review?.stars ?? 0,
       body: review?.body ?? '',
+      recommended: review?.recommended ?? undefined,
     },
   });
 
@@ -52,14 +66,17 @@ export default function ReviewForm({
   } = methods;
 
   const stars = watch('stars');
+  const recommended = watch('recommended');
 
   const onSubmit = async (values) => {
     await saveReview(
       {
         id: review?.id,
         isbn,
+        title: values.title,
         stars: values.stars,
         body: values.body,
+        recommended: values.recommended === 'true',
       },
       { throwOnError: false, onSuccess: () => onClose?.() },
     );
@@ -75,6 +92,76 @@ export default function ReviewForm({
         onSubmit={handleSubmit(onSubmit)}
         className='flex flex-col gap-3 items-center'
       >
+        <div className='flex flex-col w-full gap-1'>
+          <p className='justify-self-start font-display text-gray-900'>
+            Title
+          </p>
+
+          <input
+            type='text'
+            placeholder='Sum up your review'
+            {...register('title', validationRules.title)}
+            className='w-full rounded-lg border border-gray-200 px-3 py-2 text-sm
+            font-display focus:outline-none focus:border-main'
+          />
+
+          {errors.title && (
+            <p className='text-red-500 text-sm mt-1'>
+              {errors.title.message}
+            </p>
+          )}
+        </div>
+
+        <div className='flex flex-col w-full gap-1'>
+          <p className='justify-self-start font-display text-gray-900'>
+            Do you recommend this book?
+          </p>
+
+          <div className='flex gap-2'>
+            <label
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border
+              text-sm font-display font-semibold px-3 py-2 cursor-pointer transition-colors ${
+    recommended === 'true'
+      ? 'bg-green-50 border-green-200 text-green-600'
+      : 'border-gray-200 text-gray-400 hover:bg-gray-50'
+    }`}
+            >
+              <input
+                type='radio'
+                value='true'
+                {...register('recommended', validationRules.recommended)}
+                className='sr-only'
+              />
+              <FaThumbsUp size={12} />
+              Recommended
+            </label>
+
+            <label
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border
+              text-sm font-display font-semibold px-3 py-2 cursor-pointer transition-colors ${
+    recommended === 'false'
+      ? 'bg-red-50 border-red-200 text-red-500'
+      : 'border-gray-200 text-gray-400 hover:bg-gray-50'
+    }`}
+            >
+              <input
+                type='radio'
+                value='false'
+                {...register('recommended', validationRules.recommended)}
+                className='sr-only'
+              />
+              <FaThumbsDown size={12} />
+              Not recommended
+            </label>
+          </div>
+
+          {errors.recommended && (
+            <p className='text-red-500 text-sm mt-1'>
+              {errors.recommended.message}
+            </p>
+          )}
+        </div>
+
         <div className='flex flex-col w-full gap-1'>
           <p className='justify-self-start font-display text-gray-900'>
             Rating

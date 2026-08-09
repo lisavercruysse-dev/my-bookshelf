@@ -123,6 +123,8 @@ export default function BookDetails() {
                     body={r.body}
                     isOwner={r.user.id === user?.id}
                     onEdit={() => setReviewModalOpen(true)}
+                    recommended={r.recommended}
+                    title={r.title}
                   />
                 ))
               ) : (

@@ -71,6 +71,8 @@ export default function Reviews() {
                 isOwner={r.userId === user?.id}
                 onEdit={() => setEditingReview(r)}
                 body={r.body}
+                title={r.title}
+                recommended={r.recommended}
               />
             </div>
           ))}

@@ -1,4 +1,4 @@
-import { FaStar, FaPen } from 'react-icons/fa6';
+import { FaStar, FaPen, FaThumbsUp, FaThumbsDown } from 'react-icons/fa6';
 import { generateHTML } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import DOMPurify from 'dompurify';
@@ -15,7 +15,7 @@ function renderReviewBody(body) {
   }
 }
 
-export default function Review({ userName, rating, date, body, isOwner, onEdit }) {
+export default function Review({ userName, rating, date, body, isOwner, onEdit, title, recommended }) {
   const initial = userName?.charAt(0).toUpperCase();
   const shortDate = date?.split('T')[0];
 
@@ -57,7 +57,30 @@ export default function Review({ userName, rating, date, body, isOwner, onEdit }
           )}
         </div>
       </div>
-      <div className='reviewBody mt-3 text-gray-600 text-sm leading-relaxed'
+
+      <div className='mt-3 flex items-center justify-between gap-3'>
+        {title && (
+          <p className='font-display font-bold text-gray-800 leading-tight'>{title}</p>
+        )}
+
+        {recommended != null && (
+          recommended ? (
+            <span className='flex items-center gap-1 shrink-0 rounded-full bg-green-50 
+            text-green-600 text-xs font-display font-semibold px-2.5 py-1'>
+              <FaThumbsUp size={10} />
+              Recommends
+            </span>
+          ) : (
+            <span className='flex items-center gap-1 shrink-0 rounded-full bg-red-50 
+            text-red-500 text-xs font-display font-semibold px-2.5 py-1'>
+              <FaThumbsDown size={10} />
+              Doesn&apos;t recommend
+            </span>
+          )
+        )}
+      </div>
+
+      <div className='reviewBody mt-2 text-gray-600 text-sm leading-relaxed'
         dangerouslySetInnerHTML={{ __html: renderReviewBody(body) }} />
     </div>
   );

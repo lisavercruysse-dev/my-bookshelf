@@ -1,4 +1,11 @@
-import { IsInt, IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
 import { BookResponseDTO } from '../book/book.dto';
 
 export class CreateReviewRequestDto {
@@ -11,7 +18,10 @@ export class CreateReviewRequestDto {
   @Max(5)
   stars: number;
 
+  @IsString()
+  @IsNotEmpty()
   title: string;
+
   recommended: boolean;
 }
 
@@ -22,6 +32,8 @@ export class ReviewResponseDto {
   body: string | null;
   stars: number;
   date: Date;
+  recommended: boolean;
+  title: string;
   book?: BookResponseDTO;
 }
 
@@ -33,6 +45,13 @@ export class UpdateReviewRequestDto {
   @Min(1)
   @Max(5)
   stars: number;
+
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsBoolean()
+  recommended: boolean;
 }
 
 export class ReviewListResponseDto {
