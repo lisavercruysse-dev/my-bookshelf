@@ -64,3 +64,31 @@
 .reviewBody h4 { @apply font-display font-bold text-sm mt-2 mb-1; }
 .reviewBody p { @apply mb-2; }
 .reviewBody p:last-child { @apply mb-0; }
+
+.reviewBody blockquote {
+  border-left: 3px solid #d1d5db;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.reviewBody blockquote p {
+  margin: 0;
+}
+
+.ProseMirror blockquote,
+.tiptap blockquote {
+  border-left: 3px solid #d1d5db;
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.ProseMirror blockquote p,
+.tiptap blockquote p {
+  margin: 0;
+}

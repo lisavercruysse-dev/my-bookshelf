@@ -3,11 +3,14 @@ import StarterKit from '@tiptap/starter-kit';
 import { useEditor } from '@tiptap/react';
 import { Placeholder } from '@tiptap/extensions';
 import { useEffect } from 'react';
-import { FaBold, FaItalic } from 'react-icons/fa6';
+import { FaBold, FaItalic, FaUnderline, FaQuoteLeft } from 'react-icons/fa6';
 
-const extensions = [StarterKit, Placeholder.configure({
-  placeholder: 'Write your review here...',
-})];
+const extensions = [
+  StarterKit,
+  Placeholder.configure({
+    placeholder: 'Write your review here...',
+  }),
+];
 
 const buttonClass = (isActive) =>
   `flex items-center justify-center h-8 w-8 rounded-lg cursor-pointer 
@@ -25,6 +28,10 @@ function MenuBar({ editor }) {
       canBold: ctx.editor.can().chain().toggleBold().run() ?? false,
       isItalic: ctx.editor.isActive('italic') ?? false,
       canItalic: ctx.editor.can().chain().toggleItalic().run() ?? false,
+      isUnderline: ctx.editor.isActive('underline') ?? false,
+      canUnderline: ctx.editor.can().chain().toggleUnderline().run() ?? false,
+      isBlockquote: ctx.editor.isActive('blockquote') ?? false,
+      canBlockquote: ctx.editor.can().chain().toggleBlockquote().run() ?? false,
     }),
   });
 
@@ -46,6 +53,24 @@ function MenuBar({ editor }) {
         className={buttonClass(editorState.isItalic)}
       >
         <FaItalic size={13} />
+      </button>
+
+      <button
+        type='button'
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        disabled={!editorState.canUnderline}
+        className={buttonClass(editorState.isUnderline)}
+      >
+        <FaUnderline size={13} />
+      </button>
+
+      <button
+        type='button'
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        disabled={!editorState.canBlockquote}
+        className={buttonClass(editorState.isBlockquote)}
+      >
+        <FaQuoteLeft size={13} />
       </button>
 
     </div>
