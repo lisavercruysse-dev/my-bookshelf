@@ -62,13 +62,4 @@ export class ReviewController {
   ) {
     await this.reviewService.deleteReview(user.id, id);
   }
-
-  /*
-  @Get(':id')
-  async getReviewById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<ReviewResponseDto> {
-    return await this.reviewService.getReviewById(id);
-  }
-*/
 }

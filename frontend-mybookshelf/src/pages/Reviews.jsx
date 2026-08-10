@@ -56,33 +56,37 @@ export default function Reviews() {
 
       <div className='flex flex-col gap-6'>
         <AsyncData loading={isLoading} error={error}>
-          {reviews?.map((r) => (
-            <div key={r.id} className='flex gap-6 items-stretch'>
-              {            console.log(r)
-              }
-              <Link to={`/books/${r.book.isbn}`} className='shrink-0 group'>
-                <img
-                  src={r.book.imageLink || fallbackImage}
-                  alt={r.book.title}
-                  className='w-24 h-36 object-cover rounded-xl shadow-sm 
-                transition-transform duration-200 group-hover:scale-[1.03] group-hover:shadow-md'
-                />
-              </Link>
+          {reviews?.length === 0 ? (
+            <p className='font-display text-gray-500 text-sm self-center'>
+              You haven&apos;t written any reviews yet.
+            </p>
+          ) : (
+            reviews?.map((r) => (
+              <div key={r.id} className='flex gap-6 items-stretch'>
+                <Link to={`/books/${r.book.isbn}`} className='shrink-0 group'>
+                  <img
+                    src={r.book.imageLink || fallbackImage}
+                    alt={r.book.title}
+                    className='w-24 h-36 object-cover rounded-xl shadow-sm 
+                  transition-transform duration-200 group-hover:scale-[1.03] group-hover:shadow-md'
+                  />
+                </Link>
 
-              <Review
-                userName={user?.userName}
-                rating={r.stars}
-                date={r.date}
-                isOwner={r.userId === user?.id}
-                onEdit={() => setEditingReview(r)}
-                body={r.body}
-                title={r.title}
-                recommended={r.recommended}
-                onDelete={deleteReview}
-                id={r.id}
-              />
-            </div>
-          ))}
+                <Review
+                  userName={user?.userName}
+                  rating={r.stars}
+                  date={r.date}
+                  isOwner={r.userId === user?.id}
+                  onEdit={() => setEditingReview(r)}
+                  body={r.body}
+                  title={r.title}
+                  recommended={r.recommended}
+                  onDelete={deleteReview}
+                  id={r.id}
+                />
+              </div>
+            ))
+          )}
         </AsyncData>
       </div>
 

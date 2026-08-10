@@ -22,6 +22,7 @@ export class CreateReviewRequestDto {
   @IsNotEmpty()
   title: string;
 
+  @IsBoolean()
   recommended: boolean;
 }
 

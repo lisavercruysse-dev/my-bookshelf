@@ -1,16 +1,4 @@
-import {
-  IsBoolean,
-  IsDateString,
-  IsDefined,
-  IsEmail,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 import { Expose } from 'class-transformer';
 
 export class UserResponseDto {
@@ -37,48 +25,6 @@ export class UpdateUserRequestDto {
 
 export class UserListResponseDto {
   items: UserResponseDto[];
-}
-
-export class CreateSavedBookDto {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(20)
-  isbn: string;
-
-  @IsInt()
-  @Min(0)
-  userId: number;
-
-  @IsInt()
-  @Min(0)
-  pagesRead: number;
-
-  @IsBoolean()
-  @IsDefined()
-  favorite: boolean;
-
-  @IsDateString()
-  @IsOptional()
-  dateStarted: Date | null;
-
-  @IsDateString()
-  @IsOptional()
-  dateEnded: Date | null;
-
-  @IsInt()
-  @Min(1)
-  statusId: number;
-}
-
-export class UpdateSavedBookRequestDto extends CreateSavedBookDto {}
-
-export class savedBookResponseDto {
-  isbn: string;
-  userId: number;
-  pagesRead: number;
-  favorite: boolean;
-  dateStarted: Date | null;
-  dateEnded: Date | null;
 }
 
 export class RegisterUserRequestDto {

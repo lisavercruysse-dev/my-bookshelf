@@ -102,40 +102,4 @@ export class ReviewService {
       throw new NotFoundException('No review with this id exists');
     }
   }
-
-  /*
-  async getReviewsByIsbn(isbn: string): Promise<ReviewListResponseDto> {
-    const items = await this.db.query.reviews.findMany({
-      where: eq(reviews.isbn, isbn),
-      with: {
-        book: true,
-        user: true,
-      },
-    });
-    if (items.length === 0) {
-      throw new NotFoundException('No reviews for this ISBN exist');
-    }
-    return { items };
-  }
-
-
-  async getReviewsByUserId(id: number): Promise<ReviewListResponseDto> {
-    const items = await this.db.query.reviews.findMany({
-      where: eq(reviews.userId, id),
-      with: {
-        book: {
-          with: {
-            userBooks: true,
-          },
-        },
-      },
-    });
-
-    return { items };
-  }
-
-
-
-
-  */
 }

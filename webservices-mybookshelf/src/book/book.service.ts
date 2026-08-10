@@ -135,36 +135,11 @@ export class BookService {
     return book;
   }
 
-  /*
-
-
-
-  async getBooksByUserId(id: number): Promise<BookDetailListDto> {
-    const items = await this.db.query.userBooks.findMany({
-      where: eq(userBooks.userId, id),
-      with: {
-        book: true,
-        status: true,
-      },
-    });
-
-    return { items };
-  }
-
-
-  async update(
-    isbn: string,
-    updateBook: UpdateBookRequestDto,
-  ): Promise<BookResponseDto> {
-    await this.db.update(books).set(updateBook).where(eq(books.isbn, isbn));
-    return this.getByIsbn(isbn);
-  }
-
   async delete(isbn: string): Promise<void> {
     const [result] = await this.db.delete(books).where(eq(books.isbn, isbn));
 
     if (result.affectedRows === 0) {
       throw new NotFoundException('No book with this ISBN exists');
     }
-  }*/
+  }
 }
