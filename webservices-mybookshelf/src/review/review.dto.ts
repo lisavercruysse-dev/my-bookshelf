@@ -4,7 +4,9 @@ import {
   IsNotEmpty,
   IsString,
   Max,
+  MaxLength,
   Min,
+  MinLength,
 } from 'class-validator';
 import { BookResponseDTO } from '../book/book.dto';
 
@@ -20,6 +22,8 @@ export class CreateReviewRequestDto {
 
   @IsString()
   @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(255)
   title: string;
 
   @IsBoolean()
