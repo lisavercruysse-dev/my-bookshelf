@@ -10,7 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ShelfService } from './shelf.service';
-import { BookResponseDTO, BookResponseListDTO } from 'src/book/book.dto';
+import {
+  BookResponseDTO,
+  BookResponseListDTO,
+  CreateBookRequestDTO,
+} from 'src/book/book.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { Session } from '../types/auth';
@@ -27,12 +31,13 @@ export class ShelfController {
   constructor(private readonly shelfService: ShelfService) {}
 
   @Post(':shelfId/books/:isbn')
-  async addToShelf(
-    @Param('shelfId', ParseIntPipe) shelfId: number,
+  async addBookToShelf(
+    @Param('shelfId') shelfId: number,
     @Param('isbn') isbn: string,
-    @CurrentUser() user: Session,
+    @Body() bookData: CreateBookRequestDTO,
+    @CurrentUser() userId: number,
   ): Promise<BookResponseDTO> {
-    return await this.shelfService.addToShelf(user.id, shelfId, isbn);
+    return this.shelfService.addBook(userId, shelfId, isbn, bookData);
   }
 
   @Post()

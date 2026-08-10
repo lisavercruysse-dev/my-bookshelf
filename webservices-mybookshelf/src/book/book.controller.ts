@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import {
   BookResponseDTO,
@@ -13,8 +14,12 @@ import {
   CreateBookRequestDTO,
 } from './book.dto';
 import { BookService } from './book.service';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/roles';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('books')
+@UseGuards(AuthGuard)
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
@@ -29,6 +34,7 @@ export class BookController {
   }
 
   @Post()
+  @Roles(Role.ADMIN)
   async createBook(
     @Body() createBookDto: CreateBookRequestDTO,
   ): Promise<BookResponseDTO> {
@@ -36,6 +42,7 @@ export class BookController {
   }
 
   @Put(':isbn')
+  @Roles(Role.ADMIN)
   async updateBook(
     @Param('isbn') isbn: string,
     @Body() createBookDto: CreateBookRequestDTO,
@@ -44,6 +51,7 @@ export class BookController {
   }
 
   @Delete(':isbn')
+  @Roles(Role.ADMIN)
   async deleteBook(@Param('isbn') isbn: string): Promise<void> {
     await this.bookService.delete(isbn);
   }

@@ -3,7 +3,11 @@ import {
   type DatabaseProvider,
   InjectDrizzle,
 } from '../drizzle/drizzle.provider';
-import { UserListResponseDto, UserResponseDto } from './user.dto';
+import {
+  UpdateUserRequestDto,
+  UserListResponseDto,
+  UserResponseDto,
+} from './user.dto';
 import { eq } from 'drizzle-orm';
 import { users } from '../drizzle/schema';
 import { plainToInstance } from 'class-transformer';
@@ -37,5 +41,21 @@ export class UserService {
     return plainToInstance(UserResponseDto, item, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async updateById(
+    id: number,
+    changes: UpdateUserRequestDto,
+  ): Promise<UserResponseDto> {
+    const [result] = await this.db
+      .update(users)
+      .set(changes)
+      .where(eq(users.id, id));
+
+    if (result.affectedRows === 0) {
+      throw new NotFoundException('No user with this id exists');
+    }
+
+    return this.getUserById(id);
   }
 }

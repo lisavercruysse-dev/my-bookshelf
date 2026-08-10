@@ -3,7 +3,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookResponseDTO, BookResponseListDTO } from 'src/book/book.dto';
+import {
+  BookResponseDTO,
+  BookResponseListDTO,
+  CreateBookRequestDTO,
+} from 'src/book/book.dto';
 import { DatabaseProvider, InjectDrizzle } from 'src/drizzle/drizzle.provider';
 import { shelfBooks, shelves } from 'src/drizzle/schema';
 import {
@@ -14,28 +18,22 @@ import {
   ShelfWithBooksResponseDTO,
 } from './shelf.dto';
 import { and, eq, sql } from 'drizzle-orm';
+import { BookService } from 'src/book/book.service';
 
 @Injectable()
 export class ShelfService {
   constructor(
     @InjectDrizzle()
     private readonly db: DatabaseProvider,
+    private readonly bookService: BookService,
   ) {}
 
-  async addToShelf(
+  async addBook(
     userId: number,
     shelfId: number,
     isbn: string,
+    bookData?: CreateBookRequestDTO,
   ): Promise<BookResponseDTO> {
-    //Fetch book
-    const book = await this.db.query.books.findFirst({
-      where: (books, { eq }) => eq(books.isbn, isbn),
-    });
-    if (!book) {
-      throw new NotFoundException(`No book with isbn ${isbn} exists`);
-    }
-
-    //Fetch shelf
     const shelf = await this.db.query.shelves.findFirst({
       where: (shelves, { eq, and }) =>
         and(eq(shelves.id, shelfId), eq(shelves.userId, userId)),
@@ -46,7 +44,17 @@ export class ShelfService {
       );
     }
 
-    //Add relation
+    let book = await this.db.query.books.findFirst({
+      where: (books, { eq }) => eq(books.isbn, isbn),
+    });
+
+    if (!book) {
+      if (!bookData) {
+        throw new NotFoundException(`No book with isbn ${isbn} exists`);
+      }
+      book = await this.bookService.create(bookData);
+    }
+
     await this.db.insert(shelfBooks).values({ shelfId, isbn: book.isbn });
 
     return book;

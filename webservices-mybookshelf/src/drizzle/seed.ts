@@ -107,7 +107,7 @@ async function seedUsers() {
       userName: 'Alice',
       email: 'alice@example.com',
       passwordHash: await hashPassword('12345678'),
-      roles: [Role.ADMIN, Role.USER],
+      roles: [Role.USER],
     },
     {
       userName: 'Bob',
@@ -119,7 +119,7 @@ async function seedUsers() {
       userName: 'Charlie',
       email: 'charlie@example.com',
       passwordHash: await hashPassword('12345678'),
-      roles: [Role.ADMIN, Role.USER],
+      roles: [Role.USER],
     },
     {
       userName: 'Diana',
@@ -131,7 +131,7 @@ async function seedUsers() {
       userName: 'Eve',
       email: 'eve@example.com',
       passwordHash: await hashPassword('12345678'),
-      roles: [Role.ADMIN, Role.USER],
+      roles: [Role.USER],
     },
     {
       userName: 'Frank',
