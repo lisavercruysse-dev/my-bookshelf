@@ -12,6 +12,7 @@ import {
 import CustomLogger from './core/customlogger';
 import { HttpExceptionFilter } from './lib/http-exception.filter';
 import helmet from 'helmet';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -39,6 +40,16 @@ async function bootstrap() {
   const log = config.get<LogConfig>('log')!;
   const port = config.get<number>('port')!;
   const cors = config.get<CorsConfig>('cors')!;
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Budget Web Services')
+    .setDescription('The Budget API application')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('docs', app, document);
+
   app.enableCors({
     origin: cors.origins,
     maxAge: cors.maxAge,

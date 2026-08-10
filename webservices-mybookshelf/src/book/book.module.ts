@@ -3,9 +3,10 @@ import { BookService } from './book.service';
 import { BookController } from './book.controller';
 import { DrizzleModule } from '../drizzle/drizzle.module';
 import { ReviewModule } from '../review/review.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [DrizzleModule, ReviewModule],
+  imports: [DrizzleModule, ReviewModule, AuthModule],
   controllers: [BookController],
   providers: [BookService],
   exports: [BookService],

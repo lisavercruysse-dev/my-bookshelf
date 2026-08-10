@@ -1,64 +1,121 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  Max,
-  MaxLength,
-  Min,
-  MinLength,
-} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BookResponseDTO } from '../book/book.dto';
+import { IsNumber, IsString, IsBoolean } from 'nestjs-swagger-dto';
 
 export class CreateReviewRequestDto {
-  @IsString()
-  @IsNotEmpty()
-  body: string;
+  @IsString({
+    example: 'A beautifully written story about grief and connection.',
+    description: 'The body/content of the review',
+  })
+  body!: string;
 
-  @IsInt()
-  @Min(1)
-  @Max(5)
-  stars: number;
+  @IsNumber({
+    name: 'stars',
+    description: 'Star rating out of 5',
+    min: 1,
+    max: 5,
+  })
+  stars!: number;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(255)
-  title: string;
+  @IsString({
+    example: 'A must-read',
+    description: 'The title of the review',
+    minLength: 3,
+    maxLength: 255,
+  })
+  title!: string;
 
-  @IsBoolean()
-  recommended: boolean;
+  @IsBoolean({
+    example: true,
+    description: 'Whether the reviewer recommends this book',
+  })
+  recommended!: boolean;
 }
 
 export class ReviewResponseDto {
-  id: number;
-  isbn: string;
-  userId: number;
-  body: string | null;
-  stars: number;
-  date: Date;
-  recommended: boolean;
-  title: string;
+  @ApiProperty({ example: 1, description: 'Id of the review' })
+  id!: number;
+
+  @ApiProperty({
+    example: '9781444775827',
+    description: 'ISBN of the reviewed book',
+  })
+  isbn!: string;
+
+  @ApiProperty({
+    example: 42,
+    description: 'Id of the user who wrote the review',
+  })
+  userId!: number;
+
+  @ApiProperty({
+    example: 'A beautifully written story about grief and connection.',
+    description: 'The body/content of the review',
+    nullable: true,
+    type: 'string',
+  })
+  body!: string | null;
+
+  @ApiProperty({
+    example: 5,
+    description: 'Star rating out of 5',
+    minimum: 1,
+    maximum: 5,
+  })
+  stars!: number;
+
+  @ApiProperty({
+    example: '2026-08-10T14:30:00.000Z',
+    description: 'Date the review was posted',
+  })
+  date!: Date;
+
+  @ApiProperty({
+    example: true,
+    description: 'Whether the reviewer recommends this book',
+  })
+  recommended!: boolean;
+
+  @ApiProperty({
+    example: 'A must-read',
+    description: 'The title of the review',
+  })
+  title!: string;
+
+  @ApiPropertyOptional({
+    type: () => BookResponseDTO,
+    description: 'The reviewed book',
+  })
   book?: BookResponseDTO;
 }
 
 export class UpdateReviewRequestDto {
-  @IsString()
-  body: string | null;
+  @IsString({
+    example: 'A beautifully written story about grief and connection.',
+    description: 'The body/content of the review',
+    nullable: true,
+  })
+  body!: string | null;
 
-  @IsInt()
-  @Min(1)
-  @Max(5)
-  stars: number;
+  @IsNumber({
+    name: 'stars',
+    description: 'Star rating out of 5',
+    min: 1,
+    max: 5,
+  })
+  stars!: number;
 
-  @IsString()
-  @IsNotEmpty()
-  title: string;
+  @IsString({ example: 'A must-read', description: 'The title of the review' })
+  title!: string;
 
-  @IsBoolean()
-  recommended: boolean;
+  @IsBoolean({
+    example: true,
+    description: 'Whether the reviewer recommends this book',
+  })
+  recommended!: boolean;
 }
 
 export class ReviewListResponseDto {
-  items: ReviewResponseDto[];
+  @ApiProperty({ type: () => [ReviewResponseDto] })
+  items!: ReviewResponseDto[];
 }

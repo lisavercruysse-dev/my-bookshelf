@@ -1,36 +1,65 @@
-import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import { BookResponseDTO } from 'src/book/book.dto';
+import { IsString } from 'nestjs-swagger-dto';
 
 export class CreateShelfDto {
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(100)
-  title: string;
+  @IsString({
+    example: 'Favorites',
+    description: 'The title of the shelf',
+    maxLength: 100,
+  })
+  title!: string;
 
-  @IsString()
-  @MaxLength(500)
-  description: string;
+  @IsString({
+    example: 'A shelf to keep track of all your favorite books',
+    description: 'The description of the shelf',
+    maxLength: 500,
+  })
+  description!: string;
 }
 
 export class ShelfResponseDto {
-  id: number;
-  title: string;
-  userId: number;
-  canDelete: boolean;
-  description: string | null;
+  @ApiProperty({ example: 1, description: 'Id of the shelf' })
+  id!: number;
+
+  @ApiProperty({ example: 'Favorites', description: 'The title of the shelf' })
+  title!: string;
+
+  @ApiProperty({
+    example: 42,
+    description: 'Id of the user who owns the shelf',
+  })
+  userId!: number;
+
+  @ApiProperty({
+    example: false,
+    description:
+      'Whether this shelf can be deleted (false for default shelves)',
+  })
+  canDelete!: boolean;
+
+  @ApiProperty({
+    example: 'A shelf to keep track of all your favorite books',
+    description: 'The description of the shelf',
+    nullable: true,
+    type: 'string',
+  })
+  description!: string | null;
 }
 
 export class ShelfWithBooksResponseDTO extends ShelfResponseDto {
-  books: BookResponseDTO[];
+  @ApiProperty({ type: () => [BookResponseDTO] })
+  books!: BookResponseDTO[];
 }
 
 export class ShelfListResponseDTO {
-  items: ShelfResponseDto[];
+  @ApiProperty({ type: () => [ShelfResponseDto] })
+  items!: ShelfResponseDto[];
 }
 
 export class DefaultShelfDto {
-  title: string;
-  description: string;
+  title!: string;
+  description!: string;
 }
 
 export const DEFAULT_SHELVES: DefaultShelfDto[] = [
