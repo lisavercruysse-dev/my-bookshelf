@@ -65,23 +65,8 @@ export const shelves = mysqlTable('shelves', {
     .references(() => users.id, { onDelete: 'cascade' }),
   canDelete: boolean('canDelete').notNull().default(true),
   dateAdded: date('dateAdded'),
+  description: text('description'),
 });
-
-export const userBooks = mysqlTable(
-  'user_books',
-  {
-    isbn: varchar('isbn', { length: 13 })
-      .notNull()
-      .references(() => books.isbn, { onDelete: 'cascade' }),
-    userId: int('userId', { unsigned: true })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    pagesRead: int('pagesRead', { unsigned: true }).notNull(),
-    dateStarted: date('dateStarted'),
-    dateEnded: date('dateEnded'),
-  },
-  (table) => [primaryKey({ columns: [table.isbn, table.userId] })],
-);
 
 export const shelfBooks = mysqlTable(
   'shelfBooks',
@@ -99,7 +84,6 @@ export const shelfBooks = mysqlTable(
 //Relations
 export const bookRelations = relations(books, ({ many }) => ({
   reviews: many(reviews),
-  userBooks: many(userBooks),
   shelves: many(shelves),
 }));
 
@@ -117,24 +101,12 @@ export const reviewRelations = relations(reviews, ({ one }) => ({
 export const userRelations = relations(users, ({ many }) => ({
   reviews: many(reviews),
   shelves: many(shelves),
-  userBooks: many(userBooks),
 }));
 
 export const shelfRelations = relations(shelves, ({ many, one }) => ({
   shelfBooks: many(shelfBooks),
   user: one(users, {
     fields: [shelves.userId],
-    references: [users.id],
-  }),
-}));
-
-export const userBookRelations = relations(userBooks, ({ one }) => ({
-  book: one(books, {
-    fields: [userBooks.isbn],
-    references: [books.isbn],
-  }),
-  user: one(users, {
-    fields: [userBooks.userId],
     references: [users.id],
   }),
 }));

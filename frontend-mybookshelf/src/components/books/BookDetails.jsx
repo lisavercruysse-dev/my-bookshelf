@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { getBookById, getData, getById, save, deleteById } from '../../api';
+import { getBookById, getData, getById, deleteById, saveReview } from '../../api';
 import { useParams } from 'react-router';
 import AsyncData from '../asyncData/AsyncData';
 import fallbackImage from '../../assets/altBook.jpg';
@@ -62,7 +62,7 @@ export default function BookDetails() {
 
   const { trigger: submitReview, error: reviewSaveError } = useSWRMutation(
     `reviews/${isbn}`,
-    save,
+    saveReview,
   );
 
   const {trigger: deleteReview} = useSWRMutation(

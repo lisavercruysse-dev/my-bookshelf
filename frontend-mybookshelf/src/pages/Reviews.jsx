@@ -4,7 +4,7 @@ import Modal from '../components/general/Modal';
 import fallbackImage from '../assets/altBook.jpg';
 import { Link } from 'react-router';
 import { FaStar } from 'react-icons/fa6';
-import { deleteById, getData, save } from '../api';
+import { deleteById, getData, saveReview } from '../api';
 import AsyncData from '../components/asyncData/AsyncData';
 import useSWR from 'swr';
 import { useAuth } from '../contexts/auth';
@@ -23,7 +23,7 @@ export default function Reviews() {
 
   const { trigger: submitReview, error: reviewSaveError } = useSWRMutation(
     'reviews',
-    save,
+    saveReview,
   );
 
   const {trigger: deleteReview} = useSWRMutation(

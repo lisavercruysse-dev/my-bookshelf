@@ -35,8 +35,15 @@ export default function Shelf({ shelf, onDelete, onEdit }) {
 
   return (
     <div className="flex flex-col gap-4 py-6">
-      <div className="flex items-baseline justify-between">
-        <p className="font-display text-main font-bold text-xl">{shelf?.title}</p>
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-1">
+          <p className="font-display text-main font-bold text-xl">{shelf?.title}</p>
+          {shelf?.description && (
+            <p className="font-display text-gray-400 text-sm max-w-md">
+              {shelf.description}
+            </p>
+          )}
+        </div>
         <div className="flex items-center gap-3">
           <p className="font-display text-gray-300 text-xs">
             {books?.length ?? 0} books

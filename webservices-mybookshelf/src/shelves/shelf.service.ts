@@ -61,6 +61,7 @@ export class ShelfService {
       userId,
       canDelete: true,
       dateAdded: new Date(),
+      description: dto.description,
     });
 
     const newShelf = await this.db.query.shelves.findFirst({
@@ -94,6 +95,7 @@ export class ShelfService {
         canDelete: shelf.canDelete,
         shelfBooks: shelf.shelfBooks.map(({ isbn }) => ({ isbn })),
         books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
+        description: shelf.description,
       }),
     );
 
@@ -198,6 +200,7 @@ export class ShelfService {
       .update(shelves)
       .set({
         title: dto.title,
+        description: dto.description,
       })
       .where(eq(shelves.id, shelfId));
   }
@@ -228,16 +231,18 @@ export class ShelfService {
       userId: shelf.userId,
       canDelete: shelf.canDelete,
       books: shelf.shelfBooks.map((shelfBook) => shelfBook.book),
+      description: shelf.description,
     };
   }
 
   async createDefaultShelves(userId: number, tx = this.db) {
     await tx.insert(shelves).values(
-      DEFAULT_SHELVES.map(({ title }) => ({
+      DEFAULT_SHELVES.map(({ title, description }) => ({
         title,
         userId,
         canDelete: false,
         dateAdded: new Date(),
+        description,
       })),
     );
   }

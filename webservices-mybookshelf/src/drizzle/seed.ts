@@ -29,7 +29,6 @@ async function resetDatabase() {
   console.log('Deleting existing data...');
 
   await db.delete(schema.shelfBooks);
-  await db.delete(schema.userBooks);
   await db.delete(schema.reviews);
   await db.delete(schema.shelves);
   await db.delete(schema.books);
@@ -208,50 +207,6 @@ async function seedReviews() {
   console.log('Review seed data inserted successfully.');
 }
 
-async function seedUserBooks() {
-  console.log('Seeding user_books...');
-
-  await db.insert(schema.userBooks).values([
-    {
-      userId: 1,
-      isbn: '9780435123437', // Flowers for Algernon
-      pagesRead: 50,
-      dateStarted: new Date('2025-01-01'),
-      dateEnded: null,
-    },
-    {
-      userId: 2,
-      isbn: '9781781103142', // Harry Potter
-      pagesRead: 336,
-      dateStarted: new Date('2024-12-01'),
-      dateEnded: new Date('2024-12-20'),
-    },
-    {
-      userId: 3,
-      isbn: '0721438935188', // Beautiful Test
-      pagesRead: 20,
-      dateStarted: new Date('2025-02-15'),
-      dateEnded: new Date('2025-02-16'),
-    },
-    {
-      userId: 4,
-      isbn: '0123438455178', // Another Test Test
-      pagesRead: 2,
-      dateStarted: new Date('2025-03-10'),
-      dateEnded: null,
-    },
-    {
-      userId: 5,
-      isbn: '9780140449136', // The Odyssey
-      pagesRead: 300,
-      dateStarted: new Date('2025-01-20'),
-      dateEnded: null,
-    },
-  ]);
-
-  console.log('user_books seed data inserted successfully.');
-}
-
 async function seedShelves() {
   console.log('Seeding shelves...');
 
@@ -329,7 +284,6 @@ async function main() {
   await seedBooks();
   await seedUsers();
   await seedReviews();
-  await seedUserBooks();
   await seedShelves();
   await seedShelfBooks();
 
