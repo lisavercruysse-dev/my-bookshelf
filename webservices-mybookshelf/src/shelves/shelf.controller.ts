@@ -55,9 +55,9 @@ export class ShelfController {
     @Param('shelfId', ParseIntPipe) shelfId: number,
     @Param('isbn') isbn: string,
     @Body() bookData: CreateBookRequestDTO,
-    @CurrentUser() userId: number,
+    @CurrentUser() user: Session,
   ): Promise<BookResponseDTO> {
-    return this.shelfService.addBook(userId, shelfId, isbn, bookData);
+    return this.shelfService.addBook(user.id, shelfId, isbn, bookData);
   }
 
   @ApiResponse({

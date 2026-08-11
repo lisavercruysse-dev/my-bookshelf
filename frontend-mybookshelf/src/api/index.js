@@ -57,12 +57,6 @@ export async function save(url, { arg: { id, ...data } }) {
 export async function saveToShelf(url, { arg: values }) {
   const { isbn, bookData, existingShelf, newShelf } = values;
 
-  await axios({
-    method: 'POST',
-    url: `${baseUrl}/books`,
-    data: { isbn, ...bookData },
-  });
-
   let shelfId = existingShelf;
   if (newShelf) {
     const shelf = await save('shelves', { arg: { title: newShelf } });
@@ -72,6 +66,7 @@ export async function saveToShelf(url, { arg: values }) {
   await axios({
     method: 'POST',
     url: `${baseUrl}/shelves/${shelfId}/books/${isbn}`,
+    data: { isbn, ...bookData },
   });
 }
 

@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "isbn": "0123438455178",
+      "title": "Another Test Test",
+      "genre": "Test Fiction",
+      "description": "Another short test book.",
+      "amountPages": 4,
+      "author": "Test Person",
+      "imageLink": null
+    },
+    {
+      "isbn": "0721438935188",
+      "title": "Beautiful Test",
+      "genre": "Test Fiction",
+      "description": "This is a test book for testing purposes.",
+      "amountPages": 20,
+      "author": "Suzanne Collins",
+      "imageLink": null
+    },
+    {
+      "isbn": "9780140449136",
+      "title": "The Odyssey",
+      "genre": "Epic Poetry",
+      "description": "Homer's classic tale of Odysseus and his journey home from the Trojan War.",
+      "amountPages": 560,
+      "author": "Homer",
+      "imageLink": null
+    }
+  ]
+}

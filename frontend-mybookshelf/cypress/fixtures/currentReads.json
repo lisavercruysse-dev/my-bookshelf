@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "isbn": "9780435123437",
+      "title": "Flowers for Algernon",
+      "genre": "Science Fiction",
+      "description": "A novella about a man with low IQ who undergoes an experimental surgery to increase his intelligence.",
+      "amountPages": 218,
+      "author": "Daniel Keyes",
+      "imageLink": null
+    }
+  ]
+}

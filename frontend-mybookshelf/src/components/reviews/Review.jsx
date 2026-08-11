@@ -31,8 +31,9 @@ export default function Review({
   const shortDate = date?.split('T')[0];
 
   return (
-    <div className='bg-white p-5 rounded-2xl shadow-sm border border-black/5 w-full transition-shadow hover:shadow-md
-    min-w-100'>
+    <div className='bg-white p-5 rounded-2xl shadow-sm border 
+    border-black/5 w-full transition-shadow hover:shadow-md min-w-100'
+    data-cy="review">
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
           <div className='flex h-9 w-9 items-center justify-center 
@@ -40,13 +41,13 @@ export default function Review({
             {initial}
           </div>
           <div>
-            <p className='font-display font-bold leading-tight'>{userName}</p>
-            <p className='font-display text-xs text-gray-400'>{shortDate}</p>
+            <p className='font-display font-bold leading-tight' data-cy="reviewUserName">{userName}</p>
+            <p className='font-display text-xs text-gray-400' data-cy="reviewDate">{shortDate}</p>
           </div>
         </div>
 
         <div className='flex items-center gap-3'>
-          <div className='flex gap-0.5'>
+          <div className='flex gap-0.5' data-cy="reviewStars" data-stars={rating}>
             {[...Array(5)].map((_, i) => (
               <FaStar
                 key={i}
@@ -61,6 +62,7 @@ export default function Review({
               <button
                 onClick={onEdit}
                 aria-label='Edit review'
+                data-cy="editReviewBtn"
                 className='flex h-7 w-7 items-center justify-center rounded-full text-gray-400
                 hover:text-main hover:bg-gray-100 transition-colors shrink-0'
               >
@@ -70,6 +72,7 @@ export default function Review({
               <button
                 onClick={() => onDelete(id)}
                 aria-label='Delete review'
+                data-cy="deleteReviewBtn"
                 className='flex h-7 w-7 items-center justify-center rounded-full text-gray-400
                 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0'
               >
@@ -82,18 +85,18 @@ export default function Review({
 
       <div className='mt-3 flex items-center justify-between gap-3'>
         {title && (
-          <p className='font-display font-bold text-gray-800 leading-tight'>{title}</p>
+          <p className='font-display font-bold text-gray-800 leading-tight' data-cy="reviewTitle">{title}</p>
         )}
 
         {recommended != null && (
           recommended ? (
-            <span className='flex items-center gap-1 shrink-0 rounded-full bg-green-50 
+            <span data-cy="reviewRecommended" className='flex items-center gap-1 shrink-0 rounded-full bg-green-50 
             text-green-600 text-xs font-display font-semibold px-2.5 py-1'>
               <FaThumbsUp size={10} />
               Recommended
             </span>
           ) : (
-            <span className='flex items-center gap-1 shrink-0 rounded-full bg-red-50 
+            <span data-cy="reviewNotRecommended" className='flex items-center gap-1 shrink-0 rounded-full bg-red-50 
             text-red-500 text-xs font-display font-semibold px-2.5 py-1'>
               <FaThumbsDown size={10} />
               Not recommended
@@ -103,6 +106,7 @@ export default function Review({
       </div>
 
       <div className='reviewBody mt-2 text-gray-600 text-sm leading-relaxed'
+        data-cy="reviewBody"
         dangerouslySetInnerHTML={{ __html: renderReviewBody(body) }} />
     </div>
   );

@@ -1,6 +1,10 @@
 describe('General', () => {
-  it('runs application', () => {
+  it('draait de applicatie', () => {
     cy.visit('http://localhost:5173');
-    cy.get('h1').should('exist');
+    cy.get('title').should('exist');
+  });
+
+  it('should login', () => {
+    cy.login('bob@example.com', '12345678');
   });
 });

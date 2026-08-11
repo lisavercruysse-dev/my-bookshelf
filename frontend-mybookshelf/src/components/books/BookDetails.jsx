@@ -91,7 +91,8 @@ export default function BookDetails() {
           <div className="flex flex-row gap-10">
             <div className='flex flex-col gap-5 items-center'>
               <img src={bookImage} alt={book?.volumeInfo?.title} className='w-75 rounded-md object-cover'/>
-              <button onClick={() => setModalOpen(true)} className='primary'>Add to shelf</button>
+              <button onClick={() => setModalOpen(true)} className='primary' 
+                data-cy="addToShelfBtn">Add to shelf</button>
             </div>
             <div className='flex flex-col gap-4'>
               <div className='flex flex-col gap-1'>
@@ -107,7 +108,8 @@ export default function BookDetails() {
             <AsyncData loading={reviewsLoading}>
               {!myReview && (
                 isFinished ? (
-                  <button onClick={() => setReviewModalOpen(true)} className='primary self-start'>
+                  <button onClick={() => setReviewModalOpen(true)} className='primary self-start' 
+                    data-cy="writeReviewBtn">
                     Write a review
                   </button>
                 ) : (

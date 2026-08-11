@@ -53,7 +53,12 @@ export default function ReviewForm({
       title: review?.title ?? '',
       stars: review?.stars ?? 0,
       body: review?.body ?? '',
-      recommended: review?.recommended ?? undefined,
+      recommended:
+    review?.recommended === true
+      ? 'true'
+      : review?.recommended === false
+        ? 'false'
+        : undefined,
     },
   });
 
@@ -84,12 +89,13 @@ export default function ReviewForm({
 
   return (
     <FormProvider {...methods}>
-      <p className='font-display justify-self-center text-2xl pb-10'>
+      <p className='font-display justify-self-center text-2xl pb-10' data-cy="reviewFormTitle">
         {review?.id ? 'Edit your review' : 'Write a review'}
       </p>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
+        data-cy="reviewForm"
         className='flex flex-col gap-3 items-center'
       >
         <div className='flex flex-col w-full gap-1'>
@@ -100,13 +106,14 @@ export default function ReviewForm({
           <input
             type='text'
             placeholder='Sum up your review'
+            data-cy="reviewTitleInput"
             {...register('title', validationRules.title)}
             className='w-full rounded-lg border border-gray-200 px-3 py-2 text-sm
             font-display focus:outline-none focus:border-main'
           />
 
           {errors.title && (
-            <p className='text-red-500 text-sm mt-1'>
+            <p className='text-red-500 text-sm mt-1' data-cy="reviewTitleError">
               {errors.title.message}
             </p>
           )}
@@ -119,6 +126,7 @@ export default function ReviewForm({
 
           <div className='flex gap-2'>
             <label
+              data-cy="recommendedYesLabel"
               className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border
               text-sm font-display font-semibold px-3 py-2 cursor-pointer transition-colors ${
     recommended === 'true'
@@ -129,6 +137,7 @@ export default function ReviewForm({
               <input
                 type='radio'
                 value='true'
+                data-cy="recommendedYesInput"
                 {...register('recommended', validationRules.recommended)}
                 className='sr-only'
               />
@@ -137,6 +146,7 @@ export default function ReviewForm({
             </label>
 
             <label
+              data-cy="recommendedNoLabel"
               className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border
               text-sm font-display font-semibold px-3 py-2 cursor-pointer transition-colors ${
     recommended === 'false'
@@ -147,6 +157,7 @@ export default function ReviewForm({
               <input
                 type='radio'
                 value='false'
+                data-cy="recommendedNoInput"
                 {...register('recommended', validationRules.recommended)}
                 className='sr-only'
               />
@@ -156,7 +167,7 @@ export default function ReviewForm({
           </div>
 
           {errors.recommended && (
-            <p className='text-red-500 text-sm mt-1'>
+            <p className='text-red-500 text-sm mt-1' data-cy="recommendedError">
               {errors.recommended.message}
             </p>
           )}
@@ -172,11 +183,12 @@ export default function ReviewForm({
             {...register('stars', validationRules.stars)}
           />
 
-          <div className='flex gap-1'>
+          <div className='flex gap-1' data-cy="starRatingInput">
             {[1, 2, 3, 4, 5].map((n) => (
               <button
                 type='button'
                 key={n}
+                data-cy={`starBtn-${n}`}
                 onClick={() =>
                   setValue('stars', n, {
                     shouldValidate: true,
@@ -198,7 +210,7 @@ export default function ReviewForm({
           </div>
 
           {errors.stars && (
-            <p className='text-red-500 text-sm mt-1'>
+            <p className='text-red-500 text-sm mt-1' data-cy="starsError">
               {errors.stars.message}
             </p>
           )}
@@ -211,20 +223,22 @@ export default function ReviewForm({
 
           <input type='hidden' {...register('body', validationRules.body)} />
 
-          <TipTap
-            initialContent={review?.body}
-            onEditorReady={(editorInstance) => {
-              editorInstance.on('update', () => {
-                setValue('body', editorInstance.getHTML(), {
-                  shouldValidate: true,
-                  shouldDirty: true,
+          <div data-cy="reviewBodyInput">
+            <TipTap
+              initialContent={review?.body}
+              onEditorReady={(editorInstance) => {
+                editorInstance.on('update', () => {
+                  setValue('body', editorInstance.getHTML(), {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
                 });
-              });
-            }}
-          />
+              }}
+            />
+          </div>
 
           {errors.body && (
-            <p className='text-red-500 text-sm mt-1'>
+            <p className='text-red-500 text-sm mt-1' data-cy="reviewBodyError">
               {errors.body.message}
             </p>
           )}
@@ -233,6 +247,7 @@ export default function ReviewForm({
         <button
           type='submit'
           className='primary mt-5'
+          data-cy="reviewSubmitBtn"
           disabled={isSubmitting}
         >
           {review?.id ? 'Save review' : 'Confirm'}

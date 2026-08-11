@@ -60,6 +60,7 @@ export default function AddBookToShelfForm({ isbn, book, addToShelf, onClose }) 
             defaultValue=''
             className='appearance-none border rounded-2xl px-5 py-1 pr-10 w-full outline-none'
             {...register('existingShelf')}
+            data-cy="shelfSelect"
           >
             <option value='' className='text-gray-400'>--Choose a shelf--</option>
             {shelves
@@ -77,7 +78,7 @@ export default function AddBookToShelfForm({ isbn, book, addToShelf, onClose }) 
             className='border rounded-2xl px-5 py-1 font-display w-full outline-none' placeholder='Shelf Name'/>
         </div>
         {shelfError && <p className="text-red-500 text-sm mt-1">{shelfError}</p>}
-        <button type='submit' className='primary mt-5'>Confirm</button>
+        <button type='submit' className='primary mt-5' data-cy="addToShelfSubmitBtn">Confirm</button>
       </form>
     </>
   );
