@@ -20,8 +20,8 @@ import {
 } from './review.dto';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { Session } from 'src/types/auth';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('Reviews')
 @ApiBearerAuth()
@@ -30,7 +30,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
   description: 'Unauthorized - you need to be signed in',
 })
 @Controller('reviews')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 

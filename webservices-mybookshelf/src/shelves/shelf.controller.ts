@@ -17,7 +17,6 @@ import {
   BookResponseListDTO,
   CreateBookRequestDTO,
 } from 'src/book/book.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
 import { Session } from '../types/auth';
 import {
@@ -27,6 +26,7 @@ import {
   ShelfWithBooksResponseDTO,
 } from './shelf.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('Shelves')
 @ApiBearerAuth()
@@ -35,7 +35,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
   description: 'Unauthorized - you need to be signed in',
 })
 @Controller('shelves')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class ShelfController {
   constructor(private readonly shelfService: ShelfService) {}
 

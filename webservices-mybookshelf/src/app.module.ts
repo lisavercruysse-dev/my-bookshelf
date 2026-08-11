@@ -13,9 +13,8 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { SessionModule } from './session/session.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth/guards/auth.guard';
-import { RolesGuard } from './auth/guards/roles.guard';
 import { ShelfModule } from './shelves/shelf.module';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -32,11 +31,7 @@ import { ShelfModule } from './shelves/shelf.module';
     SessionModule,
   ],
   controllers: [AppController, HealthController, UserController],
-  providers: [
-    { provide: APP_GUARD, useClass: AuthGuard },
-    { provide: APP_GUARD, useClass: RolesGuard },
-    AppService,
-  ],
+  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }, AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

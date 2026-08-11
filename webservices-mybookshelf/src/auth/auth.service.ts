@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   type DatabaseProvider,
   InjectDrizzle,
@@ -8,8 +8,6 @@ import { ConfigService } from '@nestjs/config';
 import { ServerConfig, AuthConfig } from '../config/configuration';
 import * as argon2 from 'argon2';
 import { User } from '../types/user';
-import { JwtPayload } from '../types/auth';
-import { LoginRequestDto } from '../session/session.dto';
 import { eq } from 'drizzle-orm';
 import { users } from '../drizzle/schema';
 import { RegisterUserRequestDto } from '../user/user.dto';
@@ -48,25 +46,13 @@ export class AuthService {
     });
   }
 
-  async verifyJwt(token: string): Promise<JwtPayload> {
-    const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
-
-    if (!payload) {
-      throw new UnauthorizedException('Invalid authentication token');
-    }
-
-    return payload;
-  }
-
-  async login({ email, password }: LoginRequestDto): Promise<string> {
+  async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.db.query.users.findFirst({
       where: eq(users.email, email),
     });
 
     if (!user) {
-      throw new UnauthorizedException(
-        'The given email and password do not match',
-      );
+      return null;
     }
 
     const passwordValid = await this.verifyPassword(
@@ -75,11 +61,13 @@ export class AuthService {
     );
 
     if (!passwordValid) {
-      throw new UnauthorizedException(
-        'The given email and password do not match',
-      );
+      return null;
     }
 
+    return user;
+  }
+
+  async login(user: User): Promise<string> {
     return this.signJwt(user);
   }
 

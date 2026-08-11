@@ -1,17 +1,20 @@
-// src/sessions/sessions.controller.ts
 import {
   Controller,
   Post,
-  Body,
   HttpStatus,
   HttpCode,
+  UseGuards,
   UseInterceptors,
+  Request,
 } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto, LoginResponseDto } from './session.dto';
 import { Public } from '../auth/decorators/public.decorator';
+import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
 import { AuthDelayInterceptor } from '../auth/interceptors/authDelay.interceptor';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import type { Request as ExpressRequest } from 'express';
+import { User } from '../types/user';
 
 @ApiTags('Sessions')
 @Controller('sessions')
@@ -31,12 +34,14 @@ export class SessionController {
     status: 400,
     description: 'Invalid input data',
   })
+  @ApiBody({ type: LoginRequestDto })
   @Post()
   @Public()
+  @UseGuards(LocalAuthGuard)
   @UseInterceptors(AuthDelayInterceptor)
   @HttpCode(HttpStatus.OK)
-  async signIn(@Body() loginDto: LoginRequestDto): Promise<LoginResponseDto> {
-    const token = await this.authService.login(loginDto);
+  async signIn(@Request() req: ExpressRequest & { user: User }) {
+    const token = await this.authService.login(req.user);
     return { token };
   }
 }

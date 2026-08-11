@@ -1,5 +1,3 @@
-// cypress/e2e/reviews.cy.js
-
 describe('Add, edit and remove a review', () => {
   beforeEach(() => {
     cy.login('bob@example.com', '12345678');

@@ -18,8 +18,8 @@ import {
 import { BookService } from './book.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/roles';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('Books')
 @ApiBearerAuth()
@@ -28,7 +28,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
   description: 'Unauthorized - you need to be signed in',
 })
 @Controller('books')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 

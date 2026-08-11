@@ -5,6 +5,9 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ServerConfig, AuthConfig } from '../config/configuration';
 import { ShelfModule } from 'src/shelves/shelf.module';
+import { PassportModule } from '@nestjs/passport';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -26,8 +29,9 @@ import { ShelfModule } from 'src/shelves/shelf.module';
     }),
     DrizzleModule,
     forwardRef(() => ShelfModule),
+    PassportModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
