@@ -3,7 +3,7 @@ import { JWT_TOKEN_KEY } from '../contexts/auth';
 
 const googleBooksBaseUrl = import.meta.env.VITE_GOOGLE_BOOKS_API_URL;
 const googleBooksKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
-const baseUrl = import.meta.env.VITE_PERSONAL_API_URL;
+const baseUrl = import.meta.env.VITE_API_URL;
 ;
 
 export const axios = axiosRoot.create({
