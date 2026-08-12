@@ -1,5 +1,5 @@
-onlyBuiltDependencies:
-  - "@swc/core"
-  - "@tailwindcss/oxide"
-  - cypress
-  - esbuild
+allowBuilds:
+  "@swc/core": true
+  "@tailwindcss/oxide": true
+  cypress: true
+  esbuild: true
