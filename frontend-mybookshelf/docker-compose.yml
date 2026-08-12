@@ -6,6 +6,8 @@ services:
       dockerfile: ./Dockerfile
       args:
         VITE_PERSONAL_API_URL: http://localhost:3000/api
+        VITE_GOOGLE_BOOKS_API_KEY: googleKey
+        VITE_GOOGLE_BOOKS_API_URL: https://www.googleapis.com/books/v1
     container_name: budget-app-frontend
     ports:
       - '80:80'

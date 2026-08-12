@@ -1,0 +1,21 @@
+services:
+  mybookshelf-backend:
+    container_name: mybookshelf-backend
+    image: mybookshelf-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # 👇 1
+    environment:
+      NODE_ENV: production
+      PORT: '3000'
+      CORS_ORIGINS: '["http://localhost:5173","http://localhost"]'
+      CORS_MAX_AGE: 10800
+      DATABASE_URL: db_url
+      AUTH_JWT_SECRET: authJWTSecret
+      GOOGLE_CLIENT_ID: 123456789.apps.googleusercontent.com
+      GOOGLE_CLIENT_SECRET: googleClientSecret
+      GOOGLE_CALLBACK_URL: http://localhost:3000/api/sessions/google/callback
+      FRONTEND_URL: http://localhost
+    ports:
+      - '3000:3000'
