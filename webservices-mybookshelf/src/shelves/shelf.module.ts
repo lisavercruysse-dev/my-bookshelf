@@ -1,9 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { DrizzleModule } from 'src/drizzle/drizzle.module';
+import { DrizzleModule } from '../drizzle/drizzle.module';
 import { ShelfController } from './shelf.controller';
 import { ShelfService } from './shelf.service';
-import { AuthModule } from 'src/auth/auth.module';
-import { BookModule } from 'src/book/book.module';
+import { AuthModule } from '../auth/auth.module';
+import { BookModule } from '../book/book.module';
 
 @Module({
   imports: [

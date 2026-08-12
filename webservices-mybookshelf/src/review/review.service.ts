@@ -10,7 +10,7 @@ import {
   InjectDrizzle,
 } from '../drizzle/drizzle.provider';
 import { and, eq } from 'drizzle-orm';
-import { reviews } from 'src/drizzle/schema';
+import { reviews } from '../drizzle/schema';
 
 @Injectable()
 export class ReviewService {
@@ -52,6 +52,14 @@ export class ReviewService {
     userId: number,
     review: CreateReviewRequestDto,
   ): Promise<ReviewResponseDto> {
+    const book = await this.db.query.books.findFirst({
+      where: (books, { eq }) => eq(books.isbn, isbn),
+    });
+
+    if (!book) {
+      throw new NotFoundException(`No book with isbn ${isbn} exists`);
+    }
+
     const [newReview] = await this.db
       .insert(reviews)
       .values({

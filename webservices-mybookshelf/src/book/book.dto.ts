@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Min } from 'class-validator';
-import { ReviewResponseDto } from 'src/review/review.dto';
+import { ReviewResponseDto } from '../review/review.dto';
 import { IsString, IsNumber } from 'nestjs-swagger-dto';
 
 export class CreateBookRequestDTO {

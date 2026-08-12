@@ -16,8 +16,8 @@ import {
   BookResponseDTO,
   BookResponseListDTO,
   CreateBookRequestDTO,
-} from 'src/book/book.dto';
-import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
+} from '../book/book.dto';
+import { CurrentUser } from '../auth/decorators/currentUser.decorator';
 import { Session } from '../types/auth';
 import {
   CreateShelfDto,
@@ -26,7 +26,7 @@ import {
   ShelfWithBooksResponseDTO,
 } from './shelf.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Shelves')
 @ApiBearerAuth()

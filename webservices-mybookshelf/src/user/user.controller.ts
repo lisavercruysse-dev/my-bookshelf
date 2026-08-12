@@ -14,8 +14,8 @@ import { CheckUserAccessGuard } from '../auth/guards/userAcces.guard';
 import { CurrentUser } from '../auth/decorators/currentUser.decorator';
 import { ParseUserIdPipe } from '../auth/pipes/parseUserId.pipe';
 import { BookResponseListDTO } from '../book/book.dto';
-import { LoginResponseDto } from 'src/session/session.dto';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { LoginResponseDto } from '../session/session.dto';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('users')
 export class UserController {

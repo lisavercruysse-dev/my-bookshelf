@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
       register,
+      setSession,
     }),
     [
       token,
@@ -101,6 +102,7 @@ export const AuthProvider = ({ children }) => {
       login,
       logout,
       register,
+      setSession,
     ],
   );
 

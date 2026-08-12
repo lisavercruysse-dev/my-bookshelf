@@ -15,7 +15,9 @@ import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: process.env.LOG_DISABLED === 'true' ? false : undefined,
+  });
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -55,11 +57,13 @@ async function bootstrap() {
     maxAge: cors.maxAge,
   });
 
-  app.useLogger(
-    new CustomLogger({
-      logLevels: log.levels,
-    }),
-  );
+  if (!log.disabled) {
+    app.useLogger(
+      new CustomLogger({
+        logLevels: log.levels,
+      }),
+    );
+  }
 
   app.use(helmet());
   app.useGlobalFilters(new DrizzleQueryErrorFilter());

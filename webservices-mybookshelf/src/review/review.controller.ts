@@ -18,10 +18,10 @@ import {
   ReviewResponseDto,
   UpdateReviewRequestDto,
 } from './review.dto';
-import { CurrentUser } from 'src/auth/decorators/currentUser.decorator';
-import { Session } from 'src/types/auth';
+import { CurrentUser } from '../auth/decorators/currentUser.decorator';
+import { Session } from '../types/auth';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Reviews')
 @ApiBearerAuth()

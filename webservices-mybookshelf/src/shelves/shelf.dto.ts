@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BookResponseDTO } from 'src/book/book.dto';
+import { BookResponseDTO } from '../book/book.dto';
 import { IsString } from 'nestjs-swagger-dto';
 
 export class CreateShelfDto {

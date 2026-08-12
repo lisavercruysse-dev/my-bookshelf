@@ -32,7 +32,7 @@ export const users = mysqlTable(
     id: int('id', { unsigned: true }).primaryKey().autoincrement(),
     userName: varchar('userName', { length: 50 }).notNull(),
     email: varchar('email', { length: 255 }).notNull(),
-    passwordHash: varchar('passwordHash', { length: 255 }).notNull(),
+    passwordHash: varchar('passwordHash', { length: 255 }),
     roles: json('roles').notNull(),
   },
   (table) => [uniqueIndex('idx_user_email_unique').on(table.email)],

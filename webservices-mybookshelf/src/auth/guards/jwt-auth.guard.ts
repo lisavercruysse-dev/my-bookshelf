@@ -1,3 +1,4 @@
+// src/auth/guards/jwt-auth.guard.ts
 import {
   ExecutionContext,
   Injectable,
@@ -26,7 +27,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest(err: any, user: any, info: any) {
     if (err || !user) {
-      throw err || new UnauthorizedException('Invalid authentication token');
+      if (info?.message === 'No auth token') {
+        throw new UnauthorizedException('You need to be signed in');
+      }
+      throw new UnauthorizedException('Invalid authentication token');
     }
     return user;
   }

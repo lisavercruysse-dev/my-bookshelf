@@ -7,9 +7,9 @@ import {
   BookResponseDTO,
   BookResponseListDTO,
   CreateBookRequestDTO,
-} from 'src/book/book.dto';
-import { DatabaseProvider, InjectDrizzle } from 'src/drizzle/drizzle.provider';
-import { shelfBooks, shelves } from 'src/drizzle/schema';
+} from '../book/book.dto';
+import { DatabaseProvider, InjectDrizzle } from '../drizzle/drizzle.provider';
+import { shelfBooks, shelves } from '../drizzle/schema';
 import {
   CreateShelfDto,
   DEFAULT_SHELVES,
@@ -18,7 +18,7 @@ import {
   ShelfWithBooksResponseDTO,
 } from './shelf.dto';
 import { and, eq, sql } from 'drizzle-orm';
-import { BookService } from 'src/book/book.service';
+import { BookService } from '../book/book.service';
 
 @Injectable()
 export class ShelfService {

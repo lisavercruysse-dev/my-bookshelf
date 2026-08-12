@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   type DatabaseProvider,
   InjectDrizzle,
@@ -12,7 +12,7 @@ import { eq } from 'drizzle-orm';
 import { users } from '../drizzle/schema';
 import { RegisterUserRequestDto } from '../user/user.dto';
 import { Role } from './roles';
-import { ShelfService } from 'src/shelves/shelf.service';
+import { ShelfService } from '../shelves/shelf.service';
 
 @Injectable()
 export class AuthService {
@@ -51,7 +51,7 @@ export class AuthService {
       where: eq(users.email, email),
     });
 
-    if (!user) {
+    if (!user || !user.passwordHash) {
       return null;
     }
 
@@ -94,6 +94,40 @@ export class AuthService {
 
     if (user) {
       await this.shelfService.createDefaultShelves(user.id);
+    }
+
+    return this.signJwt(user!);
+  }
+
+  async validateOAuthLogin(googleUser: {
+    googleId: string;
+    email?: string;
+    userName?: string;
+  }): Promise<string> {
+    if (!googleUser.email) {
+      throw new UnauthorizedException('Google account has no email');
+    }
+
+    let user = await this.db.query.users.findFirst({
+      where: eq(users.email, googleUser.email),
+    });
+
+    if (!user) {
+      const [newUser] = await this.db
+        .insert(users)
+        .values({
+          userName: googleUser.userName ?? googleUser.email.split('@')[0],
+          email: googleUser.email,
+          passwordHash: null,
+          roles: [Role.USER],
+        })
+        .$returningId();
+
+      user = await this.db.query.users.findFirst({
+        where: eq(users.id, newUser.id),
+      });
+
+      await this.shelfService.createDefaultShelves(user!.id);
     }
 
     return this.signJwt(user!);

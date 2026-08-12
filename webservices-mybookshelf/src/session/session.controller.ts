@@ -5,15 +5,18 @@ import {
   HttpCode,
   UseGuards,
   UseInterceptors,
-  Request,
+  Get,
+  Req,
+  Res,
 } from '@nestjs/common';
+import type { Request, Response } from 'express';
 import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto, LoginResponseDto } from './session.dto';
 import { Public } from '../auth/decorators/public.decorator';
 import { LocalAuthGuard } from '../auth/guards/local-auth.guard';
+import { GoogleAuthGuard } from '../auth/guards/google-auth.guard';
 import { AuthDelayInterceptor } from '../auth/interceptors/authDelay.interceptor';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
-import type { Request as ExpressRequest } from 'express';
 import { User } from '../types/user';
 
 @ApiTags('Sessions')
@@ -40,8 +43,31 @@ export class SessionController {
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(AuthDelayInterceptor)
   @HttpCode(HttpStatus.OK)
-  async signIn(@Request() req: ExpressRequest & { user: User }) {
+  async signIn(
+    @Req() req: Request & { user: User },
+  ): Promise<LoginResponseDto> {
     const token = await this.authService.login(req.user);
     return { token };
+  }
+
+  @Public()
+  @UseGuards(GoogleAuthGuard)
+  @Get('google')
+  async googleAuth() {}
+
+  @Public()
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/callback')
+  async googleAuthCallback(
+    @Req()
+    req: Request & {
+      user: { googleId: string; email?: string; userName?: string };
+    },
+    @Res() res: Response,
+  ) {
+    const token = await this.authService.validateOAuthLogin(req.user);
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    res.redirect(`${frontendUrl}/oauth-callback?token=${token}`);
   }
 }

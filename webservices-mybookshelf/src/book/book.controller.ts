@@ -16,10 +16,10 @@ import {
   CreateBookRequestDTO,
 } from './book.dto';
 import { BookService } from './book.service';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/auth/roles';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/roles';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '..//auth/guards/jwt-auth.guard';
 
 @ApiTags('Books')
 @ApiBearerAuth()

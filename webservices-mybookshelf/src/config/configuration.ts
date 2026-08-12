@@ -14,6 +14,7 @@ export default () => ({
     levels: process.env.LOG_LEVELS
       ? (JSON.parse(process.env.LOG_LEVELS) as LogLevel[])
       : ['log', 'error', 'warn'],
+    disabled: process.env.LOG_DISABLED === 'true',
   },
   auth: {
     hashLength: parseInt(process.env.AUTH_HASH_LENGTH || '32'),
@@ -26,6 +27,13 @@ export default () => ({
       secret: process.env.AUTH_JWT_SECRET || '',
       audience: process.env.AUTH_JWT_AUDIENCE || 'myBookshelf',
       issuer: process.env.AUTH_JWT_ISSUER || 'myBookshelf',
+    },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      callbackUrl:
+        process.env.GOOGLE_CALLBACK_URL ||
+        'http://localhost:3000/api/sessions/google/callback',
     },
   },
 });
@@ -43,6 +51,11 @@ export interface AuthConfig {
   timeCost: number;
   memoryCost: number;
   jwt: JwtConfig;
+  google: {
+    clientId: string;
+    clientSecret: string;
+    callbackUrl: string;
+  };
 }
 
 export interface ServerConfig {
@@ -65,6 +78,7 @@ export interface DatabaseConfig {
 
 export interface LogConfig {
   levels: LogLevel[];
+  disabled: boolean;
 }
 
 type LogLevel = 'log' | 'error' | 'warn' | 'debug' | 'verbose' | 'fatal';
