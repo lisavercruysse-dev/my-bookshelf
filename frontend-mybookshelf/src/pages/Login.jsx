@@ -90,7 +90,7 @@ export default function Login() {
           </div>
 
           <a
-            href={`${import.meta.env.VITE_PERSONAL_API_URL}/sessions/google`}
+            href={`${import.meta.env.VITE_API_URL}/sessions/google`}
             className='w-full max-w-xs'
           >
             <button
