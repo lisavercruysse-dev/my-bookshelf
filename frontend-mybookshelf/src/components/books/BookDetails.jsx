@@ -5,7 +5,7 @@ import AsyncData from '../asyncData/AsyncData';
 import fallbackImage from '../../assets/altBook.jpg';
 import Review from '../reviews/Review';
 import ReviewForm from '../reviews/ReviewForm';
-import Modal from '../general/Modal';
+import Modal from '../general/modal';
 import { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 import AddBookToShelfForm from '../books/AddBookToShelfForm';
