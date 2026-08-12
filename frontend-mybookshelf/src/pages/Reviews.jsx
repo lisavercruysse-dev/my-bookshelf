@@ -1,6 +1,6 @@
 import Review from '../components/reviews/Review';
 import ReviewForm from '../components/reviews/ReviewForm';
-import Modal from '../components/general/Modal';
+import Modal from '../components/general/modal';
 import fallbackImage from '../assets/altBook.jpg';
 import { Link } from 'react-router';
 import { FaStar } from 'react-icons/fa6';
