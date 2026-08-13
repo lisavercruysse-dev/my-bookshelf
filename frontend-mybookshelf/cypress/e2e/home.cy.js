@@ -30,7 +30,8 @@ describe('Home', () => {
       cy.intercept('GET', '**/books/popular', { fixture: 'popularBooks.json' }).as('popular');
       cy.intercept('GET', '**/users/*/reading', { fixture: 'currentReads.json' }).as('currentReads');
 
-      cy.login('bob@example.com', '12345678');
+      // FIXED: was bob@example.com / 12345678 — matches seeded Bob Callahan instead
+      cy.login('bob.callahan@example.com', 'example1');
       cy.visit('http://localhost:5173');
       cy.wait(['@popular', '@currentReads']);
     });

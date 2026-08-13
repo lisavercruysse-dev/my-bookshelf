@@ -90,21 +90,21 @@ export default function BookDetails() {
         <div className="flex flex-row gap-20 max-w-400 px-40">
           <div className="flex flex-row gap-10">
             <div className='flex flex-col gap-5 items-center'>
-              <img src={bookImage} alt={book?.volumeInfo?.title} className='w-75 rounded-md object-cover'/>
+              <img src={bookImage} alt={book?.volumeInfo?.title} className='w-75 min-w-50 rounded-md object-cover'/>
               <button onClick={() => setModalOpen(true)} className='primary' 
                 data-cy="addToShelfBtn">Add to shelf</button>
             </div>
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 min-w-[600px] max-w-[600px]'>
               <div className='flex flex-col gap-1'>
-                <p className='font-display text-gray-900 text-3xl max-w-150'>{book?.volumeInfo?.title}</p>
+                <p className='font-display text-gray-900 text-3xl'>{book?.volumeInfo?.title}</p>
                 <p className='font-display text-gray-900 text-lg'>{mapAuthors(book)}</p>
                 <p className='font-display text-gray-500 text-sm'>{book?.volumeInfo?.pageCount} pages</p>
               </div>
-              <p className='font-display text-gray-900 max-w-150'>{book?.volumeInfo?.description}</p>
+              <p className='font-display text-gray-900'>{book?.volumeInfo?.description}</p>
             </div>
           </div>
-          <div className='flex flex-col gap-5'>
-            <p className='font-display text-gray-900 text-3xl max-w-150'>Reviews</p>
+          <div className='flex flex-col gap-5 min-w-[400px] max-w-[400px]'>
+            <p className='font-display text-gray-900 text-3xl'>Reviews</p>
             <AsyncData loading={reviewsLoading}>
               {!myReview && (
                 isFinished ? (

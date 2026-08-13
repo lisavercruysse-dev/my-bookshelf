@@ -32,7 +32,7 @@ export default function Review({
 
   return (
     <div className='bg-white p-5 rounded-2xl shadow-sm border 
-    border-black/5 w-full transition-shadow hover:shadow-md min-w-100'
+    border-black/5 w-full transition-shadow hover:shadow-md'
     data-cy="review">
       <div className='flex items-center justify-between'>
         <div className='flex items-center gap-3'>
@@ -105,7 +105,7 @@ export default function Review({
         )}
       </div>
 
-      <div className='reviewBody mt-2 text-gray-600 text-sm leading-relaxed'
+      <div className='reviewBody mt-2 text-gray-600 text-sm leading-relaxed break-words'
         data-cy="reviewBody"
         dangerouslySetInnerHTML={{ __html: renderReviewBody(body) }} />
     </div>

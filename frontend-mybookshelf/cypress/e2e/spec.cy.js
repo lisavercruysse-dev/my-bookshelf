@@ -5,6 +5,6 @@ describe('General', () => {
   });
 
   it('should login', () => {
-    cy.login('bob@example.com', '12345678');
+    cy.login('bob.callahan@example.com', 'example1');
   });
 });

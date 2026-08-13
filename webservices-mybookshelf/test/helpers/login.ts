@@ -4,7 +4,10 @@ import { AuthService } from '../../src/auth/auth.service';
 export const login = async (app: INestApplication): Promise<string> => {
   const authService = app.get(AuthService);
 
-  const user = await authService.validateUser('bob@example.com', '12345678');
+  const user = await authService.validateUser(
+    'bob.callahan@example.com',
+    'example1',
+  );
   if (!user) {
     throw new UnauthorizedException('Invalid test credentials');
   }

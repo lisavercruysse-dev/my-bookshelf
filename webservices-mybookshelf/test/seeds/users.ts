@@ -10,13 +10,13 @@ export async function seedUsers(
   drizzle: DatabaseProvider,
 ) {
   const authService = app.get(AuthService);
-  const passwordHash = await authService.hashPassword('12345678');
+  const passwordHash = await authService.hashPassword('example1');
 
   await drizzle.insert(users).values([
     {
       id: 1,
       userName: 'Bob',
-      email: 'bob@example.com',
+      email: 'bob.callahan@example.com',
       passwordHash,
       roles: [Role.USER],
     },
